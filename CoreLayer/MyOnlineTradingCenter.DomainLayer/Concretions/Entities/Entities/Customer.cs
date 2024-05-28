@@ -7,12 +7,11 @@ using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities
 {
-    public class Product : BaseEntity
+    public class Customer : BaseEntity
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public int Stock { get; set; }
-        public long Price { get; set; }
+        public string FirstName { get; set; } 
+        public string LastName { get; set; } 
+        public string Email { get; set; }
         public ICollection<Order> Orders { get; set; }
     }
 }
