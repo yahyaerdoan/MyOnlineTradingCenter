@@ -20,8 +20,8 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Services
                     Name = "Apple",
                     Description = "IPhone 14 Pro Max",
                     Price = 1115,
-                    CreatedDate = DateTime.Parse(DateTime.Now.ToString("yyyy-MMM-dd hh:mm tt")),
-                    UpdatedDate = DateTime.Parse(DateTime.Now.ToString("yyyy-MMM-dd hh:mm tt")),
+                    CreatedDate = DateTime.Parse($"{DateTime.Now:yyyy-MM-dd HH:mm:ss tt}"),
+                    UpdatedDate = DateTime.Parse($"{DateTime.Now:yyyy-MM-dd HH:mm:ss tt}"),
                     Stock = 10,
                     Status = true
                 },
