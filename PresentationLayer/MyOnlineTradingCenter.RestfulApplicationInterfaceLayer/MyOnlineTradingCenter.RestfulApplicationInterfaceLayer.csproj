@@ -11,7 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\..\CoreLayer\MyOnlineTradingCenter.ApplicationLayer\MyOnlineTradingCenter.ApplicationLayer.csproj" />
+    <ProjectReference Include="..\..\InfrastructureLayer\MyOnlineTradingCenter.PersistenceLayer\MyOnlineTradingCenter.PersistenceLayer.csproj" />
   </ItemGroup>
 
 </Project>

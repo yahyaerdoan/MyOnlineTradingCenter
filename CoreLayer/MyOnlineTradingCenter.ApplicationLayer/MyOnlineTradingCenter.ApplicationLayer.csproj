@@ -10,4 +10,8 @@
     <ProjectReference Include="..\MyOnlineTradingCenter.DomainLayer\MyOnlineTradingCenter.DomainLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Concretions\" />
+  </ItemGroup>
+
 </Project>
