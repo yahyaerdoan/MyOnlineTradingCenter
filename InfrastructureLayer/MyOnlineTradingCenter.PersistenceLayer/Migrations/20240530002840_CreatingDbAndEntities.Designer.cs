@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MyOnlineTradingCenter.PersistenceLayer.Migrations
 {
     [DbContext(typeof(MyOnlineTradingCenterPostgreSqlDbContext))]
-    [Migration("20240529225050_CreatingDbAndEntities")]
+    [Migration("20240530002840_CreatingDbAndEntities")]
     partial class CreatingDbAndEntities
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
