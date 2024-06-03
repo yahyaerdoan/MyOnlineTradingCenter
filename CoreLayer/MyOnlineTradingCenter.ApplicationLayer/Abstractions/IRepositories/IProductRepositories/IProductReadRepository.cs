@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.CustomerRepositories
+namespace MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IProductRepositories
 {
     public interface IProductReadRepository
     {
