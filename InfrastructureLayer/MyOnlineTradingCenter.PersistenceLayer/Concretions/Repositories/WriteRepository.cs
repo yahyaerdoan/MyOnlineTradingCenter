@@ -29,29 +29,43 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Repositories
         }
           
 
-        public Task<bool> AddRangeAsync(List<T> entity)
+        public async Task<bool> AddRangeAsync(List<T> datas)
         {
-            throw new NotImplementedException();
+            await Table.AddRangeAsync(datas);
+            return true;
         }
 
         public bool Remove(T entity)
         {
-            throw new NotImplementedException();
+            EntityEntry<T> entityEntry = Table.Remove(entity);
+            return entityEntry.State == EntityState.Deleted;
         }
 
-        public bool Remove(string id)
+        public async Task<bool> RemoveAsync(string id)
         {
-            throw new NotImplementedException();
+           T entity = await Table.FirstOrDefaultAsync(data => data.Id == Guid.Parse(id));
+            return Remove(entity);
         }
 
-        public Task<int> SaveAsync()
+        public bool RemoveRange(List<T> datas)
         {
-            throw new NotImplementedException();
+            Table.AddRange(datas);
+            return true;
         }
 
-        public Task<bool> UpdateAsync(T entity)
+        public async Task<int> SaveAsync()
+            => await _context.SaveChangesAsync();
+
+        public bool Update(T entity)
         {
-            throw new NotImplementedException();
+            EntityEntry entityEntry = Table.Update(entity);
+            return entityEntry.State == EntityState.Modified;
+        }
+
+        public bool UpdateRange(List<T> datas)
+        {
+            Table.UpdateRange(datas); 
+            return true;            
         }
     }
 }
