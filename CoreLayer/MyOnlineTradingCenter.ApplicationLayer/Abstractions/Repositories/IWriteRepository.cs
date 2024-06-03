@@ -11,10 +11,10 @@ namespace MyOnlineTradingCenter.ApplicationLayer.Abstractions.Repositories
     {
         Task<bool> AddAsync(T entity);
         Task<bool> AddRangeAsync(List<T> datas);
-        bool Remove(T entity);
-        Task<bool> RemoveAsync(string id);
+        Task<bool> RemoveAsync(T entity);
+        Task<bool> RemoveByIdAsync(string id);
         bool RemoveRange(List<T> datas);
-        bool Update(T entity);
+        Task<bool> UpdateAsync(T entity);
         bool UpdateRange(List<T> datas);
         Task<int> SaveAsync();
     }

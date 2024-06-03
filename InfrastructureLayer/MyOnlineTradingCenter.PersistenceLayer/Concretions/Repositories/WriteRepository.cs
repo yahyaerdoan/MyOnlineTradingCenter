@@ -35,16 +35,16 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Repositories
             return true;
         }
 
-        public bool Remove(T entity)
+        public async Task<bool> RemoveAsync(T entity)
         {
-            EntityEntry<T> entityEntry = Table.Remove(entity);
+            EntityEntry<T> entityEntry = await Task.Run( ()=> Table.Remove(entity));
             return entityEntry.State == EntityState.Deleted;
         }
 
-        public async Task<bool> RemoveAsync(string id)
+        public async Task<bool> RemoveByIdAsync(string id)
         {
            T entity = await Table.FirstOrDefaultAsync(data => data.Id == Guid.Parse(id));
-            return Remove(entity);
+            return await RemoveAsync(entity);
         }
 
         public bool RemoveRange(List<T> datas)
@@ -56,9 +56,9 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Repositories
         public async Task<int> SaveAsync()
             => await _context.SaveChangesAsync();
 
-        public bool Update(T entity)
+        public async Task<bool> UpdateAsync(T entity)
         {
-            EntityEntry entityEntry = Table.Update(entity);
+            EntityEntry entityEntry = await Task.Run( ()=> Table.Update(entity));
             return entityEntry.State == EntityState.Modified;
         }
 
