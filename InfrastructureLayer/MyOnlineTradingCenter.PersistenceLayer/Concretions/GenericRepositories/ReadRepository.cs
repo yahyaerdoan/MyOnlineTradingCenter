@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Repositories
+namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.GenericRepositories
 {
     public class ReadRepository<T> : IReadRepository<T> where T : BaseEntity
     {
