@@ -21,13 +21,13 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Extensions
         public static void AddPersistanceServices(this IServiceCollection services)
         {
             services.AddDbContext<MyOnlineTradingCenterPostgreSqlDbContext>(optionsAction: options => options
-            .UseNpgsql(ConnectionStringConfiguration.ConnectionString), ServiceLifetime.Singleton);
+            .UseNpgsql(ConnectionStringConfiguration.ConnectionString), ServiceLifetime.Scoped);
 
             services.AddScoped<ICustomerReadRepository, CustomerReadRepository>();
             services.AddScoped<ICustomerWriteRepository, CustomerWriteRepository>();
 
-            services.AddSingleton<IProductReadRepository, ProductReadRepository>();
-            services.AddSingleton<IProductWriteRepository, ProductWriteRepository>();
+            services.AddScoped<IProductReadRepository, ProductReadRepository>();
+            services.AddScoped<IProductWriteRepository, ProductWriteRepository>();
 
             services.AddScoped<IOrderReadRepository, OrderReadRepository>();
             services.AddScoped<IOrderWriteRepository, OrderWriteRepository>();
