@@ -8,11 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyOnlineTradingCenter.PersistenceLayer.Repositories.OrderRepository
+namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Repositories.OrderRepository
 {
-    public class OrderReadRepository : ReadRepository<Order>, IOrderReadRepository
+    public class OrderWriteRepository : WriteRepository<Order>, IOrderWriteRepository
     {
-        public OrderReadRepository(MyOnlineTradingCenterPostgreSqlDbContext context) : base(context)
+        public OrderWriteRepository(MyOnlineTradingCenterPostgreSqlDbContext context) : base(context)
         {
         }
     }

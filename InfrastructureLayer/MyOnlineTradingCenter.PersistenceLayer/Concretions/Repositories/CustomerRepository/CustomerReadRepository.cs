@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyOnlineTradingCenter.PersistenceLayer.Repositories.CustomerRepository
+namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Repositories.CustomerRepository
 {
     public class CustomerReadRepository : ReadRepository<Customer>, ICustomerReadRepository
     {

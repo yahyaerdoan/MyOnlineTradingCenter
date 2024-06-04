@@ -5,9 +5,9 @@ using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IOrderRe
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IProductRepositories;
 using MyOnlineTradingCenter.PersistenceLayer.Concretions.Contexts;
 using MyOnlineTradingCenter.PersistenceLayer.Concretions.Contexts.Configurations;
-using MyOnlineTradingCenter.PersistenceLayer.Repositories.CustomerRepository;
-using MyOnlineTradingCenter.PersistenceLayer.Repositories.OrderRepository;
-using MyOnlineTradingCenter.PersistenceLayer.Repositories.ProductRepository;
+using MyOnlineTradingCenter.PersistenceLayer.Concretions.Repositories.CustomerRepository;
+using MyOnlineTradingCenter.PersistenceLayer.Concretions.Repositories.OrderRepository;
+using MyOnlineTradingCenter.PersistenceLayer.Concretions.Repositories.ProductRepository;
 using System;
 using System.Collections.Generic;
 using System.Linq;

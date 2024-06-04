@@ -9,11 +9,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyOnlineTradingCenter.PersistenceLayer.Repositories.ProductRepository
+namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Repositories.ProductRepository
 {
-    public class ProductReadRepository : ReadRepository<Product>, IProductReadRepository
+    public class ProductWriteRepository : WriteRepository<Product>, IProductWriteRepository
     {
-        public ProductReadRepository(MyOnlineTradingCenterPostgreSqlDbContext context) : base(context)
+        public ProductWriteRepository(MyOnlineTradingCenterPostgreSqlDbContext context) : base(context)
         {
         }
     }
