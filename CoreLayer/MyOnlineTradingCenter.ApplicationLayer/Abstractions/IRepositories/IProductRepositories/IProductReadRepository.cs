@@ -1,4 +1,4 @@
-﻿using MyOnlineTradingCenter.ApplicationLayer.Abstractions.Repositories;
+﻿using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IGenericRepositories;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;
 using System;
 using System.Collections.Generic;

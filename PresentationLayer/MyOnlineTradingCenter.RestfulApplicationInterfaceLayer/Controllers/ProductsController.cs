@@ -24,7 +24,7 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
         {
             await _productWriteRepository.AddRangeAsync(new()
             {
-                new(){Id = Guid.NewGuid(), Name="product 1", Description="p1", Price = 5, CreatedDate= DateTime.UtcNow, UpdatedDate= DateTime.UtcNow, Stock = 10, Status= true}
+                new(){Id = Guid.NewGuid(), Name="product 2", Description="p2", Price = 6, CreatedDate= DateTime.UtcNow, UpdatedDate= DateTime.UtcNow, Stock = 11, Status= true}
             });
             await _productWriteRepository.SaveAsync();
         }

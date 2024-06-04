@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyOnlineTradingCenter.ApplicationLayer.Abstractions.Repositories
+namespace MyOnlineTradingCenter.ApplicationLayer.Abstractions.IGenericRepositories
 {
     public interface IReadRepository<T> : IRepository<T> where T : BaseEntity
     {

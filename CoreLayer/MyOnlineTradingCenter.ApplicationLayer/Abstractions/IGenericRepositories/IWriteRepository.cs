@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyOnlineTradingCenter.ApplicationLayer.Abstractions.Repositories
+namespace MyOnlineTradingCenter.ApplicationLayer.Abstractions.IGenericRepositories
 {
     public interface IWriteRepository<T> : IRepository<T> where T : BaseEntity
     {

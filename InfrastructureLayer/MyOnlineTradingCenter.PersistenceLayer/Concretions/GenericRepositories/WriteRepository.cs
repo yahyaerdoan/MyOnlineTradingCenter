@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using MyOnlineTradingCenter.ApplicationLayer.Abstractions.Repositories;
+using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IGenericRepositories;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.CommonEntity;
 using MyOnlineTradingCenter.PersistenceLayer.Concretions.Contexts;
 using System;
