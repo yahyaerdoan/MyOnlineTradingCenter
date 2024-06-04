@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IOrderRepositories
 {
-    public interface IOrderWriteRepository : IWriteRepository<Product>
+    public interface IOrderWriteRepository : IWriteRepository<Order>
     {
     }
 }
