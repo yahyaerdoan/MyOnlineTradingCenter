@@ -21,11 +21,13 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
         readonly private IOrderWriteRepository _orderWriteRepository;
         readonly private IOrderReadRepository _orderReadRepository;
 
-        public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, IOrderWriteRepository orderWriteRepository)
+        public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, IOrderWriteRepository orderWriteRepository, ICustomerWriteRepository customerWriteRepository, IOrderReadRepository orderReadRepository)
         {
             _productWriteRepository = productWriteRepository;
             _productReadRepository = productReadRepository;
             _orderWriteRepository = orderWriteRepository;
+            _customerWriteRepository = customerWriteRepository;
+            _orderReadRepository = orderReadRepository;
         }
 
         [HttpGet]
@@ -44,8 +46,19 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
             //await _productWriteRepository.SaveAsync();
             #endregion
 
-            await _orderWriteRepository.AddAsync(new Order() {Address="7588 W Granville Ave", Description="New Product" });
+            #region CreatingDate
+            //var customerId = Guid.NewGuid();
+            //await _customerWriteRepository.AddAsync(new Customer() { Id = customerId, FirstName = "Yahya", LastName = "Erdogan", Email = "yahyaerdogan@gmai.com", });
+            //await _orderWriteRepository.AddAsync(new Order() { Address = "7588 W Granville Ave", Description = "New Product", CustomerId = customerId });
+            //await _orderWriteRepository.SaveAsync();
+            #endregion
+
+            #region UpdatingDate
+            Order order = await _orderReadRepository.GetByIdAsync("b02e03c7-07bf-4fb9-8e38-30c0a4a06051");
+            order.Status = true;
             await _orderWriteRepository.SaveAsync();
+            #endregion
+
 
         }
         [HttpGet("id")]
