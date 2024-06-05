@@ -22,17 +22,38 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.GenericRepositories
 
         public DbSet<T> Table => _context.Set<T>();
 
-        public IQueryable<T> GetAll()
-            => Table;
+        public IQueryable<T> GetAll(bool traking = true)
+        {
+            var query = Table.AsQueryable();
+            if (!traking)
+                query = query.AsNoTracking();
+            return query;
+        }  
 
-        public async Task<T> GetByIdAsync(string id)
-            //=> await Table.FirstOrDefaultAsync(data => data.Id == Guid.Parse(id));
-            => await Table.FindAsync(Guid.Parse(id));
+        public async Task<T> GetByIdAsync(string id, bool traking = true)
+        //=> await Table.FirstOrDefaultAsync(data => data.Id == Guid.Parse(id));
+        //=> await Table.FindAsync(Guid.Parse(id));
+        {
+            var query = Table.AsQueryable();
+            if (!traking)
+                query = Table.AsNoTracking();
+            return await query.FirstOrDefaultAsync(data => data.Id == Guid.Parse(id));
+        }
 
-        public async Task<T> GetSingleAsync(Expression<Func<T, bool>> expression)
-            => await Table.FirstOrDefaultAsync(expression);
+        public async Task<T> GetSingleAsync(Expression<Func<T, bool>> expression, bool traking = true)
+        { 
+            var query = Table.AsQueryable();
+            if(!traking)
+                query = Table.AsNoTracking();
+            return await query.FirstOrDefaultAsync(expression);
+        }
 
-        public IQueryable<T> GetWhere(Expression<Func<T, bool>> expression)
-            => Table.Where(expression);
+        public IQueryable<T> GetWhere(Expression<Func<T, bool>> expression, bool traking = true)
+        {
+            var query = Table.Where(expression);
+            if(!traking) 
+                query = query.AsNoTracking();
+            return query;
+        }
     }
 }
