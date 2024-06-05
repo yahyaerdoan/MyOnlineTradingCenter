@@ -26,8 +26,9 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
             //{
             //    new(){Id = Guid.NewGuid(), Name="product 2", Description="p2", Price = 6, CreatedDate= DateTime.UtcNow, UpdatedDate= DateTime.UtcNow, Stock = 11, Status= true}
             //});
-            Product product = await _productReadRepository.GetByIdAsync("efe30fe6-2734-4cbd-a23c-c025ffe739a5", false);
-            product.Name = "yahya 1";
+            Product product = await _productReadRepository.GetByIdAsync("efe30fe6-2734-4cbd-a23c-c025ffe739a5", true);
+            product.Name = "yahya 3";
+            product.UpdatedDate = DateTime.UtcNow;
             await _productWriteRepository.SaveAsync();
         }
         [HttpGet("id")]
