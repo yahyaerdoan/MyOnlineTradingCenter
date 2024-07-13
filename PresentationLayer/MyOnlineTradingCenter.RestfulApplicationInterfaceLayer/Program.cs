@@ -1,17 +1,20 @@
 using MyOnlineTradingCenter.PersistenceLayer.Concretions.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 builder.Services.AddControllers();
 builder.Services.AddPersistanceServices();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddCors(opt  => opt.AddDefaultPolicy(policy => policy.WithOrigins("http://localhost:4200", "https://localhost:4200").AllowAnyHeader().AllowAnyMethod()));
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.UseCors();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
