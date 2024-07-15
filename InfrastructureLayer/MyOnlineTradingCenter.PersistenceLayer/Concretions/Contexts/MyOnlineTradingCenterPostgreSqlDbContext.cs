@@ -34,6 +34,7 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Contexts
                 {
                     EntityState.Added => datum.Entity.CreatedDate = currentTime,
                     EntityState.Modified => datum.Entity.UpdatedDate = currentTime,
+                    //_=> DateTime.UtcNow
                 };
             }
 
