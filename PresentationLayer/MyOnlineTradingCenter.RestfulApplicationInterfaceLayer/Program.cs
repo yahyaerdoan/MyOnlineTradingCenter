@@ -1,11 +1,31 @@
 using MyOnlineTradingCenter.PersistenceLayer.Concretions.Extensions;
+using FluentValidation.AspNetCore;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Validations.Products;
+using FluentValidation;
+using MyOnlineTradingCenter.InfrastructureLayer.Filters.Validations;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services to the container.
+builder.Services.AddControllers(options =>
+{
+    // Add custom validation filter
+    options.Filters.Add<ValidationFilter>();
+})
+.ConfigureApiBehaviorOptions(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
 
-builder.Services.AddControllers();
+// Register FluentValidation services
+builder.Services.AddFluentValidationAutoValidation()
+                .AddFluentValidationClientsideAdapters()
+                .AddValidatorsFromAssemblyContaining<CreateProductValidator>();
+
+// Register Persistance Layer services
 builder.Services.AddPersistanceServices();
-builder.Services.AddCors(opt  => opt.AddDefaultPolicy(policy => policy.WithOrigins("http://localhost:4200", "https://localhost:4200").AllowAnyHeader().AllowAnyMethod()));
+
+builder.Services.AddCors(opt => opt.AddDefaultPolicy(policy => policy.WithOrigins("http://localhost:4200", "https://localhost:4200").AllowAnyHeader().AllowAnyMethod()));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

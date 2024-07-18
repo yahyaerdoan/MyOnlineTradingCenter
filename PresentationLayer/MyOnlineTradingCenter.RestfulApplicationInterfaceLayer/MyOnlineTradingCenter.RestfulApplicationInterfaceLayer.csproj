@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\CoreLayer\MyOnlineTradingCenter.ApplicationLayer\MyOnlineTradingCenter.ApplicationLayer.csproj" />
+    <ProjectReference Include="..\..\InfrastructureLayer\MyOnlineTradingCenter.InfrastructureLayer\MyOnlineTradingCenter.InfrastructureLayer.csproj" />
     <ProjectReference Include="..\..\InfrastructureLayer\MyOnlineTradingCenter.PersistenceLayer\MyOnlineTradingCenter.PersistenceLayer.csproj" />
   </ItemGroup>
 
