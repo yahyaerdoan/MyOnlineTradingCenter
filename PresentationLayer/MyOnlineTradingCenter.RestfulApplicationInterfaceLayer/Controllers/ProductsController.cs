@@ -138,7 +138,7 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
             return Ok();
         }
 
-        [HttpPost("action")]
+        [HttpPost("[action]")]
         public async Task<IActionResult> Upload()
         {
             string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "Resource/Product-Images");
