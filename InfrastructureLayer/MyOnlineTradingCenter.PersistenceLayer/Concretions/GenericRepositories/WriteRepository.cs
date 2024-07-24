@@ -37,7 +37,7 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.GenericRepositories
 
         public async Task<bool> RemoveAsync(T entity)
         {
-            EntityEntry<T> entityEntry = await Task.Run( ()=> Table.Remove(entity));
+            EntityEntry<T> entityEntry = await Task.Run(()=> Table.Remove(entity));
             return entityEntry.State == EntityState.Deleted;
         }
 
@@ -45,6 +45,7 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.GenericRepositories
         {
            T entity = await Table.FirstOrDefaultAsync(data => data.Id == Guid.Parse(id));
             return await RemoveAsync(entity);
+            
         }
 
         public bool RemoveRange(List<T> datas)

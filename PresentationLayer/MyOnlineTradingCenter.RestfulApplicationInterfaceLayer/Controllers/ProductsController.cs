@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.ICustomerRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IOrderRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IProductRepositories;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.RequestParameters.Paginations;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.ViewModels.Products;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;
 using System.Net;
@@ -22,14 +24,16 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
 
         readonly private IOrderWriteRepository _orderWriteRepository;
         readonly private IOrderReadRepository _orderReadRepository;
+        readonly private IWebHostEnvironment _webHostEnvironment;
 
-        public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, IOrderWriteRepository orderWriteRepository, ICustomerWriteRepository customerWriteRepository, IOrderReadRepository orderReadRepository)
+        public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, IOrderWriteRepository orderWriteRepository, ICustomerWriteRepository customerWriteRepository, IOrderReadRepository orderReadRepository, IWebHostEnvironment webHostEnvironment)
         {
             _productWriteRepository = productWriteRepository;
             _productReadRepository = productReadRepository;
             _orderWriteRepository = orderWriteRepository;
             _customerWriteRepository = customerWriteRepository;
             _orderReadRepository = orderReadRepository;
+            _webHostEnvironment = webHostEnvironment;
         }
         #region example
 
@@ -67,9 +71,10 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
         #endregion
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get([FromQuery]Pagination pagination)
         {
-            return Ok(_productReadRepository.GetAll(false).Select(p => new
+            var totalDataCount = await _productReadRepository.GetAll(false).CountAsync();
+            var products = _productReadRepository.GetAll(false).Skip(pagination.Page * pagination.Size).Take(pagination.Size).Select(p => new
             {
                 p.Id,
                 p.Name,
@@ -79,7 +84,12 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
                 p.CreatedDate,
                 p.UpdatedDate,
 
-            }));
+            }).ToList();
+            return Ok(new
+            {
+                products,
+                totalDataCount,
+            });
         }
 
         [HttpGet("id")]
@@ -125,7 +135,32 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
 
             await _productWriteRepository.SaveAsync();
 
-            return Ok("deleted.");
+            return Ok();
+        }
+
+        [HttpPost("action")]
+        public async Task<IActionResult> Upload()
+        {
+            string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "Resource/Product-Images");
+
+            if (!Directory.Exists(uploadPath))
+            {
+                Directory.CreateDirectory(uploadPath);
+
+            }
+
+            foreach (var file in Request.Form.Files)
+            {
+                string uniqueFilename = Path.GetFileNameWithoutExtension(file.Name)+ "_" + Guid.NewGuid().ToString() + Path.GetExtension(file.Name);
+
+                string fullPath = Path.Combine(uploadPath, uniqueFilename);
+
+                using var stream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, useAsync: false);
+                await file.CopyToAsync(stream);
+                await stream.FlushAsync();
+            }
+
+            return Ok(new { message = "Files uploaded successfully" });
         }
     }
 }
