@@ -100,7 +100,7 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
         }
 
         [HttpPost]
-        public async  Task<IActionResult> Post (CreateProductViewModel createProductViewModel)
+        public async Task<IActionResult> Post(CreateProductViewModel createProductViewModel)
         {
             await _productWriteRepository.AddAsync(new()
             {
