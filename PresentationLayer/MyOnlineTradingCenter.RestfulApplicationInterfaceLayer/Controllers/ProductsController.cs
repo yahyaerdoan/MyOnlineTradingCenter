@@ -5,6 +5,7 @@ using MyOnlineTradingCenter.ApplicationLayer.Abstractions;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.ICustomerRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IOrderRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IProductRepositories;
+using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.RequestParameters.Paginations;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.ViewModels.Products;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;
@@ -25,8 +26,9 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
         readonly private IOrderWriteRepository _orderWriteRepository;
         readonly private IOrderReadRepository _orderReadRepository;
         readonly private IWebHostEnvironment _webHostEnvironment;
+        private readonly IFileService _fileService;
 
-        public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, IOrderWriteRepository orderWriteRepository, ICustomerWriteRepository customerWriteRepository, IOrderReadRepository orderReadRepository, IWebHostEnvironment webHostEnvironment)
+        public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, IOrderWriteRepository orderWriteRepository, ICustomerWriteRepository customerWriteRepository, IOrderReadRepository orderReadRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService)
         {
             _productWriteRepository = productWriteRepository;
             _productReadRepository = productReadRepository;
@@ -34,6 +36,7 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
             _customerWriteRepository = customerWriteRepository;
             _orderReadRepository = orderReadRepository;
             _webHostEnvironment = webHostEnvironment;
+            _fileService = fileService;
         }
         #region example
 
@@ -141,26 +144,32 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Upload()
         {
-            string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "Resource/Product-Images");
+            #region File Uploading
+            //string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "Resource/Product-Images");
 
-            if (!Directory.Exists(uploadPath))
-            {
-                Directory.CreateDirectory(uploadPath);
+            //if (!Directory.Exists(uploadPath))
+            //{
+            //    Directory.CreateDirectory(uploadPath);
 
-            }
+            //}
 
-            foreach (var file in Request.Form.Files)
-            {
-                string uniqueFilename = Path.GetFileNameWithoutExtension(file.Name)+ "_" + Guid.NewGuid().ToString() + Path.GetExtension(file.Name);
+            //foreach (var file in Request.Form.Files)
+            //{
+            //    string uniqueFilename = Path.GetFileNameWithoutExtension(file.Name)+ "_" + Guid.NewGuid().ToString() + Path.GetExtension(file.Name);
 
-                string fullPath = Path.Combine(uploadPath, uniqueFilename);
+            //    string fullPath = Path.Combine(uploadPath, uniqueFilename);
 
-                using var stream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, useAsync: false);
-                await file.CopyToAsync(stream);
-                await stream.FlushAsync();
-            }
+            //    using var stream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, useAsync: false);
+            //    await file.CopyToAsync(stream);
+            //    await stream.FlushAsync();
+            //}
 
+            //return Ok(new { message = "Files uploaded successfully" });
+
+            #endregion
+
+            await _fileService.UploadAsync("Resource\\Product-Images", Request.Form.Files);
             return Ok(new { message = "Files uploaded successfully" });
         }
-    }
+    }    
 }

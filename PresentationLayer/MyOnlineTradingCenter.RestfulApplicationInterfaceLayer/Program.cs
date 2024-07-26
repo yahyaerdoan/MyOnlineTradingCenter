@@ -3,6 +3,7 @@ using FluentValidation.AspNetCore;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Validations.Products;
 using FluentValidation;
 using MyOnlineTradingCenter.InfrastructureLayer.Filters.Validations;
+using MyOnlineTradingCenter.InfrastructureLayer.Concretions.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,7 @@ builder.Services.AddFluentValidationAutoValidation()
 
 // Register Persistance Layer services
 builder.Services.AddPersistanceServices();
+builder.Services.AddInfrastructureServiceRegistrations();
 
 builder.Services.AddCors(opt => opt.AddDefaultPolicy(policy => policy.WithOrigins("http://localhost:4200", "https://localhost:4200").AllowAnyHeader().AllowAnyMethod()));
 
