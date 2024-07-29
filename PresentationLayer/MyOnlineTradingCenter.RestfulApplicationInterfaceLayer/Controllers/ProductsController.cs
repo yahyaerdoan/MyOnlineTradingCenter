@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MyOnlineTradingCenter.ApplicationLayer.Abstractions;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.ICustomerRepositories;
+using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IImageFileRepositories;
+using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IInvoiceFileRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IOrderRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IProductRepositories;
+using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IUploadedFileRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.RequestParameters.Paginations;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.ViewModels.Products;
@@ -16,7 +17,7 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase
-    {       
+    {
         readonly private IProductWriteRepository _productWriteRepository;
         readonly private IProductReadRepository _productReadRepository;
 
@@ -25,19 +26,38 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
 
         readonly private IOrderWriteRepository _orderWriteRepository;
         readonly private IOrderReadRepository _orderReadRepository;
-        readonly private IWebHostEnvironment _webHostEnvironment;
-        private readonly IFileService _fileService;
 
-        public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, IOrderWriteRepository orderWriteRepository, ICustomerWriteRepository customerWriteRepository, IOrderReadRepository orderReadRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService)
+        readonly private IImageFileWriteRepository _imageFileWriteRepository;
+        readonly private IImageFileReadRepository _imageFileReadRepository;
+
+        readonly private IInvoiceFileWriteRepository _invoiceFileWriteRepository;
+        readonly private IInvoiceFileReadRepository _invoiceFileReadRepository;
+
+        readonly private IUploadedFileWriteRepository _uploadedFileWriteRepository;
+        readonly private IInvoiceFileReadRepository _invoicesFileReadRepository;
+
+        readonly private IWebHostEnvironment _webHostEnvironment;
+        readonly private IFileService _fileService;
+
+        public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, ICustomerWriteRepository customerWriteRepository, ICustomerReadRepository customerReadRepository, IOrderWriteRepository orderWriteRepository, IOrderReadRepository orderReadRepository, IImageFileWriteRepository imageFileWriteRepository, IImageFileReadRepository imageFileReadRepository, IInvoiceFileWriteRepository invoiceFileWriteRepository, IInvoiceFileReadRepository invoiceFileReadRepository, IUploadedFileWriteRepository uploadedFileWriteRepository, IInvoiceFileReadRepository invoicesFileReadRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService)
         {
             _productWriteRepository = productWriteRepository;
             _productReadRepository = productReadRepository;
-            _orderWriteRepository = orderWriteRepository;
             _customerWriteRepository = customerWriteRepository;
+            _customerReadRepository = customerReadRepository;
+            _orderWriteRepository = orderWriteRepository;
             _orderReadRepository = orderReadRepository;
+            _imageFileWriteRepository = imageFileWriteRepository;
+            _imageFileReadRepository = imageFileReadRepository;
+            _invoiceFileWriteRepository = invoiceFileWriteRepository;
+            _invoiceFileReadRepository = invoiceFileReadRepository;
+            _uploadedFileWriteRepository = uploadedFileWriteRepository;
+            _invoicesFileReadRepository = invoicesFileReadRepository;
             _webHostEnvironment = webHostEnvironment;
             _fileService = fileService;
         }
+
+
         #region example
 
         //[HttpGet]
@@ -74,7 +94,7 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
         #endregion
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery]Pagination pagination)
+        public async Task<IActionResult> Get([FromQuery] Pagination pagination)
         {
             var totalDataCount = await _productReadRepository.GetAll(false).CountAsync();
             var products = _productReadRepository.GetAll(false).Skip(pagination.Page * pagination.Size).Take(pagination.Size).Select(p => new
@@ -127,7 +147,7 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
             product.Price = updateProductViewModel.Price;
 
             await _productWriteRepository.SaveAsync();
-            
+
             return StatusCode((int)HttpStatusCode.OK);
         }
 
@@ -168,8 +188,17 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
 
             #endregion
 
-            await _fileService.UploadAsync("Resource\\Product-Images", Request.Form.Files);
+            var datas = await _fileService.UploadAsync("Resource\\Product-Images", Request.Form.Files);
+
+           await _imageFileWriteRepository.AddRangeAsync(datas.Select(d => new ImageFile()
+            {
+               Name = d.FileName,
+               Path = d.TargetFolderPath,
+
+            }).ToList());
+            await _imageFileWriteRepository.SaveAsync();
+
             return Ok(new { message = "Files uploaded successfully" });
         }
-    }    
+    }
 }

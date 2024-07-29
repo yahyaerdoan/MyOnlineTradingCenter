@@ -17,7 +17,7 @@ namespace MyOnlineTradingCenter.InfrastructureLayer.Concretions.Services
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public async Task<List<(string FileName, string FileExtension, string FullPath)>> UploadAsync(string targetFolderPath, IFormFileCollection files)
+        public async Task<List<(string FileName, string FileExtension, string FullPath, string TargetFolderPath)>> UploadAsync(string targetFolderPath, IFormFileCollection files)
         {
             string uploadDirectory = Path.Combine(_webHostEnvironment.WebRootPath, targetFolderPath);
 
@@ -26,7 +26,7 @@ namespace MyOnlineTradingCenter.InfrastructureLayer.Concretions.Services
                 Directory.CreateDirectory(uploadDirectory);
             }
 
-            var uploadedFiles = new List<(string FileName, string FileExtension, string FullPath)>();
+            var uploadedFiles = new List<(string FileName, string FileExtension, string FullPath, string targetFolderPath)>();
             foreach (var file in files)
             {
                 string originalFileName = Path.GetFileNameWithoutExtension(file.FileName);
@@ -37,7 +37,7 @@ namespace MyOnlineTradingCenter.InfrastructureLayer.Concretions.Services
                 bool isFileCopied = await CopyFileAsync(fullFilePath, file);
                 if (isFileCopied)
                 {
-                    uploadedFiles.Add((uniqueFileName, fileExtension, fullFilePath));
+                    uploadedFiles.Add((uniqueFileName, fileExtension, fullFilePath, targetFolderPath));
                 }
             }
 

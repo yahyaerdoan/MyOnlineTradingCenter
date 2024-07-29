@@ -10,6 +10,9 @@ namespace MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;
 
 public class UploadedFile : BaseEntity
 {
+    public string Name { get; set; }
+    public string Path { get; set; }
+
     [NotMapped]
     public override DateTime UpdatedDate { get => base.UpdatedDate; set => base.UpdatedDate = value; }
 }
