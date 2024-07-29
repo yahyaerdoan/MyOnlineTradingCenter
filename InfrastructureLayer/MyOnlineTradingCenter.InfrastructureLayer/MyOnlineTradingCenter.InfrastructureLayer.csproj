@@ -12,6 +12,10 @@
 
   <ItemGroup>
     <Folder Include="Abstractions\" />
+    <Folder Include="Concretions\StorageServices\Storages\AwsStorages\" />
+    <Folder Include="Concretions\StorageServices\Storages\GoogleCloudStorages\" />
+    <Folder Include="Concretions\StorageServices\Storages\FireBaseStorages\" />
+    <Folder Include="Concretions\StorageServices\Storages\AzureStorages\" />
   </ItemGroup>
 
 </Project>

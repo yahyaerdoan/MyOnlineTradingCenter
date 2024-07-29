@@ -7,6 +7,7 @@ using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IOrderRe
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IProductRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IUploadedFileRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
+using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IStorageServices;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.RequestParameters.Paginations;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.ViewModels.Products;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;
@@ -39,7 +40,9 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
         readonly private IWebHostEnvironment _webHostEnvironment;
         readonly private IFileService _fileService;
 
-        public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, ICustomerWriteRepository customerWriteRepository, ICustomerReadRepository customerReadRepository, IOrderWriteRepository orderWriteRepository, IOrderReadRepository orderReadRepository, IImageFileWriteRepository imageFileWriteRepository, IImageFileReadRepository imageFileReadRepository, IInvoiceFileWriteRepository invoiceFileWriteRepository, IInvoiceFileReadRepository invoiceFileReadRepository, IUploadedFileWriteRepository uploadedFileWriteRepository, IInvoiceFileReadRepository invoicesFileReadRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService)
+        readonly private IStorageService _storageService;
+
+        public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, ICustomerWriteRepository customerWriteRepository, ICustomerReadRepository customerReadRepository, IOrderWriteRepository orderWriteRepository, IOrderReadRepository orderReadRepository, IImageFileWriteRepository imageFileWriteRepository, IImageFileReadRepository imageFileReadRepository, IInvoiceFileWriteRepository invoiceFileWriteRepository, IInvoiceFileReadRepository invoiceFileReadRepository, IUploadedFileWriteRepository uploadedFileWriteRepository, IInvoiceFileReadRepository invoicesFileReadRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService, IStorageService storageService)
         {
             _productWriteRepository = productWriteRepository;
             _productReadRepository = productReadRepository;
@@ -55,6 +58,7 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
             _invoicesFileReadRepository = invoicesFileReadRepository;
             _webHostEnvironment = webHostEnvironment;
             _fileService = fileService;
+            _storageService = storageService;
         }
 
 
@@ -164,7 +168,7 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Upload()
         {
-            #region File Uploading
+            #region File Uploading Only for Controller
             //string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "Resource/Product-Images");
 
             //if (!Directory.Exists(uploadPath))
@@ -188,12 +192,27 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
 
             #endregion
 
-            var datas = await _fileService.UploadAsync("Resource\\Product-Images", Request.Form.Files);
+            #region File Uploading Only for File Service
+            //var datas = await _fileService.UploadAsync("Resource\\Product-Images", Request.Form.Files);
+
+            //await _imageFileWriteRepository.AddRangeAsync(datas.Select(d => new ImageFile()
+            //{
+            //    Name = d.FileName,
+            //    Path = d.TargetFolderPath,
+
+            //}).ToList());
+            //await _imageFileWriteRepository.SaveAsync();
+
+            //return Ok(new { message = "Files uploaded successfully" });
+            #endregion
+
+            var datas = await _storageService.UploadAsync("Resource\\LocalStorage\\Product-Images", Request.Form.Files);
 
            await _imageFileWriteRepository.AddRangeAsync(datas.Select(d => new ImageFile()
             {
                Name = d.FileName,
-               Path = d.TargetFolderPath,
+               Path = d.TargetFolderPathOrContainerName,
+               Storage = _storageService.StorageName,
 
             }).ToList());
             await _imageFileWriteRepository.SaveAsync();
