@@ -46,7 +46,7 @@ namespace MyOnlineTradingCenter.InfrastructureLayer.Concretions.Services
 
         public async Task<bool> CopyFileAsync(string destinationFilePath, IFormFile sourceFile)
         {
-            await using var fileStream = new FileStream(destinationFilePath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, useAsync: false);
+            await using var fileStream = new FileStream(destinationFilePath, FileMode.Create, FileAccess.Write, FileShare.None,4096, useAsync: false);
             await sourceFile.CopyToAsync(fileStream);
             await fileStream.FlushAsync();
             return true;
