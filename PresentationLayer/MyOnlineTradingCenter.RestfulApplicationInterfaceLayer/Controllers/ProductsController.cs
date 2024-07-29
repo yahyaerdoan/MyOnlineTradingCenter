@@ -38,7 +38,7 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
         readonly private IInvoiceFileReadRepository _invoicesFileReadRepository;
 
         readonly private IWebHostEnvironment _webHostEnvironment;
-        readonly private IFileService _fileService;
+       readonly private IFileService _fileService;
 
         readonly private IStorageService _storageService;
 
