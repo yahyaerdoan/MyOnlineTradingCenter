@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.ILocalStorages;
+using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IStorages.ILocalStorages;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
