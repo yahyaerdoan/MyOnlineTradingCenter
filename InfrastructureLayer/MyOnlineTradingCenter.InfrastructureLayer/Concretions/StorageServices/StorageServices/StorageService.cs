@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IStorages;
+using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IBaseStorages;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IStorageServices;
 using System;
 using System.Collections.Generic;
@@ -11,9 +11,9 @@ namespace MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.
 
 public class StorageService : IStorageService
 {
-    private readonly IStorage _storage;
+    private readonly IBaseStorage _storage;
 
-    public StorageService(IStorage storage)
+    public StorageService(IBaseStorage storage)
     {
         _storage = storage;
     }

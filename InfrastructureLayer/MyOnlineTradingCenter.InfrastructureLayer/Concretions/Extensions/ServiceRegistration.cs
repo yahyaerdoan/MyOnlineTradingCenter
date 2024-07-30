@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
-using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IStorages;
+using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IBaseStorages;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IStorageServices;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.Services;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Enums.StorageTypes;
@@ -22,9 +22,9 @@ public static class ServiceRegistration
         services.AddScoped<IStorageService, StorageService>();
     }
 
-    public static void AddStorageServices<T>(this IServiceCollection services) where T : class, IStorage
+    public static void AddStorageServices<T>(this IServiceCollection services) where T : class, IBaseStorage
     {
-        services.AddScoped<IStorage, T>();
+        services.AddScoped<IBaseStorage, T>();
     }
 
     public static void AddStorageServices(this IServiceCollection services,  StorageType storageType)
@@ -32,7 +32,7 @@ public static class ServiceRegistration
         switch (storageType)
         {
             case StorageType.LocalStorage:
-                services.AddScoped<IStorage, LocalStorage>();
+                services.AddScoped<IBaseStorage, LocalStorage>();
                 break;
             case StorageType.AzureStorage:
                 break;
@@ -43,7 +43,7 @@ public static class ServiceRegistration
             case StorageType.GoogleCloudStorage:
                 break;
             default:
-                services.AddScoped<IStorage, LocalStorage>();
+                services.AddScoped<IBaseStorage, LocalStorage>();
                 break;
         }
     }
