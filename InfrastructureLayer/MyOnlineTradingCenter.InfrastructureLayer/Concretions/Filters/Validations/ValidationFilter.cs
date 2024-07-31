@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyOnlineTradingCenter.InfrastructureLayer.Filters.Validations;
+namespace MyOnlineTradingCenter.InfrastructureLayer.Concretions.Filters.Validations;
 
 public class ValidationFilter : IAsyncActionFilter
 {
@@ -18,7 +18,7 @@ public class ValidationFilter : IAsyncActionFilter
                 .Where(x => x.Value != null && x.Value.Errors.Any())
                 .ToDictionary(
                     e => e.Key,
-                    e =>  e.Value?.Errors.Select(error => error.ErrorMessage).ToArray() ?? Array.Empty<string>()
+                    e => e.Value?.Errors.Select(error => error.ErrorMessage).ToArray() ?? Array.Empty<string>()
                 );
 
             context.Result = new BadRequestObjectResult(errors);

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.CommonEntity;
+using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.CommonEntities;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;
 using System;
 using System.Collections.Generic;

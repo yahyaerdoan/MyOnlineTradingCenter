@@ -2,11 +2,11 @@ using MyOnlineTradingCenter.PersistenceLayer.Concretions.Extensions;
 using FluentValidation.AspNetCore;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Validations.Products;
 using FluentValidation;
-using MyOnlineTradingCenter.InfrastructureLayer.Filters.Validations;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.Extensions;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Enums.StorageTypes;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Storages.AzureStorages;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Storages.LocalStorages;
+using MyOnlineTradingCenter.InfrastructureLayer.Concretions.Filters.Validations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +27,7 @@ builder.Services.AddFluentValidationAutoValidation()
                 .AddValidatorsFromAssemblyContaining<CreateProductValidator>();
 
 // Register Persistance Layer services
-builder.Services.AddPersistanceServices();
+builder.Services.AddPersistanceServiceRegistrations();
 builder.Services.AddInfrastructureServiceRegistrations();
 
 builder.Services.AddStorageServices<LocalStorage>();

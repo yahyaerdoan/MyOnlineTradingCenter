@@ -24,7 +24,7 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Extensions
 {
     public static class ServiceRegistration
     {
-        public static void AddPersistanceServices(this IServiceCollection services)
+        public static void AddPersistanceServiceRegistrations(this IServiceCollection services)
         {
             services.AddDbContext<MyOnlineTradingCenterPostgreSqlDbContext>(optionsAction: options => options
             .UseNpgsql(ConnectionStringConfiguration.ConnectionString), ServiceLifetime.Scoped);

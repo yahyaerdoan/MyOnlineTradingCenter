@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyOnlineTradingCenter.DomainLayer.Concretions.Entities.CommonEntity
+namespace MyOnlineTradingCenter.DomainLayer.Concretions.Entities.CommonEntities
 {
     public class BaseEntity
     {

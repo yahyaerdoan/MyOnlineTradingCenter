@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.CommonEntity;
+using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.CommonEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
