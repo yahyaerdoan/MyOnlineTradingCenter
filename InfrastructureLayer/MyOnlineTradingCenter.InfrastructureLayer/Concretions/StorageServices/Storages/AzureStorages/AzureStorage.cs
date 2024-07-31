@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IStorages.IAzureStorages;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IStorageServices;
+using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Utilities.FileHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Storages.AzureStorages;
 
-public class AzureStorage : IAzureStorage
+public class AzureStorage : FileNameHelper, IAzureStorage
 {
     private readonly BlobServiceClient _blobServiceClient;
     private BlobContainerClient? _blobContainerClient;
@@ -50,13 +51,16 @@ public class AzureStorage : IAzureStorage
         var values = new List<(string FileName, string FileExtension, string FullPath, string TargetFolderPathOrContainerName)>();
         foreach (IFormFile file in files)
         {
-            BlobClient blobClient = _blobContainerClient.GetBlobClient(file.Name);
+            string fileExtension = Path.GetExtension(file.FileName);
+            string newFileName = await GenerateUniqueFileNameAsync(file.FileName, fileExtension, targetFolderPathOrContainerName, HasFile);
+
+            BlobClient blobClient = _blobContainerClient.GetBlobClient(newFileName);
             await blobClient.UploadAsync(file.OpenReadStream());
 
             var fullPath = blobClient.Uri.ToString();
-            var fileExtensions = Path.GetExtension(file.FileName);
+            var fileExtensions = Path.GetExtension(newFileName);
 
-            values.Add((file.FileName, fileExtensions, fullPath, targetFolderPathOrContainerName));
+            values.Add((newFileName, fileExtensions, fullPath, targetFolderPathOrContainerName));
         }
         return values;
     }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IStorages.ILocalStorages;
+using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Utilities.FileHelpers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Storages.LocalStorages
 {
-    public class LocalStorage : ILocalStorage
+    public class LocalStorage : FileNameHelper, ILocalStorage
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
 
@@ -54,13 +55,13 @@ namespace MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.
             {
                 string originalFileName = Path.GetFileNameWithoutExtension(file.FileName);
                 string fileExtension = Path.GetExtension(file.FileName);
-                string uniqueFileName = await GenerateUniqueFileNameAsync(originalFileName, fileExtension, uploadDirectory);
-                string fullFilePath = Path.Combine(uploadDirectory, uniqueFileName);
+                string newFileName = await GenerateUniqueFileNameAsync(originalFileName, fileExtension, uploadDirectory, HasFile);
+                string fullFilePath = Path.Combine(uploadDirectory, newFileName);
 
                 bool isFileCopied = await CopyFileAsync(fullFilePath, file);
                 if (isFileCopied)
                 {
-                    uploadedFiles.Add((uniqueFileName, fileExtension, fullFilePath, targetFolderPathOrContainerName));
+                    uploadedFiles.Add((newFileName, fileExtension, fullFilePath, targetFolderPathOrContainerName));
                 }
             }
 
@@ -76,23 +77,27 @@ namespace MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.
             return true;
         }
 
-        private async Task<string> GenerateUniqueFileNameAsync(string fileName, string fileExtension, string directoryPath)
-        {
-            return await Task.Run(() =>
-            {
-                string newFileName = fileName;
-                string fullFileName = $"{newFileName}{fileExtension}";
-                int counter = 1;
+        #region Not Using This is Updated for Architecture
+        //private async Task<string> GenerateUniqueFileNameAsync(string fileName, string fileExtension, string directoryPath)
+        //{
+        //    return await Task.Run(() =>
+        //    {
+        //        string newFileName = fileName;
+        //        string fullFileName = $"{newFileName}{fileExtension}";
+        //        int counter = 1;
 
-                while (File.Exists(Path.Combine(directoryPath, fullFileName)))
-                {
-                    newFileName = $"{fileName}_{counter++}";
-                    fullFileName = $"{newFileName}{fileExtension}";
-                }
+        //        while (File.Exists(Path.Combine(directoryPath, fullFileName)))
+        //        {
+        //            newFileName = $"{fileName}_{counter++}";
+        //            fullFileName = $"{newFileName}{fileExtension}";
+        //        }
 
-                return fullFileName;
-            });
-        }
+        //        return fullFileName;
+        //    });
+        //}
+
+        #endregion
+
         #endregion
     }
 }

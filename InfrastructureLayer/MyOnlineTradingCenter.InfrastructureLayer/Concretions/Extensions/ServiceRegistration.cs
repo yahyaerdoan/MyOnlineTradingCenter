@@ -7,6 +7,7 @@ using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Enum
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Storages.AzureStorages;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Storages.LocalStorages;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.StorageServices;
+using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Utilities.FileHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ public static class ServiceRegistration
         services.AddScoped<IStorageService, StorageService>();
     }
 
-    public static void AddStorageServices<T>(this IServiceCollection services) where T : class, IBaseStorage
+    public static void AddStorageServices<T>(this IServiceCollection services) where T : FileNameHelper, IBaseStorage
     {
         services.AddScoped<IBaseStorage, T>();
     }

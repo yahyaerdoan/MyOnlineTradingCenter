@@ -9,9 +9,9 @@ namespace MyOnlineTradingCenter.InfrastructureLayer.Concretions.Operations;
 
 public static class NameOperation
 {
-    public static string CharacterRegulatory(string name)
+    public static string CharacterRegulatory(string fileName)
     {
-        if (string.IsNullOrWhiteSpace(name))
+        if (string.IsNullOrWhiteSpace(fileName))
             return string.Empty;
 
         var replacements = new (string, string)[]
@@ -25,11 +25,11 @@ public static class NameOperation
 
         foreach (var (oldChar, newChar) in replacements)
         {
-            name = name.Replace(oldChar, newChar);
+            fileName = fileName.Replace(oldChar, newChar);
         }
 
-        name = Regex.Replace(name, "[^a-zA-Z0-9]", "");
+        fileName = Regex.Replace(fileName, "[^a-zA-Z0-9]", "");
 
-        return name;
+        return fileName;
     }
 }
