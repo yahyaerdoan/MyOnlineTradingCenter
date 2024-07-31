@@ -5,6 +5,8 @@ using FluentValidation;
 using MyOnlineTradingCenter.InfrastructureLayer.Filters.Validations;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.Extensions;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Enums.StorageTypes;
+using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Storages.AzureStorages;
+using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Storages.LocalStorages;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,8 +29,13 @@ builder.Services.AddFluentValidationAutoValidation()
 // Register Persistance Layer services
 builder.Services.AddPersistanceServices();
 builder.Services.AddInfrastructureServiceRegistrations();
-//builder.Services.AddStorageServices<LocalStorage>();
-builder.Services.AddStorageServices(StorageType.LocalStorage);
+
+builder.Services.AddStorageServices<LocalStorage>();
+//builder.Services.AddStorageServices(StorageType.LocalStorage);
+
+//builder.Services.AddStorageServices<AzureStorage>();
+//builder.Services.AddStorageServices(StorageType.AzureStorage);
+
 
 builder.Services.AddCors(opt => opt.AddDefaultPolicy(policy => policy.WithOrigins("http://localhost:4200", "https://localhost:4200").AllowAnyHeader().AllowAnyMethod()));
 

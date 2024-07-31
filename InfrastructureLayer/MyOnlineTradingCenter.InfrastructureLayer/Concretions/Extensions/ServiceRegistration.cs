@@ -4,6 +4,7 @@ using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IBase
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IStorageServices;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.Services;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Enums.StorageTypes;
+using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Storages.AzureStorages;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Storages.LocalStorages;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.StorageServices;
 using System;
@@ -35,6 +36,7 @@ public static class ServiceRegistration
                 services.AddScoped<IBaseStorage, LocalStorage>();
                 break;
             case StorageType.AzureStorage:
+                services.AddScoped<IBaseStorage, AzureStorage>();
                 break;
             case StorageType.FireBaseStorage:
                 break;
