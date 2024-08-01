@@ -38,7 +38,7 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
         readonly private IInvoiceFileReadRepository _invoicesFileReadRepository;
 
         readonly private IWebHostEnvironment _webHostEnvironment;
-       readonly private IFileService _fileService;
+        readonly private IFileService _fileService;
 
         readonly private IStorageService _storageService;
 
@@ -166,7 +166,7 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Upload()
+        public async Task<IActionResult> Upload(string id)
         {
             #region File Uploading Only for Controller
             //string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "Resource/Product-Images");
@@ -206,17 +206,51 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
             //return Ok(new { message = "Files uploaded successfully" });
             #endregion
 
-            var datas = await _storageService.UploadAsync("Resource\\LocalStorage\\Product-Images", Request.Form.Files);
+            #region File Uploading to Storage
 
-           await _imageFileWriteRepository.AddRangeAsync(datas.Select(d => new ImageFile()
+            //var datas = await _storageService.UploadAsync("Resource\\LocalStorage\\Product-Images", Request.Form.Files);
+
+            //await _imageFileWriteRepository.AddRangeAsync(datas.Select(d => new ImageFile()
+            //{
+            //    Name = d.FileName,
+            //    Path = d.TargetFolderPathOrContainerName,
+            //    Storage = _storageService.StorageName,
+
+            //}).ToList());
+            //await _imageFileWriteRepository.SaveAsync();
+
+            //return Ok(new { message = "Files uploaded successfully" });
+
+            #endregion
+
+            List<(string FileName, string FileExtension, string FullPath, string TargetFolderPathOrContainerName)>   result =  await _storageService.UploadAsync("Resource/LocalStorage/Product-Images", Request.Form.Files);
+
+           Product product = await _productReadRepository.GetByIdAsync(id);
+
+            #region Option 2
+
+            //foreach (var r in result)
+            //{
+            //    product.ImageFiles.Add(new()
+            //    {
+            //        Name = x.FileName,
+            //        Path = $"{x.TargetFolderPathOrContainerName}/{x.FileName}",
+            //        Storage = _storageService.StorageName,
+            //        Products = new List<Product> { product }
+            //    });
+            //}
+
+            #endregion
+
+            await _imageFileWriteRepository.AddRangeAsync(result.Select(x => new ImageFile
             {
-               Name = d.FileName,
-               Path = d.TargetFolderPathOrContainerName,
-               Storage = _storageService.StorageName,
+                Name = x.FileName,
+                Path = $"{x.TargetFolderPathOrContainerName}/{x.FileName}",
+                Storage = _storageService.StorageName,
+                Products = new List<Product> { product }
 
             }).ToList());
             await _imageFileWriteRepository.SaveAsync();
-
             return Ok(new { message = "Files uploaded successfully" });
         }
     }

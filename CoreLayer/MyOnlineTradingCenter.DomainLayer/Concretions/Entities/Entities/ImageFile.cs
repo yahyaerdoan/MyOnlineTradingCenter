@@ -8,4 +8,6 @@ namespace MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;
 
 public class ImageFile : UploadedFile
 {
+    public ICollection<Product> Products { get; set; }
+
 }
