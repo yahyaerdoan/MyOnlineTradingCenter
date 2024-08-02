@@ -303,7 +303,9 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
             product.ImageFiles.Remove(imageFile);
             await _imageFileWriteRepository.SaveAsync();
 
-            string filePath = Path.Combine("wwwroot/Resource/LocalStorage/Product-Images", imageFile.Name);
+            //string filePath = Path.Combine("wwwroot/Resource/LocalStorage/Product-Images", imageFile.Name);
+
+            string filePath = Path.Combine($"wwwroot/{_configuration["LocalStorageOrigin"]}/", imageFile.Name);
             if (System.IO.File.Exists(filePath))
                 System.IO.File.Delete(filePath);
 
