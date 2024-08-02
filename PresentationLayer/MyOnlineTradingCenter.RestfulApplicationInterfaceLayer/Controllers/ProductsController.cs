@@ -12,7 +12,6 @@ using MyOnlineTradingCenter.ApplicationLayer.Concretions.RequestParameters.Pagin
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.ViewModels.Products;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;
 using System.Net;
-using System.IO;
 
 namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
 {
@@ -269,10 +268,13 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
             {
                 p.Id,
                 p.Name,
-                //p.Path,
-                // Path = $"{_configuration["LocalStorageOrigin"]}/{p.Path}",
-               Path = $"{Request.Scheme}://{Request.Host}/Resource/LocalStorage/Product-Images/{p.Name}",
                 p.Status,
+                Path = $"{Request.Scheme}://{Request.Host}/{_configuration["LocalStorageOrigin"]}/{p.Name}",
+                #region Other path type
+                //p.Path,
+                //Path = $"{_configuration["LocalStorageOrigin"]}/{p.Path}",
+                //Path = $"{Request.Scheme}://{Request.Host}/Resource/LocalStorage/Product-Images/{p.Name}",
+                #endregion
             }));
         }
 
@@ -284,16 +286,16 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
             var product = await _productReadRepository.Table.Include(p => p.ImageFiles)
                 .FirstOrDefaultAsync(p => p.Id == productIdGuid);
 
-            if (product == null)            
-                return NotFound(new { message = "Product not found" });           
+            if (product == null)
+                return NotFound(new { message = "Product not found" });
 
             var imageFile = product.ImageFiles.FirstOrDefault(p => p.Id == imageIdGuid);
-            if (imageFile == null)            
-                return NotFound(new { message = "Image not found" });            
+            if (imageFile == null)
+                return NotFound(new { message = "Image not found" });
 
             var uploadedFile = await _imageFileReadRepository.Table.FirstOrDefaultAsync(p => p.Id == imageIdGuid);
-            if (uploadedFile == null)            
-                return NotFound(new { message = "Uploaded file record not found" });            
+            if (uploadedFile == null)
+                return NotFound(new { message = "Uploaded file record not found" });
 
             await _uploadedFileWriteRepository.RemoveAsync(uploadedFile);
             await _uploadedFileWriteRepository.SaveAsync();
@@ -302,8 +304,8 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
             await _imageFileWriteRepository.SaveAsync();
 
             string filePath = Path.Combine("wwwroot/Resource/LocalStorage/Product-Images", imageFile.Name);
-            if (System.IO.File.Exists(filePath))            
-                System.IO.File.Delete(filePath);        
+            if (System.IO.File.Exists(filePath))
+                System.IO.File.Delete(filePath);
 
             return Ok(new { message = "Files deleted successfully" });
         }
