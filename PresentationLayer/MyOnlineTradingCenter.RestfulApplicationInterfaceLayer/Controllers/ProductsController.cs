@@ -12,6 +12,7 @@ using MyOnlineTradingCenter.ApplicationLayer.Concretions.RequestParameters.Pagin
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.ViewModels.Products;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;
 using System.Net;
+using System.IO;
 
 namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
 {
@@ -35,14 +36,15 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
         readonly private IInvoiceFileReadRepository _invoiceFileReadRepository;
 
         readonly private IUploadedFileWriteRepository _uploadedFileWriteRepository;
-        readonly private IInvoiceFileReadRepository _invoicesFileReadRepository;
+        readonly private IUploadedFileReadRepository _uploadedFileReadRepository;
 
         readonly private IWebHostEnvironment _webHostEnvironment;
         readonly private IFileService _fileService;
 
         readonly private IStorageService _storageService;
+        private readonly IConfiguration _configuration;
 
-        public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, ICustomerWriteRepository customerWriteRepository, ICustomerReadRepository customerReadRepository, IOrderWriteRepository orderWriteRepository, IOrderReadRepository orderReadRepository, IImageFileWriteRepository imageFileWriteRepository, IImageFileReadRepository imageFileReadRepository, IInvoiceFileWriteRepository invoiceFileWriteRepository, IInvoiceFileReadRepository invoiceFileReadRepository, IUploadedFileWriteRepository uploadedFileWriteRepository, IInvoiceFileReadRepository invoicesFileReadRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService, IStorageService storageService)
+        public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, ICustomerWriteRepository customerWriteRepository, ICustomerReadRepository customerReadRepository, IOrderWriteRepository orderWriteRepository, IOrderReadRepository orderReadRepository, IImageFileWriteRepository imageFileWriteRepository, IImageFileReadRepository imageFileReadRepository, IInvoiceFileWriteRepository invoiceFileWriteRepository, IInvoiceFileReadRepository invoiceFileReadRepository, IUploadedFileWriteRepository uploadedFileWriteRepository, IUploadedFileReadRepository uploadedFileReadRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService, IStorageService storageService, IConfiguration configuration)
         {
             _productWriteRepository = productWriteRepository;
             _productReadRepository = productReadRepository;
@@ -55,11 +57,14 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
             _invoiceFileWriteRepository = invoiceFileWriteRepository;
             _invoiceFileReadRepository = invoiceFileReadRepository;
             _uploadedFileWriteRepository = uploadedFileWriteRepository;
-            _invoicesFileReadRepository = invoicesFileReadRepository;
+            _uploadedFileReadRepository = uploadedFileReadRepository;
             _webHostEnvironment = webHostEnvironment;
             _fileService = fileService;
             _storageService = storageService;
+            _configuration = configuration;
         }
+
+
 
 
         #region example
@@ -223,9 +228,9 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
 
             #endregion
 
-            List<(string FileName, string FileExtension, string FullPath, string TargetFolderPathOrContainerName)>   result =  await _storageService.UploadAsync("Resource/LocalStorage/Product-Images", Request.Form.Files);
+            List<(string FileName, string FileExtension, string FullPath, string TargetFolderPathOrContainerName)> result = await _storageService.UploadAsync("Resource/LocalStorage/Product-Images", Request.Form.Files);
 
-           Product product = await _productReadRepository.GetByIdAsync(id);
+            Product product = await _productReadRepository.GetByIdAsync(id);
 
             #region Option 2
 
@@ -252,6 +257,55 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
             }).ToList());
             await _imageFileWriteRepository.SaveAsync();
             return Ok(new { message = "Files uploaded successfully" });
+        }
+
+        [HttpGet("[action]/{id}")]
+        public async Task<IActionResult> GetImages(string id)
+        {
+            Product? product = await _productReadRepository.Table.Include(p => p.ImageFiles)
+                  .FirstOrDefaultAsync(p => p.Id == Guid.Parse(id));
+            // await Task.Delay(2000);
+            return Ok(product.ImageFiles.Select(p => new
+            {
+                p.Id,
+                p.Name,
+                //p.Path,
+                // Path = $"{_configuration["LocalStorageOrigin"]}/{p.Path}",
+               Path = $"{Request.Scheme}://{Request.Host}/Resource/LocalStorage/Product-Images/{p.Name}",
+                p.Status,
+            }));
+        }
+
+        [HttpDelete("[action]/{id}")]
+        public async Task<IActionResult> DeleteImage(string id, string imageId)
+        {
+            var productIdGuid = Guid.Parse(id); var imageIdGuid = Guid.Parse(imageId);
+
+            var product = await _productReadRepository.Table.Include(p => p.ImageFiles)
+                .FirstOrDefaultAsync(p => p.Id == productIdGuid);
+
+            if (product == null)            
+                return NotFound(new { message = "Product not found" });           
+
+            var imageFile = product.ImageFiles.FirstOrDefault(p => p.Id == imageIdGuid);
+            if (imageFile == null)            
+                return NotFound(new { message = "Image not found" });            
+
+            var uploadedFile = await _imageFileReadRepository.Table.FirstOrDefaultAsync(p => p.Id == imageIdGuid);
+            if (uploadedFile == null)            
+                return NotFound(new { message = "Uploaded file record not found" });            
+
+            await _uploadedFileWriteRepository.RemoveAsync(uploadedFile);
+            await _uploadedFileWriteRepository.SaveAsync();
+
+            product.ImageFiles.Remove(imageFile);
+            await _imageFileWriteRepository.SaveAsync();
+
+            string filePath = Path.Combine("wwwroot/Resource/LocalStorage/Product-Images", imageFile.Name);
+            if (System.IO.File.Exists(filePath))            
+                System.IO.File.Delete(filePath);        
+
+            return Ok(new { message = "Files deleted successfully" });
         }
     }
 }
