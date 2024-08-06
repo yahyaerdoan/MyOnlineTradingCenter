@@ -7,6 +7,7 @@ using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Enum
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Storages.AzureStorages;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Storages.LocalStorages;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.Filters.Validations;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Extenions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +30,7 @@ builder.Services.AddFluentValidationAutoValidation()
 // Register Persistance Layer services
 builder.Services.AddPersistanceServiceRegistrations();
 builder.Services.AddInfrastructureServiceRegistrations();
+builder.Services.AddApplicationServiceRegistrations();
 
 builder.Services.AddStorageServices<LocalStorage>();
 //builder.Services.AddStorageServices(StorageType.LocalStorage);

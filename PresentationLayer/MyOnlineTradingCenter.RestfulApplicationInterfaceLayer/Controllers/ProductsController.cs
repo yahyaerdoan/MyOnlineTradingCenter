@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.ICustomerRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IImageFileRepositories;
@@ -8,6 +9,7 @@ using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IProduct
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IUploadedFileRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IStorageServices;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Queries.GetList;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.RequestParameters.Paginations;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.ViewModels.Products;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;
@@ -43,7 +45,9 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
         readonly private IStorageService _storageService;
         private readonly IConfiguration _configuration;
 
-        public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, ICustomerWriteRepository customerWriteRepository, ICustomerReadRepository customerReadRepository, IOrderWriteRepository orderWriteRepository, IOrderReadRepository orderReadRepository, IImageFileWriteRepository imageFileWriteRepository, IImageFileReadRepository imageFileReadRepository, IInvoiceFileWriteRepository invoiceFileWriteRepository, IInvoiceFileReadRepository invoiceFileReadRepository, IUploadedFileWriteRepository uploadedFileWriteRepository, IUploadedFileReadRepository uploadedFileReadRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService, IStorageService storageService, IConfiguration configuration)
+        private readonly IMediator _mediator;
+
+        public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, ICustomerWriteRepository customerWriteRepository, ICustomerReadRepository customerReadRepository, IOrderWriteRepository orderWriteRepository, IOrderReadRepository orderReadRepository, IImageFileWriteRepository imageFileWriteRepository, IImageFileReadRepository imageFileReadRepository, IInvoiceFileWriteRepository invoiceFileWriteRepository, IInvoiceFileReadRepository invoiceFileReadRepository, IUploadedFileWriteRepository uploadedFileWriteRepository, IUploadedFileReadRepository uploadedFileReadRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService, IStorageService storageService, IConfiguration configuration, IMediator mediator)
         {
             _productWriteRepository = productWriteRepository;
             _productReadRepository = productReadRepository;
@@ -61,10 +65,8 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
             _fileService = fileService;
             _storageService = storageService;
             _configuration = configuration;
+            _mediator = mediator;
         }
-
-
-
 
         #region example
 
@@ -101,26 +103,37 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
         //}
         #endregion
 
-        [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] Pagination pagination)
-        {
-            var totalDataCount = await _productReadRepository.GetAll(false).CountAsync();
-            var products = _productReadRepository.GetAll(false).Skip(pagination.Page * pagination.Size).Take(pagination.Size).Select(p => new
-            {
-                p.Id,
-                p.Name,
-                p.Description,
-                p.Stock,
-                p.Price,
-                p.CreatedDate,
-                p.UpdatedDate,
+        #region Old Version Get Products
+        //[HttpGet]
+        //public async Task<IActionResult> Get([FromQuery] Pagination pagination)
+        //{
 
-            }).ToList();
-            return Ok(new
-            {
-                products,
-                totalDataCount,
-            });
+        //    var totalDataCount = await _productReadRepository.GetAll(false).CountAsync();
+        //    var products = _productReadRepository.GetAll(false).Skip(pagination.Page * pagination.Size).Take(pagination.Size).Select(p => new
+        //    {
+        //        p.Id,
+        //        p.Name,
+        //        p.Description,
+        //        p.Stock,
+        //        p.Price,
+        //        p.CreatedDate,
+        //        p.UpdatedDate,
+
+        //    }).ToList();
+        //    return Ok(new
+        //    {
+        //        products,
+        //        totalDataCount,
+        //    });
+        //}
+        #endregion
+
+        [HttpGet]
+        public async Task<IActionResult> Get([FromQuery] GetProductsQueryRequest getProductsQueryRequest)
+        {
+            GetProductsQueryResponse getProductsQueryResponse = await _mediator.Send(getProductsQueryRequest);
+            return Ok(getProductsQueryResponse);
+
         }
 
         [HttpGet("id")]
