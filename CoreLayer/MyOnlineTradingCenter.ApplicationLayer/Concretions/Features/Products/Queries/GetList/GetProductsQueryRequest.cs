@@ -10,5 +10,14 @@ namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Q
 
 public class GetProductsQueryRequest : IRequest<GetProductsQueryResponse>
 {
-    public Pagination? Pagination { get; set; } = new Pagination();
+    public Pagination Pagination { get; set; }
+
+    public GetProductsQueryRequest()
+    {
+        Pagination = new Pagination();
+    }
+    public GetProductsQueryRequest(Pagination pagination)
+    {
+        Pagination = pagination ??  new Pagination();
+    }
 }

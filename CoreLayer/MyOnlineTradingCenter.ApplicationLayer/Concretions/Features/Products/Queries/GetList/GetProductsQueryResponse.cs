@@ -8,6 +8,6 @@ namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Q
 
 public class GetProductsQueryResponse
 {
-    public int TotalCount { get; set; }
+    public int TotalDataCount { get; set; }
     public object? Products { get; set; }
 }

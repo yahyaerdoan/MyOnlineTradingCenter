@@ -22,32 +22,29 @@ public class GetProductsQueryHandler : IRequestHandler<GetProductsQueryRequest, 
 
     public async Task<GetProductsQueryResponse> Handle(GetProductsQueryRequest request, CancellationToken cancellationToken)
     {
-        //var totalCount = _productReadRepository.GetAll(false).Count();
-        //var products = _productReadRepository.GetAll(false).Skip(request.Pagination.Page * request.Pagination.Size).Take(request.Pagination.Size).Select(p=> new
-        //{
-        //    p.Id,
-        //    p.Name,
-        //    p.Description,
-        //    p.Price,
-        //    p.Stock,
-        //    p.Status,
-        //    p.CreatedDate,
-        //}).ToList();
+        var query = _productReadRepository.GetAll(false);
 
-        //return new() { Products = products, TotalCount = totalCount };
+        var totalCount = await query.CountAsync(cancellationToken);
 
-        var pagination = request.Pagination ?? new Pagination();
-
-        var query = _productReadRepository.GetAll()
-            .Skip(pagination.Page * pagination.Size)
-            .Take(pagination.Size);
-
-        var products = await query.ToListAsync(cancellationToken);
+        var products = await query
+            .Skip((request.Pagination.Page) * request.Pagination.Size)
+            .Take(request.Pagination.Size)
+            .Select(p => new
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price,
+                Stock = p.Stock,
+                Status = p.Status,
+                CreatedDate = p.CreatedDate,
+            })
+            .ToListAsync(cancellationToken);
 
         return new GetProductsQueryResponse
         {
-            Products = products
+            Products = products,
+            TotalDataCount = totalCount
         };
-        //this is not return counts fix it
     }
 }

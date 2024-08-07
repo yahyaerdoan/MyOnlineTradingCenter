@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Azure.Core;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.ICustomerRepositories;
@@ -129,10 +130,11 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
         #endregion
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] GetProductsQueryRequest getProductsQueryRequest)
+        public async Task<IActionResult> Get([FromQuery] Pagination pagination)
         {
-            GetProductsQueryResponse getProductsQueryResponse = await _mediator.Send(getProductsQueryRequest);
-            return Ok(getProductsQueryResponse);
+            var query = new GetProductsQueryRequest(pagination);
+            GetProductsQueryResponse response = await _mediator.Send(query);
+            return Ok(response);
 
         }
 
