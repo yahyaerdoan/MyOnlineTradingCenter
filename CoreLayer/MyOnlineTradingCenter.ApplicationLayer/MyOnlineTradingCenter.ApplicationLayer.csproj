@@ -22,6 +22,12 @@
     <Folder Include="Abstractions\IStorageServices\IStorages\IGoogleCloudStorages\" />
     <Folder Include="Abstractions\IStorageServices\IStorages\IFireBaseStorages\" />
     <Folder Include="Abstractions\IStorageServices\IStorages\IAwsStorages\" />
+    <Folder Include="Concretions\Features\Repetition - Copy\Commands\Create\" />
+    <Folder Include="Concretions\Features\Repetition - Copy\Commands\Delete\" />
+    <Folder Include="Concretions\Features\Repetition - Copy\Commands\Update\" />
+    <Folder Include="Concretions\Features\Repetition - Copy\Handlers\" />
+    <Folder Include="Concretions\Features\Repetition - Copy\Queries\GetById\" />
+    <Folder Include="Concretions\Features\Repetition - Copy\Queries\Get\" />
   </ItemGroup>
 
 </Project>
