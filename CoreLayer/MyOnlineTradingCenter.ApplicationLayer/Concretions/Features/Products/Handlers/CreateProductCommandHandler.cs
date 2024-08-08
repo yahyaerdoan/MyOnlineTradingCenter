@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IProductRepositories;
-using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Commands.CreateProduct;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Commands.Create;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.ViewModels.Products;
 using System;
 using System.Collections.Generic;

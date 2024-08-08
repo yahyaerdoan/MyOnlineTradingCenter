@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Commands.CreateProduct;
+namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Commands.Create;
 
 public class CreateProductCommandRequest : IRequest<Unit>
 {

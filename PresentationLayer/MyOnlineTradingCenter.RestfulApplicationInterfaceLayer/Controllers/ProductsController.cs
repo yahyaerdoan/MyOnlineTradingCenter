@@ -10,7 +10,7 @@ using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IProduct
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IUploadedFileRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IStorageServices;
-using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Commands.CreateProduct;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Commands.Create;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Queries.GetList;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.RequestParameters.Paginations;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.ViewModels.Products;
