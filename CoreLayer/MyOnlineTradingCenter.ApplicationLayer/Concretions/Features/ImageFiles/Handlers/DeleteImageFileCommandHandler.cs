@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.ImageFiles.Handlers;
 
-public class DeleteImageFileCommandHandler : IRequestHandler<CreateImageFileCommandRequest, DeleteImageFileCommandResponse>
+public class DeleteImageFileCommandHandler : IRequestHandler<DeleteImageFileCommandRequest, DeleteImageFileCommandResponse>
 {
-    public Task<DeleteImageFileCommandResponse> Handle(CreateImageFileCommandRequest request, CancellationToken cancellationToken)
+    public Task<DeleteImageFileCommandResponse> Handle(DeleteImageFileCommandRequest request, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

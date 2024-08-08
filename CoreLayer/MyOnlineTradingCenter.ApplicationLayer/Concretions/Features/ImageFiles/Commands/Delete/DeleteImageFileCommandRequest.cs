@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.ImageFiles.Commands.Delete;
 
-public class CreateImageFileCommandRequest : IRequest<DeleteImageFileCommandResponse>
+public class DeleteImageFileCommandRequest : IRequest<DeleteImageFileCommandResponse>
 {
 }
