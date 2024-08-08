@@ -1,4 +1,5 @@
-﻿using Azure.Core;
+﻿using Azure;
+using Azure.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IUploade
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IStorageServices;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Commands.Create;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Commands.Delete;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Commands.Update;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Queries.Get;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Queries.GetById;
@@ -211,14 +213,11 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
         //    return Ok();
         //}
         #endregion
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string id)
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> Delete([FromRoute] DeleteProductCommandRequest request)
         {
-            await _productWriteRepository.RemoveByIdAsync(id);
-
-            await _productWriteRepository.SaveAsync();
-
-            return Ok();
+            DeleteProductCommandResponse response = await _mediator.Send(request);
+            return StatusCode((int)HttpStatusCode.OK, new { message = $"Deleted product with ID: {response.Id}" });
         }
 
         [HttpPost("[action]")]
