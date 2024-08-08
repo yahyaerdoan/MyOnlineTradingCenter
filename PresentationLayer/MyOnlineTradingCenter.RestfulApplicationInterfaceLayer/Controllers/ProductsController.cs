@@ -378,6 +378,27 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
             return Ok(new { message = "Files uploaded successfully" });
         }
 
+        #region Old version get images
+        //[HttpGet("[action]/{id}")]
+        //public async Task<IActionResult> GetImages(string id)
+        //{
+        //    Product? product = await _productReadRepository.Table.Include(p => p.ImageFiles)
+        //          .FirstOrDefaultAsync(p => p.Id == Guid.Parse(id));
+        //    // await Task.Delay(2000);
+        //    return Ok(product.ImageFiles.Select(p => new
+        //    {
+        //        p.Id,
+        //        p.Name,
+        //        p.Status,
+        //        Path = $"{Request.Scheme}://{Request.Host}/{_configuration["LocalStorageOrigin"]}/{p.Name}",
+        //        #region Other path type
+        //        //p.Path,
+        //        //Path = $"{_configuration["LocalStorageOrigin"]}/{p.Path}",
+        //        //Path = $"{Request.Scheme}://{Request.Host}/Resource/LocalStorage/Product-Images/{p.Name}",
+        //        #endregion
+        //    }));
+        //}
+        #endregion
         [HttpGet("[action]/{id}")]
         public async Task<IActionResult> GetImages(string id)
         {
@@ -398,37 +419,46 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
             }));
         }
 
-        [HttpDelete("[action]/{id}")]
-        public async Task<IActionResult> DeleteImage(string id, string imageId)
+        #region Old version delete image
+        //[HttpDelete("[action]/{id}")]
+        //public async Task<IActionResult> DeleteImage(string id, string imageId)
+        //{
+        //    var productIdGuid = Guid.Parse(id); var imageIdGuid = Guid.Parse(imageId);
+
+        //    var product = await _productReadRepository.Table.Include(p => p.ImageFiles)
+        //        .FirstOrDefaultAsync(p => p.Id == productIdGuid);
+
+        //    if (product == null)
+        //        return NotFound(new { message = "Product not found" });
+
+        //    var imageFile = product.ImageFiles.FirstOrDefault(p => p.Id == imageIdGuid);
+        //    if (imageFile == null)
+        //        return NotFound(new { message = "Image not found" });
+
+        //    var uploadedFile = await _imageFileReadRepository.Table.FirstOrDefaultAsync(p => p.Id == imageIdGuid);
+        //    if (uploadedFile == null)
+        //        return NotFound(new { message = "Uploaded file record not found" });
+
+        //    await _uploadedFileWriteRepository.RemoveAsync(uploadedFile);
+        //    await _uploadedFileWriteRepository.SaveAsync();
+
+        //    product.ImageFiles.Remove(imageFile);
+        //    await _imageFileWriteRepository.SaveAsync();
+
+        //    //string filePath = Path.Combine("wwwroot/Resource/LocalStorage/Product-Images", imageFile.Name);
+
+        //    string filePath = Path.Combine($"wwwroot/{_configuration["LocalStorageOrigin"]}/", imageFile.Name);
+        //    if (System.IO.File.Exists(filePath))
+        //        System.IO.File.Delete(filePath);
+
+        //    return Ok(new { message = "Files deleted successfully" });
+        //}
+        #endregion
+        [HttpDelete("[action]/{Id}")]
+        public async Task<IActionResult> DeleteImage([FromRoute] DeleteImageFileCommandRequest request, [FromQuery] string imageId)
         {
-            var productIdGuid = Guid.Parse(id); var imageIdGuid = Guid.Parse(imageId);
-
-            var product = await _productReadRepository.Table.Include(p => p.ImageFiles)
-                .FirstOrDefaultAsync(p => p.Id == productIdGuid);
-
-            if (product == null)
-                return NotFound(new { message = "Product not found" });
-
-            var imageFile = product.ImageFiles.FirstOrDefault(p => p.Id == imageIdGuid);
-            if (imageFile == null)
-                return NotFound(new { message = "Image not found" });
-
-            var uploadedFile = await _imageFileReadRepository.Table.FirstOrDefaultAsync(p => p.Id == imageIdGuid);
-            if (uploadedFile == null)
-                return NotFound(new { message = "Uploaded file record not found" });
-
-            await _uploadedFileWriteRepository.RemoveAsync(uploadedFile);
-            await _uploadedFileWriteRepository.SaveAsync();
-
-            product.ImageFiles.Remove(imageFile);
-            await _imageFileWriteRepository.SaveAsync();
-
-            //string filePath = Path.Combine("wwwroot/Resource/LocalStorage/Product-Images", imageFile.Name);
-
-            string filePath = Path.Combine($"wwwroot/{_configuration["LocalStorageOrigin"]}/", imageFile.Name);
-            if (System.IO.File.Exists(filePath))
-                System.IO.File.Delete(filePath);
-
+            request.ImageId = imageId;
+            DeleteImageFileCommandResponse response = await _mediator.Send(request);
             return Ok(new { message = "Files deleted successfully" });
         }
     }

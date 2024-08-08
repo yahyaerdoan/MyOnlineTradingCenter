@@ -10,4 +10,6 @@ namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.ImageFiles
 
 public class DeleteImageFileCommandRequest : IRequest<DeleteImageFileCommandResponse>
 {
+    public string Id { get; set; }
+    public string? ImageId { get; set; }
 }
