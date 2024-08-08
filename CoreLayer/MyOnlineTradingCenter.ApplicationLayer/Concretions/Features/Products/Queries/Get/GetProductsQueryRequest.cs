@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Queries.GetList;
+namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Queries.Get;
 
 public class GetProductsQueryRequest : IRequest<GetProductsQueryResponse>
 {
@@ -18,6 +18,6 @@ public class GetProductsQueryRequest : IRequest<GetProductsQueryResponse>
     }
     public GetProductsQueryRequest(Pagination pagination)
     {
-        Pagination = pagination ??  new Pagination();
+        Pagination = pagination ?? new Pagination();
     }
 }

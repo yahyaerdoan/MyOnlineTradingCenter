@@ -11,7 +11,7 @@ using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IUploade
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IStorageServices;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Commands.Create;
-using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Queries.GetList;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Queries.Get;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.RequestParameters.Paginations;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.ViewModels.Products;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;

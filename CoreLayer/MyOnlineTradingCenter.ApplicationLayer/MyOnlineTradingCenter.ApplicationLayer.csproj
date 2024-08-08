@@ -22,7 +22,6 @@
     <Folder Include="Abstractions\IStorageServices\IStorages\IGoogleCloudStorages\" />
     <Folder Include="Abstractions\IStorageServices\IStorages\IFireBaseStorages\" />
     <Folder Include="Abstractions\IStorageServices\IStorages\IAwsStorages\" />
-    <Folder Include="Concretions\Features\Products\Queries\GetById\" />
   </ItemGroup>
 
 </Project>

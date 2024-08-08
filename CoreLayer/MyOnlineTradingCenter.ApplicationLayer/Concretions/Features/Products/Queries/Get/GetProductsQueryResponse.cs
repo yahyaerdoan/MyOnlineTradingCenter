@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Queries.GetList;
+namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Queries.Get;
 
 public class GetProductsQueryResponse
 {

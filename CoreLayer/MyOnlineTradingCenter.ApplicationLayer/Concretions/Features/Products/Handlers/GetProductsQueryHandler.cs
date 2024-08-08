@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IProductRepositories;
-using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Queries.GetList;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Queries.Get;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.RequestParameters.Paginations;
 using System;
 using System.Collections.Generic;
