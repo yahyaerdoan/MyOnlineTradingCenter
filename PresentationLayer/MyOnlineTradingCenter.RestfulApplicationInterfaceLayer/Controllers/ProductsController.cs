@@ -10,6 +10,7 @@ using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IProduct
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IUploadedFileRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IStorageServices;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Commands.CreateProduct;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Queries.GetList;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.RequestParameters.Paginations;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.ViewModels.Products;
@@ -145,17 +146,25 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
             return Ok(product);
         }
 
+        #region Old Version Create Product
+        //[HttpPost]
+        //public async Task<IActionResult> Post(CreateProductViewModel createProductViewModel)
+        //{
+        //    await _productWriteRepository.AddAsync(new()
+        //    {
+        //        Name = createProductViewModel.Name,
+        //        Description = createProductViewModel.Description,
+        //        Stock = createProductViewModel.Stock,
+        //        Price = createProductViewModel.Price,
+        //    });
+        //    await _productWriteRepository.SaveAsync();
+        //    return StatusCode((int)HttpStatusCode.Created);
+        //}
+        #endregion
         [HttpPost]
-        public async Task<IActionResult> Post(CreateProductViewModel createProductViewModel)
+        public async Task<IActionResult> Post(CreateProductCommandRequest request)
         {
-            await _productWriteRepository.AddAsync(new()
-            {
-                Name = createProductViewModel.Name,
-                Description = createProductViewModel.Description,
-                Stock = createProductViewModel.Stock,
-                Price = createProductViewModel.Price,
-            });
-            await _productWriteRepository.SaveAsync();
+            await _mediator.Send(request);
             return StatusCode((int)HttpStatusCode.Created);
         }
 
