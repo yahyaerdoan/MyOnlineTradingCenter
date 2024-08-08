@@ -1,8 +1,5 @@
-﻿using Azure;
-using Azure.Core;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.ICustomerRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IImageFileRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IInvoiceFileRepositories;
@@ -20,8 +17,7 @@ using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Comma
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Queries.Get;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Queries.GetById;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.RequestParameters.Paginations;
-using MyOnlineTradingCenter.ApplicationLayer.Concretions.ViewModels.Products;
-using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;
+
 using System.Net;
 
 namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
@@ -30,6 +26,7 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
+        #region IRepository
         readonly private IProductWriteRepository _productWriteRepository;
         readonly private IProductReadRepository _productReadRepository;
 
@@ -54,10 +51,12 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
         readonly private IStorageService _storageService;
         private readonly IConfiguration _configuration;
 
+        #endregion
         private readonly IMediator _mediator;
 
         public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, ICustomerWriteRepository customerWriteRepository, ICustomerReadRepository customerReadRepository, IOrderWriteRepository orderWriteRepository, IOrderReadRepository orderReadRepository, IImageFileWriteRepository imageFileWriteRepository, IImageFileReadRepository imageFileReadRepository, IInvoiceFileWriteRepository invoiceFileWriteRepository, IInvoiceFileReadRepository invoiceFileReadRepository, IUploadedFileWriteRepository uploadedFileWriteRepository, IUploadedFileReadRepository uploadedFileReadRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService, IStorageService storageService, IConfiguration configuration, IMediator mediator)
         {
+            #region IRepository
             _productWriteRepository = productWriteRepository;
             _productReadRepository = productReadRepository;
             _customerWriteRepository = customerWriteRepository;
@@ -74,6 +73,7 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
             _fileService = fileService;
             _storageService = storageService;
             _configuration = configuration;
+            #endregion
             _mediator = mediator;
         }
 
