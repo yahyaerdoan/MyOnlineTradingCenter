@@ -34,17 +34,12 @@ public class DeleteImageFileCommandHandler : IRequestHandler<DeleteImageFileComm
     public async Task<DeleteImageFileCommandResponse> Handle(DeleteImageFileCommandRequest request, CancellationToken cancellationToken)
     {
         var productIdGuid = Guid.Parse(request.Id); var imageIdGuid = Guid.Parse(request.ImageId);
-
         var product = await _productReadRepository.Table.Include(p => p.ImageFiles)
-            .FirstOrDefaultAsync(p => p.Id == productIdGuid);
+            .FirstOrDefaultAsync(p => p.Id == productIdGuid);     
 
-       
+        var imageFile = product?.ImageFiles.FirstOrDefault(p => p.Id == imageIdGuid);     
 
-        var imageFile = product?.ImageFiles.FirstOrDefault(p => p.Id == imageIdGuid);
-       
-
-        var uploadedFile = await _imageFileReadRepository.Table.FirstOrDefaultAsync(p => p.Id == imageIdGuid);
-       
+        var uploadedFile = await _imageFileReadRepository.Table.FirstOrDefaultAsync(p => p.Id == imageIdGuid);      
 
         await _uploadedFileWriteRepository.RemoveAsync(uploadedFile);
         await _uploadedFileWriteRepository.SaveAsync();

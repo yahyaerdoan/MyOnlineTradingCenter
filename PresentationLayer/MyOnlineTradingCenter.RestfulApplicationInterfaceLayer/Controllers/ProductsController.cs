@@ -13,6 +13,7 @@ using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IStorageServices;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.ImageFiles.Commands.Create;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.ImageFiles.Commands.Delete;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.ImageFiles.Queries.Get;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Commands.Create;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Commands.Delete;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Commands.Update;
@@ -399,24 +400,12 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
         //    }));
         //}
         #endregion
-        [HttpGet("[action]/{id}")]
-        public async Task<IActionResult> GetImages(string id)
+        [HttpGet("[action]/{Id}")]
+        public async Task<IActionResult> GetImages([FromRoute] GetImageFileQueryRequest request)
         {
-            Product? product = await _productReadRepository.Table.Include(p => p.ImageFiles)
-                  .FirstOrDefaultAsync(p => p.Id == Guid.Parse(id));
-            // await Task.Delay(2000);
-            return Ok(product.ImageFiles.Select(p => new
-            {
-                p.Id,
-                p.Name,
-                p.Status,
-                Path = $"{Request.Scheme}://{Request.Host}/{_configuration["LocalStorageOrigin"]}/{p.Name}",
-                #region Other path type
-                //p.Path,
-                //Path = $"{_configuration["LocalStorageOrigin"]}/{p.Path}",
-                //Path = $"{Request.Scheme}://{Request.Host}/Resource/LocalStorage/Product-Images/{p.Name}",
-                #endregion
-            }));
+            List<GetImageFileQueryResponse> response = await _mediator.Send(request);
+           // var result = new { StatusCode = (int)HttpStatusCode.OK, Message = "Files retrieved successfully", Data = response };
+            return Ok(response);
         }
 
         #region Old version delete image
