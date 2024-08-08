@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,4 +9,8 @@ namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Q
 
 public class GetByIdProductQueryResponse
 {
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public int Stock { get; set; }
+    public float Price { get; set; } 
 }

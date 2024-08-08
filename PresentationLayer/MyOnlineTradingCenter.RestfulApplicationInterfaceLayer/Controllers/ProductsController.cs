@@ -12,6 +12,7 @@ using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IStorageServices;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Commands.Create;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Queries.Get;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Queries.GetById;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.RequestParameters.Paginations;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.ViewModels.Products;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;
@@ -129,7 +130,6 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
         //    });
         //}
         #endregion
-
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] Pagination pagination)
         {
@@ -139,11 +139,19 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
 
         }
 
-        [HttpGet("id")]
-        public async Task<IActionResult> Get(string id)
+        #region old version get by id
+        //[HttpGet("id")]
+        //public async Task<IActionResult> Get(string id)
+        //{
+        //    Product product = await _productReadRepository.GetByIdAsync(id, false);
+        //    return Ok(product);
+        //}
+        #endregion
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> Get([FromRoute]GetByIdProductQueryRequest request)
         {
-            Product product = await _productReadRepository.GetByIdAsync(id, false);
-            return Ok(product);
+            GetByIdProductQueryResponse response = await _mediator.Send(request);
+            return Ok(response);
         }
 
         #region Old Version Create Product
