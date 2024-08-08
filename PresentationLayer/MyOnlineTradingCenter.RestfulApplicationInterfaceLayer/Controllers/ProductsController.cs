@@ -11,6 +11,7 @@ using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IUploade
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IStorageServices;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Commands.Create;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Commands.Update;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Queries.Get;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Queries.GetById;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.RequestParameters.Paginations;
@@ -148,7 +149,7 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
         //}
         #endregion
         [HttpGet("{Id}")]
-        public async Task<IActionResult> Get([FromRoute]GetByIdProductQueryRequest request)
+        public async Task<IActionResult> Get([FromRoute] GetByIdProductQueryRequest request)
         {
             GetByIdProductQueryResponse response = await _mediator.Send(request);
             return Ok(response);
@@ -176,21 +177,40 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
             return StatusCode((int)HttpStatusCode.Created);
         }
 
+        #region Old version update
+        //[HttpPut]
+        //public async Task<IActionResult> Put(UpdateProductViewModel updateProductViewModel)
+        //{
+        //    Product product = await _productReadRepository.GetByIdAsync(updateProductViewModel.Id);
+
+        //    product.Name = updateProductViewModel.Name;
+        //    product.Description = updateProductViewModel.Description;
+        //    product.Stock = updateProductViewModel.Stock;
+        //    product.Price = updateProductViewModel.Price;
+
+        //    await _productWriteRepository.SaveAsync();
+
+        //    return StatusCode((int)HttpStatusCode.OK);
+        //}
+        #endregion
         [HttpPut]
-        public async Task<IActionResult> Put(UpdateProductViewModel updateProductViewModel)
+        public async Task<IActionResult> Put([FromBody] UpdateProductCommandRequest request)
         {
-            Product product = await _productReadRepository.GetByIdAsync(updateProductViewModel.Id);
-
-            product.Name = updateProductViewModel.Name;
-            product.Description = updateProductViewModel.Description;
-            product.Stock = updateProductViewModel.Stock;
-            product.Price = updateProductViewModel.Price;
-
-            await _productWriteRepository.SaveAsync();
-
-            return StatusCode((int)HttpStatusCode.OK);
+            UpdateProductCommandResponse response = await _mediator.Send(request);
+            return StatusCode((int)HttpStatusCode.OK, new { message = $"Updated product with ID: {response.Id}" });
         }
 
+        #region old version delete
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> Delete(string id)
+        //{
+        //    await _productWriteRepository.RemoveByIdAsync(id);
+
+        //    await _productWriteRepository.SaveAsync();
+
+        //    return Ok();
+        //}
+        #endregion
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
