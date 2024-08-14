@@ -10,4 +10,8 @@
     <Folder Include="Abstractions\Entities\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.33" />
+  </ItemGroup>
+
 </Project>

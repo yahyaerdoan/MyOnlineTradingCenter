@@ -6,6 +6,7 @@ using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IInvoice
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IOrderRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IProductRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IUploadedFileRepositories;
+using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.IdentityEntities;
 using MyOnlineTradingCenter.PersistenceLayer.Concretions.Contexts;
 using MyOnlineTradingCenter.PersistenceLayer.Concretions.Contexts.Configurations;
 using MyOnlineTradingCenter.PersistenceLayer.Concretions.Repositories.CustomerRepository;
@@ -46,6 +47,8 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Extensions
 
             services.AddScoped<IUploadedFileReadRepository, UploadedFileReadRepository>();
             services.AddScoped<IUploadedFileWriteRepository, UploadedFileWriteRepository>();
+
+            services.AddIdentity<User, Role>().AddEntityFrameworkStores<MyOnlineTradingCenterPostgreSqlDbContext>();
         }
     }
 }

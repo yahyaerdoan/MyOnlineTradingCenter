@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.CommonEntities;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;
+using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.IdentityEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Contexts
 {
-    public class MyOnlineTradingCenterPostgreSqlDbContext : DbContext
+    public class MyOnlineTradingCenterPostgreSqlDbContext : IdentityDbContext<User, Role, string> //DbContext
     {
         public MyOnlineTradingCenterPostgreSqlDbContext(DbContextOptions options) : base(options)
         {
