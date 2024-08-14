@@ -48,7 +48,10 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Extensions
             services.AddScoped<IUploadedFileReadRepository, UploadedFileReadRepository>();
             services.AddScoped<IUploadedFileWriteRepository, UploadedFileWriteRepository>();
 
-            services.AddIdentity<User, Role>().AddEntityFrameworkStores<MyOnlineTradingCenterPostgreSqlDbContext>();
+            services.AddIdentity<User, Role>(options =>
+            {
+                options.Password.RequireNonAlphanumeric = false;
+            }).AddEntityFrameworkStores<MyOnlineTradingCenterPostgreSqlDbContext>();
         }
     }
 }
