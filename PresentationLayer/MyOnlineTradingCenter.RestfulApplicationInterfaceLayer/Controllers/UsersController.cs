@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.Commands.Create;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.CreateUsers.Commands.Create;
 
 namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers;
 
@@ -20,5 +20,10 @@ public class UsersController : ControllerBase
     {
         CreateUserCommandResponse response = await _mediator.Send(request);
         return Ok(response);
+    }
+    [HttpPost("[action]")]
+    public async Task<IActionResult> LogIn()
+    {
+        return Ok();
     }
 }

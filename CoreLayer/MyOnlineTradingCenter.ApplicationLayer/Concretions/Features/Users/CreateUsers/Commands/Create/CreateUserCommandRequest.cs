@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.Commands.Create;
+namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.CreateUsers.Commands.Create;
 
 public class CreateUserCommandRequest : IRequest<CreateUserCommandResponse>
 {

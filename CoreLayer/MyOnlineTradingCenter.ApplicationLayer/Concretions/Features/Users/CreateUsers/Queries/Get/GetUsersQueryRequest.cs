@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.Queries.Get;
+namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.CreateUsers.Queries.Get;
 
 public class GetUsersQueryRequest
 {

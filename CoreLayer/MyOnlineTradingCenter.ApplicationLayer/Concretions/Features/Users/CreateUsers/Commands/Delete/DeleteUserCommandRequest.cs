@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.Commands.Delete;
+namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.CreateUsers.Commands.Delete;
 
 public class DeleteUserCommandRequest
 {

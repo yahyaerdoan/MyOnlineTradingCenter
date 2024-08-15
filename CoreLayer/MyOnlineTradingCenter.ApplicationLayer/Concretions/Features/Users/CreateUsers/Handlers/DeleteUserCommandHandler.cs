@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.Handlers;
+namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.CreateUsers.Handlers;
 
 public class DeleteUserCommandHandler
 {

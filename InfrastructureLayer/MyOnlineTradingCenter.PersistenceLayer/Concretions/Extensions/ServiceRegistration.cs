@@ -51,6 +51,7 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Extensions
             services.AddIdentity<User, Role>(options =>
             {
                 options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireDigit = false;
             }).AddEntityFrameworkStores<MyOnlineTradingCenterPostgreSqlDbContext>();
         }
     }
