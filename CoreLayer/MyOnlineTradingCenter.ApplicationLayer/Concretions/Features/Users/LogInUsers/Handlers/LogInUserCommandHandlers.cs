@@ -24,22 +24,25 @@ public class LogInUserCommandHandlers : IRequestHandler<LogInUserCommandRequest,
 
     public async Task<LogInUserCommandResponse> Handle(LogInUserCommandRequest request, CancellationToken cancellationToken)
     {
-       User user = await _userManager.FindByNameAsync(request.UserNameOrEmail);
+        User user = await _userManager.FindByNameAsync(request.UserNameOrEmail);
         if (user == null)
-           user = await _userManager.FindByEmailAsync(request.UserNameOrEmail);
+            user = await _userManager.FindByEmailAsync(request.UserNameOrEmail);
 
-        LogInUserCommandResponse response = new() { Succeeded = false};
+        var response = new LogInUserCommandResponse { Succeeded = false };
         if (user == null)
-            response.Message = "User name or email or password wrong!.";            
+        {
+            response.Message = "Invalid credentials!";
+            return response;
+        }
 
         var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
-        if (result.Succeeded) 
+        if (result.Succeeded)
         {
             response.Succeeded = true;
             response.Message = "User logged in successfully!";
         }
         else
-            response.Message = "Invalid credentials.";
+            response.Message = "Invalid credentials!";
 
         return response;
     }
