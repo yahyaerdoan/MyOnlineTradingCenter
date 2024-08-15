@@ -28,9 +28,10 @@ public class LogInUserCommandHandlers : IRequestHandler<LogInUserCommandRequest,
         if (user == null)
             user = await _userManager.FindByEmailAsync(request.UserNameOrEmail);
 
-        var response = new LogInUserCommandResponse { Succeeded = false };
+        var response = new LogInUserCommandResponse();
         if (user == null)
         {
+            response.Succeeded = false;
             response.Message = "Invalid credentials!";
             return response;
         }
