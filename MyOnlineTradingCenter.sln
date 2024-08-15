@@ -5,19 +5,21 @@ VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CoreLayer", "CoreLayer", "{18059FFA-03CE-4CCD-B52A-00792C1273FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyOnlineTradingCenter.DomainLayer", "CoreLayer\MyOnlineTradingCenter.DomainLayer\MyOnlineTradingCenter.DomainLayer.csproj", "{D7A19C1F-50F0-4E64-8D26-D51A98C6E0B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyOnlineTradingCenter.DomainLayer", "CoreLayer\MyOnlineTradingCenter.DomainLayer\MyOnlineTradingCenter.DomainLayer.csproj", "{D7A19C1F-50F0-4E64-8D26-D51A98C6E0B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyOnlineTradingCenter.ApplicationLayer", "CoreLayer\MyOnlineTradingCenter.ApplicationLayer\MyOnlineTradingCenter.ApplicationLayer.csproj", "{BDEC5460-5686-4960-BD64-D2D7FF70E4B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyOnlineTradingCenter.ApplicationLayer", "CoreLayer\MyOnlineTradingCenter.ApplicationLayer\MyOnlineTradingCenter.ApplicationLayer.csproj", "{BDEC5460-5686-4960-BD64-D2D7FF70E4B4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "InfrastructureLayer", "InfrastructureLayer", "{F2E3DA38-7DD9-41B2-B5D5-92E9D7319BDD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyOnlineTradingCenter.InfrastructureLayer", "InfrastructureLayer\MyOnlineTradingCenter.InfrastructureLayer\MyOnlineTradingCenter.InfrastructureLayer.csproj", "{3B98B3C7-5C9D-4CFB-A62E-482EF96FF4C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyOnlineTradingCenter.InfrastructureLayer", "InfrastructureLayer\MyOnlineTradingCenter.InfrastructureLayer\MyOnlineTradingCenter.InfrastructureLayer.csproj", "{3B98B3C7-5C9D-4CFB-A62E-482EF96FF4C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyOnlineTradingCenter.PersistenceLayer", "InfrastructureLayer\MyOnlineTradingCenter.PersistenceLayer\MyOnlineTradingCenter.PersistenceLayer.csproj", "{8E466556-1AEC-464F-8485-681D66AAD617}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyOnlineTradingCenter.PersistenceLayer", "InfrastructureLayer\MyOnlineTradingCenter.PersistenceLayer\MyOnlineTradingCenter.PersistenceLayer.csproj", "{8E466556-1AEC-464F-8485-681D66AAD617}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PresentationLayer", "PresentationLayer", "{6C305105-755B-409D-B564-1EDB85D32F64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyOnlineTradingCenter.RestfulApplicationInterfaceLayer", "PresentationLayer\MyOnlineTradingCenter.RestfulApplicationInterfaceLayer\MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.csproj", "{5E8752E0-72ED-49A8-9261-27228C55550F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyOnlineTradingCenter.RestfulApplicationInterfaceLayer", "PresentationLayer\MyOnlineTradingCenter.RestfulApplicationInterfaceLayer\MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.csproj", "{5E8752E0-72ED-49A8-9261-27228C55550F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyOnlineTradingCenter.DataTransferObjectLayer", "CoreLayer\MyOnlineTradingCenter.DataTransferObjectLayer\MyOnlineTradingCenter.DataTransferObjectLayer.csproj", "{BA5F038D-CE57-4D47-9683-0F19BF7C3CC2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{5E8752E0-72ED-49A8-9261-27228C55550F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E8752E0-72ED-49A8-9261-27228C55550F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E8752E0-72ED-49A8-9261-27228C55550F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA5F038D-CE57-4D47-9683-0F19BF7C3CC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA5F038D-CE57-4D47-9683-0F19BF7C3CC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA5F038D-CE57-4D47-9683-0F19BF7C3CC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA5F038D-CE57-4D47-9683-0F19BF7C3CC2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +61,7 @@ Global
 		{3B98B3C7-5C9D-4CFB-A62E-482EF96FF4C4} = {F2E3DA38-7DD9-41B2-B5D5-92E9D7319BDD}
 		{8E466556-1AEC-464F-8485-681D66AAD617} = {F2E3DA38-7DD9-41B2-B5D5-92E9D7319BDD}
 		{5E8752E0-72ED-49A8-9261-27228C55550F} = {6C305105-755B-409D-B564-1EDB85D32F64}
+		{BA5F038D-CE57-4D47-9683-0F19BF7C3CC2} = {18059FFA-03CE-4CCD-B52A-00792C1273FD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3DC16CF7-13D0-4EF0-8EDA-671AA59E739E}

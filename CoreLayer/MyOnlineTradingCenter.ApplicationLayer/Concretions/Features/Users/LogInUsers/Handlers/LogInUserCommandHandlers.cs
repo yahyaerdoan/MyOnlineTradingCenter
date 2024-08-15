@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
+using MyOnlineTradingCenter.ApplicationLayer.Abstractions.ITokens;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.CreateUsers.Commands.Create;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.LogInUsers.Commands.Create;
+using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Tokens;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.IdentityEntities;
 using System;
 using System.Collections.Generic;
@@ -15,11 +17,13 @@ public class LogInUserCommandHandlers : IRequestHandler<LogInUserCommandRequest,
 {
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
+    private readonly ITokenHandler _tokenHandler;
 
-    public LogInUserCommandHandlers(UserManager<User> userManager, SignInManager<User> signInManager)
+    public LogInUserCommandHandlers(UserManager<User> userManager, SignInManager<User> signInManager, ITokenHandler tokenHandler)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _tokenHandler = tokenHandler;
     }
 
     public async Task<LogInUserCommandResponse> Handle(LogInUserCommandRequest request, CancellationToken cancellationToken)
@@ -39,6 +43,8 @@ public class LogInUserCommandHandlers : IRequestHandler<LogInUserCommandRequest,
         var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
         if (result.Succeeded)
         {
+            Token token = _tokenHandler.CreateAccessToken(5);
+            response.Token = token;
             response.Succeeded = true;
             response.Message = "User logged in successfully!";
         }

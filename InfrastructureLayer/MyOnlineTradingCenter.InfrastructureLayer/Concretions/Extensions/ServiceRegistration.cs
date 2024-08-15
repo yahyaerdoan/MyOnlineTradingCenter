@@ -2,12 +2,14 @@
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IBaseStorages;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IStorageServices;
+using MyOnlineTradingCenter.ApplicationLayer.Abstractions.ITokens;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.Services;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Enums.StorageTypes;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Storages.AzureStorages;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Storages.LocalStorages;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.StorageServices;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Utilities.FileHelpers;
+using MyOnlineTradingCenter.InfrastructureLayer.Concretions.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +24,7 @@ public static class ServiceRegistration
     {
         services.AddScoped<IFileService, FileService>();
         services.AddScoped<IStorageService, StorageService>();
+        services.AddScoped<ITokenHandler, TokenHandler>();
     }
 
     public static void AddStorageServices<T>(this IServiceCollection services) where T : FileNameHelper, IBaseStorage
