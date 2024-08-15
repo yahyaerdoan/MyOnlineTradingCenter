@@ -28,6 +28,10 @@
     <Folder Include="Concretions\Features\Repetition - Copy\Handlers\" />
     <Folder Include="Concretions\Features\Repetition - Copy\Queries\GetById\" />
     <Folder Include="Concretions\Features\Repetition - Copy\Queries\Get\" />
+    <Folder Include="Concretions\Features\Users\LogInUsers\Commands\Delete\" />
+    <Folder Include="Concretions\Features\Users\LogInUsers\Commands\Update\" />
+    <Folder Include="Concretions\Features\Users\LogInUsers\Queries\GetById\" />
+    <Folder Include="Concretions\Features\Users\LogInUsers\Queries\Get\" />
   </ItemGroup>
 
 </Project>

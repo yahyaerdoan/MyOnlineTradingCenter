@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.CreateUsers.Commands.Create;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.LogInUsers.Commands.Create;
 
 namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers;
 
@@ -22,8 +23,9 @@ public class UsersController : ControllerBase
         return Ok(response);
     }
     [HttpPost("[action]")]
-    public async Task<IActionResult> LogIn()
+    public async Task<IActionResult> LogIn(LogInUserCommandRequest request)
     {
-        return Ok();
+        LogInUserCommandResponse response = await _mediator.Send(request);
+        return Ok(response);
     }
 }
