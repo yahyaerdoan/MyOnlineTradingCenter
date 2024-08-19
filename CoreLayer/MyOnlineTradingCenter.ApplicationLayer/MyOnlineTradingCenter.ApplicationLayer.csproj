@@ -15,6 +15,7 @@
     <PackageReference Include="FluentValidation" Version="11.9.2" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.2" />
+    <PackageReference Include="Google.Apis.Auth" Version="1.68.0" />
     <PackageReference Include="MediatR" Version="12.4.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.33" />
   </ItemGroup>
@@ -33,6 +34,16 @@
     <Folder Include="Concretions\Features\Users\LogInUsers\Commands\Update\" />
     <Folder Include="Concretions\Features\Users\LogInUsers\Queries\GetById\" />
     <Folder Include="Concretions\Features\Users\LogInUsers\Queries\Get\" />
+    <Folder Include="Concretions\Features\Users\SocialLogInUsers\GoogleLogInUsers\Commands\Delete\" />
+    <Folder Include="Concretions\Features\Users\SocialLogInUsers\GoogleLogInUsers\Commands\Update\" />
+    <Folder Include="Concretions\Features\Users\SocialLogInUsers\GoogleLogInUsers\Queries\GetById\" />
+    <Folder Include="Concretions\Features\Users\SocialLogInUsers\GoogleLogInUsers\Queries\Get\" />
+    <Folder Include="Concretions\Features\Users\SocialLogInUsers\FaceBookLogInUsers\Commands\Create\" />
+    <Folder Include="Concretions\Features\Users\SocialLogInUsers\FaceBookLogInUsers\Commands\Delete\" />
+    <Folder Include="Concretions\Features\Users\SocialLogInUsers\FaceBookLogInUsers\Commands\Update\" />
+    <Folder Include="Concretions\Features\Users\SocialLogInUsers\FaceBookLogInUsers\Handlers\" />
+    <Folder Include="Concretions\Features\Users\SocialLogInUsers\FaceBookLogInUsers\Queries\GetById\" />
+    <Folder Include="Concretions\Features\Users\SocialLogInUsers\FaceBookLogInUsers\Queries\Get\" />
   </ItemGroup>
 
 </Project>

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.CreateUsers.Commands.Create;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.LogInUsers.Commands.Create;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.SocialLogInUsers.GoogleLogInUsers.Commands.Create;
 
 namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers;
 
@@ -26,6 +27,12 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> LogIn(LogInUserCommandRequest request)
     {
         LogInUserCommandResponse response = await _mediator.Send(request);
+        return Ok(response);
+    }
+    [HttpPost("[action]")]
+    public async Task<IActionResult> GoogleLogIn(GoogleLogInUserCommandRequest request)
+    {
+        GoogleLogInUserCommandResponse response = await _mediator.Send(request);
         return Ok(response);
     }
 }
