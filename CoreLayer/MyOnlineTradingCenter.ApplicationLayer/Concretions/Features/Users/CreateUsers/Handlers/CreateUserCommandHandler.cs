@@ -1,6 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
+using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.CreateUsers.Commands.Create;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Responses;
+using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Users;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.IdentityEntities;
 using System;
 using System.Collections.Generic;
@@ -10,32 +13,43 @@ using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.CreateUsers.Handlers;
 
-public class CreateUserCommandHandler : IRequestHandler<CreateUserCommandRequest, CreateUserCommandResponse>
+public class CreateUserCommandHandler : IRequestHandler<CreateUserCommandRequest, Response<CreateUserCommandResponseDto>>
 {
-    private readonly UserManager<User> _userManager;
+    private readonly IUserService _userService;
+    public CreateUserCommandHandler(IUserService userService) => _userService = userService;
 
-    public CreateUserCommandHandler(UserManager<User> userManager)
+    public async Task<Response<CreateUserCommandResponseDto>> Handle(CreateUserCommandRequest request, CancellationToken cancellationToken)
     {
-        _userManager = userManager;
-    }
-
-    public async Task<CreateUserCommandResponse> Handle(CreateUserCommandRequest request, CancellationToken cancellationToken)
-    {
-        IdentityResult result = await _userManager.CreateAsync(new()
+        Response<CreateUserCommandResponseDto> responseDto = await _userService.CreateUserAsync(new CreateUserCommandRequestDto
         {
-            Id = Guid.NewGuid().ToString(),
-            FirtName = request.FirstName,
+            FirstName = request.FirstName,
             LastName = request.LastName,
             UserName = request.UserName,
             Email = request.Email,
-        }, request.Password);
-
-        CreateUserCommandResponse response = new() { Succeeded = result.Succeeded };
-        if (result.Succeeded)
-            response.Message = "User created!";
-        else
-            foreach (var error in result.Errors)
-                response.Message += $"{error.Code} - {error.Description}\n";
-        return response;
+            Password = request.Password,
+        });
+        return responseDto;
     }
 }
+
+#region CreateUserCommandResponse with return
+//public async Task<Response<CreateUserCommandResponse>> Handle(CreateUserCommandRequest request, CancellationToken cancellationToken)
+//{
+//    var responseDto = await _userService.CreateUserAsync(new CreateUserCommandRequestDto
+//    {
+//        FirstName = request.FirstName,
+//        LastName = request.LastName,
+//        UserName = request.UserName,
+//        Email = request.Email,
+//        Password = request.Password,
+//    });
+
+//    var responseData = new CreateUserCommandResponse()
+//    {
+//        UserName = responseDto.Data.UserName,
+//        Password = responseDto.Data.Password,
+//    };
+
+//    return new Response<CreateUserCommandResponse>(isSuccessful: true, message: "success", statusCode: 200, errors: null, data: responseData);
+//}
+#endregion

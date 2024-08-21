@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.CreateUsers.Commands.Create;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.LogInUsers.Commands.Create;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.SocialLogInUsers.GoogleLogInUsers.Commands.Create;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Responses;
+using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Users;
 
 namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers;
 
@@ -20,7 +22,7 @@ public class UsersController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(CreateUserCommandRequest request)
     {
-        CreateUserCommandResponse response = await _mediator.Send(request);
+        Response<CreateUserCommandResponseDto> response = await _mediator.Send(request);
         return Ok(response);
     }
     [HttpPost("[action]")]
