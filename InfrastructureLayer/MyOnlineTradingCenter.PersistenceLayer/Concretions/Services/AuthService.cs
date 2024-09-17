@@ -8,7 +8,6 @@ using MyOnlineTradingCenter.ApplicationLayer.Abstractions.ITokens;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.SocialLogInUsers.GoogleLogInUsers.Commands.Create;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Responses;
 using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Tokens;
-using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Users.GoogleLogInUsers;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.IdentityEntities;
 using System;
 using System.Collections.Generic;

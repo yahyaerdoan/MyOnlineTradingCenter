@@ -30,13 +30,13 @@ public class GoogleLogInUserCommandHandlers : IRequestHandler<GoogleLogInUserCom
     }
 
     public async Task<GoogleLogInUserCommandResponse> Handle(GoogleLogInUserCommandRequest request, CancellationToken cancellationToken)
-    {
-        
+    {        
         Response<GoogleLogInUserCommandResponse> response = await _authService.GoogleLogInAsync(request);
         string accessToken = response?.Data?.Token?.AccessToken ?? string.Empty;
         Token token = new() { AccessToken = accessToken };
         return new(){ Message = response?.Message ?? "Error!", Succeeded = response?.IsSuccessful ?? false, Token = token};
 
+        #region Code refactored.
         //var settings = new GoogleJsonWebSignature.ValidationSettings()
         //{
         //    Audience = new List<string> { "554001534100-n61ikte483p3maaeo3drs07p1eph7inu.apps.googleusercontent.com" }
@@ -74,9 +74,10 @@ public class GoogleLogInUserCommandHandlers : IRequestHandler<GoogleLogInUserCom
         //    response.Succeeded = true;
         //    response.Message = "User logged in successfully with Google!";
         //}      
-            
+
         //else
         //    response.Message = "Invalid credentials!";
         //return response;
+        #endregion
     }
 }
