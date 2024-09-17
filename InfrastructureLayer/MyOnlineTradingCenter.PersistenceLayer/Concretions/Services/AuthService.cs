@@ -3,6 +3,7 @@ using Google.Apis.Util;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.ITokens;
@@ -52,36 +53,19 @@ public class AuthService : IAuthService
         var userInfo = new UserLoginInfo(requestDto.Provider, payload.Subject, requestDto.Provider);
         User user = await _userManager.FindByLoginAsync(userInfo.LoginProvider, userInfo.ProviderKey);
 
-        bool result = user != null;
+        bool result = await GetOrCreateExternalUserAsync(payload, user);
         var responseDto = new GoogleLogInUserCommandResponse();
-
-        if (user == null)
-        {
-            user = await _userManager.FindByEmailAsync(payload.Email);
-            if (user == null)
-            {
-                user = new()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Email = payload.Email,
-                    UserName = payload.GivenName + payload.FamilyName,
-                    FirtName = payload.GivenName,
-                    LastName = payload.FamilyName,
-                };
-                var identityResult = await _userManager.CreateAsync(user);
-                result = identityResult.Succeeded;
-            }
-        }
+       
         if (result)
         {
             await _userManager.AddLoginAsync(user, userInfo);
-            Token token = _tokenHandler.CreateAccessToken(requestDto.TokenLifeTime);
+            Token token = _tokenHandler.CreateAccessToken(requestDto.AccessTokenLifeTime);
             responseDto.Token = token;
             return Response<GoogleLogInUserCommandResponse>.Success(responseDto, "User logged in successfully with Google!", StatusCodes.Status200OK);
         }
         else
         return Response<GoogleLogInUserCommandResponse>.Failure("Invalid credentials!");
-    }
+    }  
 
     public Task InstagramLogInAsync()
     {
@@ -96,5 +80,26 @@ public class AuthService : IAuthService
     public Task SystemLogInAsync()
     {
         throw new NotImplementedException();
+    }
+    private async Task<bool> GetOrCreateExternalUserAsync(GoogleJsonWebSignature.Payload payload, User user)
+    {
+        if (user == null)
+        {
+            user = await _userManager.FindByEmailAsync(payload.Email);
+            if (user == null)
+            {
+                user = new()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Email = payload.Email,
+                    UserName = payload.GivenName + payload.FamilyName,
+                    FirtName = payload.GivenName,
+                    LastName = payload.FamilyName,
+                };
+                var identityResult = await _userManager.CreateAsync(user);
+                return identityResult.Succeeded;
+            }
+        }
+        return true;
     }
 }
