@@ -3,6 +3,7 @@ using Google.Apis.Util;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.ITokens;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.SocialLogInUsers.GoogleLogInUsers.Commands.Create;
@@ -21,11 +22,13 @@ public class AuthService : IAuthService
 {
     private readonly UserManager<User> _userManager;
     private readonly ITokenHandler _tokenHandler;
+    private readonly IConfiguration _configuration;
 
-    public AuthService(UserManager<User> userManager, ITokenHandler tokenHandler)
+    public AuthService(UserManager<User> userManager, ITokenHandler tokenHandler, IConfiguration configuration)
     {
         _userManager = userManager;
         _tokenHandler = tokenHandler;
+        _configuration = configuration;
     }
 
     public Task FacebookLogInAsync()
@@ -42,7 +45,7 @@ public class AuthService : IAuthService
     {
         var settings = new GoogleJsonWebSignature.ValidationSettings()
         {
-            Audience = new List<string> { "554001534100-n61ikte483p3maaeo3drs07p1eph7inu.apps.googleusercontent.com" }
+            Audience = new List<string> { _configuration["ExternalLogInSettings:GoogleLogIn:ClientId"] }
         };
         var payload = await GoogleJsonWebSignature.ValidateAsync(requestDto.IdToken, settings);
 
@@ -76,7 +79,6 @@ public class AuthService : IAuthService
             responseDto.Token = token;
             return Response<GoogleLogInUserCommandResponse>.Success(responseDto, "User logged in successfully with Google!", StatusCodes.Status200OK);
         }
-
         else
         return Response<GoogleLogInUserCommandResponse>.Failure("Invalid credentials!");
     }
