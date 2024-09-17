@@ -7,6 +7,7 @@ using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IOrderRe
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IProductRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IUploadedFileRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
+using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices.IAuthentications;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.IdentityEntities;
 using MyOnlineTradingCenter.PersistenceLayer.Concretions.Contexts;
 using MyOnlineTradingCenter.PersistenceLayer.Concretions.Contexts.Configurations;
@@ -57,6 +58,9 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Extensions
             }).AddEntityFrameworkStores<MyOnlineTradingCenterPostgreSqlDbContext>();
 
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IInternalAuthentication, AuthService>();
+            services.AddScoped<IExternalAuthentication, AuthService>();
         }
     }
 }

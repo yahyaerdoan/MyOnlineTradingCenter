@@ -39,7 +39,7 @@ public class AuthService : IAuthService
         throw new NotImplementedException();
     }
 
-    public async Task<Response<GoogleLogInUserCommandResponseDto>> GoogleLogInAsync(GoogleLogInUserCommandRequestDto requestDto)
+    public async Task<Response<GoogleLogInUserCommandResponse>> GoogleLogInAsync(GoogleLogInUserCommandRequest requestDto)
     {
         var settings = new GoogleJsonWebSignature.ValidationSettings()
         {
@@ -51,7 +51,7 @@ public class AuthService : IAuthService
         User user = await _userManager.FindByLoginAsync(userInfo.LoginProvider, userInfo.ProviderKey);
 
         bool result = user != null;
-        var responseDto = new GoogleLogInUserCommandResponseDto();
+        var responseDto = new GoogleLogInUserCommandResponse();
 
         if (user == null)
         {
@@ -62,7 +62,7 @@ public class AuthService : IAuthService
                 {
                     Id = Guid.NewGuid().ToString(),
                     Email = payload.Email,
-                    UserName = payload.GivenName,
+                    UserName = payload.GivenName + payload.FamilyName,
                     FirtName = payload.GivenName,
                     LastName = payload.FamilyName,
                 };
@@ -73,13 +73,13 @@ public class AuthService : IAuthService
         if (result)
         {
             await _userManager.AddLoginAsync(user, userInfo);
-            Token token = _tokenHandler.CreateAccessToken(requestDto.Second);
+            Token token = _tokenHandler.CreateAccessToken(requestDto.TokenLifeTime);
             responseDto.Token = token;
-            return Response<GoogleLogInUserCommandResponseDto>.Success(responseDto, "User logged in successfully with Google!", StatusCodes.Status200OK);
+            return Response<GoogleLogInUserCommandResponse>.Success(responseDto, "User logged in successfully with Google!", StatusCodes.Status200OK);
         }
 
         else
-        return Response<GoogleLogInUserCommandResponseDto>.Failure("Invalid credentials!");
+        return Response<GoogleLogInUserCommandResponse>.Failure("Invalid credentials!");
     }
 
     public Task InstagramLogInAsync()

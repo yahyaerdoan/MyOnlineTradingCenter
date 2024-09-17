@@ -1,4 +1,5 @@
-﻿using MyOnlineTradingCenter.ApplicationLayer.Concretions.Responses;
+﻿using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.SocialLogInUsers.GoogleLogInUsers.Commands.Create;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Responses;
 using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Users.GoogleLogInUsers;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices.IAuthent
 
 public interface IExternalAuthentication
 {
-    Task<Response<GoogleLogInUserCommandResponseDto>> GoogleLogInAsync(GoogleLogInUserCommandRequestDto requestDto);
+    Task<Response<GoogleLogInUserCommandResponse>> GoogleLogInAsync(GoogleLogInUserCommandRequest request);
     Task FacebookLogInAsync();
     Task InstagramLogInAsync();
     Task GithubLogInAsync();

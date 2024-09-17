@@ -10,6 +10,7 @@ namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.Soci
 public class GoogleLogInUserCommandRequest :  IRequest<GoogleLogInUserCommandResponse>
 {
     public string Id { get; set; }
+    public int TokenLifeTime { get; set; } = 15;
     public string IdToken { get; set; }
     public string Name { get; set; }
     public string Email { get; set; }
