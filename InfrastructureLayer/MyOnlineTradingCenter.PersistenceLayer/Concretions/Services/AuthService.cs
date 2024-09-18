@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.ITokens;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.LogInUsers.Commands.Create;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.SocialLogInUsers.GoogleLogInUsers.Commands.Create;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Responses;
 using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Tokens;
@@ -22,14 +23,16 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Services;
 public class AuthService : IAuthService
 {
     private readonly UserManager<User> _userManager;
+    private readonly SignInManager<User> _signInManager;
     private readonly ITokenHandler _tokenHandler;
     private readonly IConfiguration _configuration;
 
-    public AuthService(UserManager<User> userManager, ITokenHandler tokenHandler, IConfiguration configuration)
+    public AuthService(UserManager<User> userManager, ITokenHandler tokenHandler, IConfiguration configuration, SignInManager<User> signInManager)
     {
         _userManager = userManager;
         _tokenHandler = tokenHandler;
         _configuration = configuration;
+        _signInManager = signInManager;
     }
 
     public Task FacebookLogInAsync()
@@ -77,10 +80,27 @@ public class AuthService : IAuthService
         throw new NotImplementedException();
     }
 
-    public Task SystemLogInAsync()
+    public async Task<Response<LogInUserCommandResponse>> SystemLogInAsync(LogInUserCommandRequest request)
     {
-        throw new NotImplementedException();
+        User user = await _userManager.FindByNameAsync(request.UserNameOrEmail);
+        user ??= await _userManager.FindByEmailAsync(request.UserNameOrEmail);
+
+        if (user == null)
+        {
+            return Response<LogInUserCommandResponse>.Failure("Invalid credentials!", "User not found", StatusCodes.Status404NotFound);
+        }
+
+        var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, true);
+        if (result.Succeeded)
+        {
+            Token token = _tokenHandler.CreateAccessToken(request.AccessTokenLifeTime);
+            var loginResponse = new LogInUserCommandResponse { Token = token };
+            return Response<LogInUserCommandResponse>.Success(loginResponse, "User logged in successfully!", StatusCodes.Status200OK);
+        }
+        else
+            return Response<LogInUserCommandResponse>.Failure("Invalid credentials!", "Login failed", StatusCodes.Status401Unauthorized);
     }
+
     private async Task<bool> GetOrCreateExternalUserAsync(GoogleJsonWebSignature.Payload payload, User user)
     {
         if (user == null)

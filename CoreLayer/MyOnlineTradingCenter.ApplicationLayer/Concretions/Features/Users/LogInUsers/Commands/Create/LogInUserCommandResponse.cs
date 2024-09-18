@@ -9,7 +9,5 @@ namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.LogI
 
 public class LogInUserCommandResponse
 {
-    public bool Succeeded { get; set; }
-    public string Message { get; set; }
-    public Token Token  { get; set; }
+    public Token Token { get; set; }
 }

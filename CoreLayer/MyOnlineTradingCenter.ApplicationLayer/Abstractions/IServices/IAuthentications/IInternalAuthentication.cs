@@ -1,4 +1,7 @@
-﻿using System;
+﻿using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.LogInUsers.Commands.Create;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Responses;
+using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Tokens;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +11,5 @@ namespace MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices.IAuthent
 
 public interface IInternalAuthentication
 {
-    Task SystemLogInAsync();
+    Task<Response<LogInUserCommandResponse>> SystemLogInAsync(LogInUserCommandRequest request);
 }

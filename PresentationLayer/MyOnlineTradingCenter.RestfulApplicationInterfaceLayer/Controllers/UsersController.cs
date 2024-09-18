@@ -28,7 +28,7 @@ public class UsersController : ControllerBase
     [HttpPost("[action]")]
     public async Task<IActionResult> LogIn(LogInUserCommandRequest request)
     {
-        LogInUserCommandResponse response = await _mediator.Send(request);
+        Response<LogInUserCommandResponse> response = await _mediator.Send(request);
         return Ok(response);
     }
     [HttpPost("[action]")]
