@@ -24,17 +24,5 @@ public class UsersController : ControllerBase
     {
         Response<CreateUserCommandResponseDto> response = await _mediator.Send(request);
         return Ok(response);
-    }
-    [HttpPost("[action]")]
-    public async Task<IActionResult> LogIn(LogInUserCommandRequest request)
-    {
-        Response<LogInUserCommandResponse> response = await _mediator.Send(request);
-        return Ok(response);
-    }
-    [HttpPost("[action]")]
-    public async Task<IActionResult> GoogleLogIn(GoogleLogInUserCommandRequest request)
-    {
-        GoogleLogInUserCommandResponse response = await _mediator.Send(request);
-        return Ok(response);
-    }
+    }   
 }

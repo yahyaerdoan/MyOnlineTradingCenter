@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.ITokens;
@@ -58,7 +59,7 @@ public class AuthService : IAuthService
 
         bool result = await GetOrCreateExternalUserAsync(payload, user);
         var responseDto = new GoogleLogInUserCommandResponse();
-       
+
         if (result)
         {
             await _userManager.AddLoginAsync(user, userInfo);
@@ -67,8 +68,8 @@ public class AuthService : IAuthService
             return Response<GoogleLogInUserCommandResponse>.Success(responseDto, "User logged in successfully with Google!", StatusCodes.Status200OK);
         }
         else
-        return Response<GoogleLogInUserCommandResponse>.Failure("Invalid credentials!");
-    }  
+            return Response<GoogleLogInUserCommandResponse>.Failure("Invalid credentials!");
+    }
 
     public Task InstagramLogInAsync()
     {
@@ -82,12 +83,12 @@ public class AuthService : IAuthService
 
     public async Task<Response<LogInUserCommandResponse>> SystemLogInAsync(LogInUserCommandRequest request)
     {
-        User user = await _userManager.FindByNameAsync(request.UserNameOrEmail);
-        user ??= await _userManager.FindByEmailAsync(request.UserNameOrEmail);
+        User? user = await _userManager.FindByNameAsync(request.UserNameOrEmail)
+               ?? await _userManager.Users.Where(u => u.Email == request.UserNameOrEmail).FirstOrDefaultAsync();
 
         if (user == null)
         {
-            return Response<LogInUserCommandResponse>.Failure("Invalid credentials!", "User not found", StatusCodes.Status404NotFound);
+            return Response<LogInUserCommandResponse>.Failure("Invalid credentials", "User not found!", StatusCodes.Status404NotFound);
         }
 
         var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, true);
@@ -98,7 +99,7 @@ public class AuthService : IAuthService
             return Response<LogInUserCommandResponse>.Success(loginResponse, "User logged in successfully!", StatusCodes.Status200OK);
         }
         else
-            return Response<LogInUserCommandResponse>.Failure("Invalid credentials!", "Login failed", StatusCodes.Status401Unauthorized);
+            return Response<LogInUserCommandResponse>.Failure("Invalid credentials", "Login failed!", StatusCodes.Status401Unauthorized);
     }
 
     private async Task<bool> GetOrCreateExternalUserAsync(GoogleJsonWebSignature.Payload payload, User user)
