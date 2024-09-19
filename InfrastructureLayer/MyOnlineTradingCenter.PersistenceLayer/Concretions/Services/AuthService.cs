@@ -25,15 +25,17 @@ public class AuthService : IAuthService
 {
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
+    private readonly IUserService _userService;
     private readonly ITokenHandler _tokenHandler;
     private readonly IConfiguration _configuration;
 
-    public AuthService(UserManager<User> userManager, ITokenHandler tokenHandler, IConfiguration configuration, SignInManager<User> signInManager)
+    public AuthService(UserManager<User> userManager, ITokenHandler tokenHandler, IConfiguration configuration, SignInManager<User> signInManager, IUserService userService)
     {
         _userManager = userManager;
         _tokenHandler = tokenHandler;
         _configuration = configuration;
         _signInManager = signInManager;
+        _userService = userService;
     }
 
     public Task FacebookLogInAsync()
@@ -64,6 +66,7 @@ public class AuthService : IAuthService
         {
             await _userManager.AddLoginAsync(user, userInfo);
             Token token = _tokenHandler.CreateAccessToken(requestDto.AccessTokenLifeTime);
+            await _userService.UpdateRefreshToken(token.RefreshToken, user.Id, token.Expiration, 5);
             responseDto.Token = token;
             return Response<GoogleLogInUserCommandResponse>.Success(responseDto, "User logged in successfully with Google!", StatusCodes.Status200OK);
         }
@@ -95,6 +98,7 @@ public class AuthService : IAuthService
         if (result.Succeeded)
         {
             Token token = _tokenHandler.CreateAccessToken(request.AccessTokenLifeTime);
+            await _userService.UpdateRefreshToken(token.RefreshToken, user.Id, token.Expiration, 15);
             var loginResponse = new LogInUserCommandResponse { Token = token };
             return Response<LogInUserCommandResponse>.Success(loginResponse, "User logged in successfully!", StatusCodes.Status200OK);
         }

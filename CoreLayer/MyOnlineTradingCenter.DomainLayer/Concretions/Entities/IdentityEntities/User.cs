@@ -11,4 +11,6 @@ public class User : IdentityUser<string>
 {
     public string FirtName { get; set; }
     public string LastName { get; set; }
+    public string? RefreshToken { get; set; }
+    public string? RefreshTokenExpirationDate { get; set; }
 }

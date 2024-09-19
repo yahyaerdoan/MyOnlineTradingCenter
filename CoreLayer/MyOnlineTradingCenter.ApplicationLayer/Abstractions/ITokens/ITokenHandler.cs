@@ -10,4 +10,5 @@ namespace MyOnlineTradingCenter.ApplicationLayer.Abstractions.ITokens;
 public interface ITokenHandler
 {
    Token CreateAccessToken(int minute);
+   string CreateRefreshToken();
 }

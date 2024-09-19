@@ -21,7 +21,7 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> LogIn(LogInUserCommandRequest request)
         {
-            Response<LogInUserCommandResponse> response = await _mediator.Send(request);
+            Response<LogInUserCommandResponse> response = await _mediator.Send(request); 
             return Ok(response);
         }
         [HttpPost("[action]")]

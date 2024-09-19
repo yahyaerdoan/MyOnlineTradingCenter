@@ -51,6 +51,17 @@ public class UserService : IUserService
             return Response<CreateUserCommandResponseDto>.Failure(errorMessage, "User creation failed", StatusCodes.Status400BadRequest);
         }
     }
+
+   public async Task UpdateRefreshToken(string refreshToken, string userId, DateTime accessTokenDuration, int refreshTokenDuration)
+    {
+        User user = await _userManager.FindByIdAsync(userId);
+        if (user != null)
+        {
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpirationDate = accessTokenDuration.AddSeconds(refreshTokenDuration).ToString("o");
+            await _userManager.UpdateAsync(user);
+        }
+    }
 }
 //IdentityResult result = await _userManager.CreateAsync(new()
 //{

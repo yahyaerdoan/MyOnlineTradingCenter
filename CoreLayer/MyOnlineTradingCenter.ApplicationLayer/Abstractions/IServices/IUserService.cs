@@ -11,4 +11,5 @@ namespace MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 public interface IUserService
 {
     Task<Response<CreateUserCommandResponseDto>> CreateUserAsync(CreateUserCommandRequestDto requestDto);
+    Task UpdateRefreshToken(string refreshToken, string userId, DateTime accessTokenDuration, int refreshTokenDuration);
 }
