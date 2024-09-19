@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <Folder Include="Abstractions\" />
+    <Folder Include="Concretions\Messages\" />
   </ItemGroup>
 
   <ItemGroup>

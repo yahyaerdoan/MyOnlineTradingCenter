@@ -28,12 +28,12 @@ public class TokenHandler : ITokenHandler
         SigningCredentials signingCredentials = new(symmetricSecurity, SecurityAlgorithms.HmacSha256);
         
         DateTime now = DateTime.Now;
-        token.Expiration = now.AddMinutes(minute);
+        token.Expiration = now.AddSeconds(minute);
 
         JwtSecurityToken jwtSecurityToken = new(
             issuer: _configuration["Token:Issuer"],
             audience: _configuration["Token:Audience"],
-            expires: now.AddMinutes(minute),
+            expires: now.AddSeconds(minute),
             notBefore: now,
             signingCredentials: signingCredentials
             );
