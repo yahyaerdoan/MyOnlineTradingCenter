@@ -27,7 +27,7 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> GoogleLogIn(GoogleLogInUserCommandRequest request)
         {
-            GoogleLogInUserCommandResponse response = await _mediator.Send(request);
+            Response<GoogleLogInUserCommandResponse> response = await _mediator.Send(request);
             return Ok(response);
         }
     }

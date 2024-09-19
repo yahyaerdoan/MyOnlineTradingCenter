@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.SocialLogInUsers.GoogleLogInUsers.Commands.Create;
 
-public class GoogleLogInUserCommandRequest :  IRequest<GoogleLogInUserCommandResponse>
+public class GoogleLogInUserCommandRequest :  IRequest<Response<GoogleLogInUserCommandResponse>>
 {
     public string Id { get; set; }
     public int AccessTokenLifeTime { get; set; } = 15;

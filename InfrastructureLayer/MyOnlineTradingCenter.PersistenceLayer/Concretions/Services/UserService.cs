@@ -46,8 +46,9 @@ public class UserService : IUserService
         }
         else
         {
-            var errors = identityResult.Errors.Select(e => $"{e.Code} - {e.Description}").ToList();
-            return Response<CreateUserCommandResponseDto>.Failure(errors, "User creation failed", StatusCodes.Status400BadRequest);
+            var errors = identityResult.Errors.Select(e => $"{e.Code}: {e.Description}\n").ToList();
+            var errorMessage = string.Join("\n", errors);
+            return Response<CreateUserCommandResponseDto>.Failure(errorMessage, "User creation failed", StatusCodes.Status400BadRequest);
         }
     }
 }

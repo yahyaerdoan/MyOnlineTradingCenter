@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.SocialLogInUsers.GoogleLogInUsers.Handlers;
 
-public class GoogleLogInUserCommandHandlers : IRequestHandler<GoogleLogInUserCommandRequest, GoogleLogInUserCommandResponse>
+public class GoogleLogInUserCommandHandlers : IRequestHandler<GoogleLogInUserCommandRequest, Response<GoogleLogInUserCommandResponse>>
 {
     private readonly UserManager<User> _userManager;
     private readonly ITokenHandler _tokenHandler;
@@ -29,12 +29,13 @@ public class GoogleLogInUserCommandHandlers : IRequestHandler<GoogleLogInUserCom
         _authService = authService;
     }
 
-    public async Task<GoogleLogInUserCommandResponse> Handle(GoogleLogInUserCommandRequest request, CancellationToken cancellationToken)
+    public async Task<Response<GoogleLogInUserCommandResponse>> Handle(GoogleLogInUserCommandRequest request, CancellationToken cancellationToken)
     {        
         Response<GoogleLogInUserCommandResponse> response = await _authService.GoogleLogInAsync(request);
-        string accessToken = response?.Data?.Token?.AccessToken ?? string.Empty;
-        Token token = new() { AccessToken = accessToken };
-        return new(){ Message = response?.Message ?? "Error!", Succeeded = response?.IsSuccessful ?? false, Token = token};
+        //string accessToken = response?.Data?.Token?.AccessToken ?? string.Empty;
+        //Token token = new() { AccessToken = accessToken };
+        //return new(){ Message = response?.Message ?? "Error!", Succeeded = response?.IsSuccessful ?? false, Token = token};
+        return response;
 
         #region Code refactored.
         //var settings = new GoogleJsonWebSignature.ValidationSettings()

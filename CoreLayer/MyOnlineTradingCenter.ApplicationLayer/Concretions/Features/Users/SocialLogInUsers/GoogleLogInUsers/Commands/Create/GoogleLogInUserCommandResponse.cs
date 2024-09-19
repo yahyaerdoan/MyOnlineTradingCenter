@@ -9,7 +9,7 @@ namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.Soci
 
 public class GoogleLogInUserCommandResponse
 {
-    public bool Succeeded { get; set; }
-    public string Message { get; set; }
+    //public bool Succeeded { get; set; }
+    //public string Message { get; set; }
     public Token Token { get; set; }
 }
