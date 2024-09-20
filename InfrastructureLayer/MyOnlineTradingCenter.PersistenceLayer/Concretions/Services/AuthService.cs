@@ -67,7 +67,7 @@ public class AuthService : IAuthService
         {
             await _userManager.AddLoginAsync(user, userInfo);
             Token token = _tokenHandler.CreateAccessToken(requestDto.AccessTokenLifeTime);
-            await _userService.UpdateRefreshToken(token.RefreshToken, user.Id, token.Expiration, 5);
+            await _userService.UpdateRefreshToken(token.RefreshToken, user.Id, token.Expiration, 15);
             responseDto.Token = token;
             return Response<GoogleLogInUserCommandResponse>.Success(responseDto, "User logged in successfully with Google!", StatusCodes.Status200OK);
         }
@@ -90,8 +90,8 @@ public class AuthService : IAuthService
         User? user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == request.RefreshToken);
         if (user != null && user?.RefreshTokenExpirationDate > DateTime.UtcNow)
         {
-            Token token = _tokenHandler.CreateAccessToken(30);
-           var updatedRefreshToken = await _userService.UpdateRefreshToken(token.RefreshToken, user.Id, token.Expiration, 30);
+            Token token = _tokenHandler.CreateAccessToken(15);
+           var updatedRefreshToken = await _userService.UpdateRefreshToken(token.RefreshToken, user.Id, token.Expiration, 15);
             var refreshTokenResponse = new RefreshTokenLogInCommandResponse { Token = token  };
             return Response<RefreshTokenLogInCommandResponse>.Success(refreshTokenResponse, "Refresh token created successfully!", StatusCodes.Status200OK);
         }
@@ -112,7 +112,7 @@ public class AuthService : IAuthService
         if (result.Succeeded)
         {
             Token token = _tokenHandler.CreateAccessToken(request.AccessTokenLifeTime);
-            await _userService.UpdateRefreshToken(token.RefreshToken, user.Id, token.Expiration, 30);
+            await _userService.UpdateRefreshToken(token.RefreshToken, user.Id, token.Expiration, 15);
             var loginResponse = new LogInUserCommandResponse { Token = token };
             return Response<LogInUserCommandResponse>.Success(loginResponse, "User logged in successfully!", StatusCodes.Status200OK);
         }
