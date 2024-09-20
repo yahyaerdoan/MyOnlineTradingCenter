@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.ITokens;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.LogInUsers.Commands.Create;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.RefreshTokenLogIns.Commands.Create;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.SocialLogInUsers.GoogleLogInUsers.Commands.Create;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Responses;
 using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Tokens;
@@ -84,6 +85,19 @@ public class AuthService : IAuthService
         throw new NotImplementedException();
     }
 
+    public async Task<Response<RefreshTokenLogInCommandResponse>> RefreshTokenLogInAsync(RefreshTokenLogInCommandRequest request)
+    {
+        User? user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == request.RefreshToken);
+        if (user != null && user?.RefreshTokenExpirationDate > DateTime.UtcNow)
+        {
+            Token token = _tokenHandler.CreateAccessToken(30);
+           var updatedRefreshToken = await _userService.UpdateRefreshToken(token.RefreshToken, user.Id, token.Expiration, 30);
+            var refreshTokenResponse = new RefreshTokenLogInCommandResponse { Token = token  };
+            return Response<RefreshTokenLogInCommandResponse>.Success(refreshTokenResponse, "Refresh token created successfully!", StatusCodes.Status200OK);
+        }
+        return Response<RefreshTokenLogInCommandResponse>.Failure("Error!", "Refresh token creation failed!", StatusCodes.Status400BadRequest);
+    }
+
     public async Task<Response<LogInUserCommandResponse>> SystemLogInAsync(LogInUserCommandRequest request)
     {
         User? user = await _userManager.FindByNameAsync(request.UserNameOrEmail)
@@ -98,7 +112,7 @@ public class AuthService : IAuthService
         if (result.Succeeded)
         {
             Token token = _tokenHandler.CreateAccessToken(request.AccessTokenLifeTime);
-            await _userService.UpdateRefreshToken(token.RefreshToken, user.Id, token.Expiration, 15);
+            await _userService.UpdateRefreshToken(token.RefreshToken, user.Id, token.Expiration, 30);
             var loginResponse = new LogInUserCommandResponse { Token = token };
             return Response<LogInUserCommandResponse>.Success(loginResponse, "User logged in successfully!", StatusCodes.Status200OK);
         }

@@ -52,15 +52,17 @@ public class UserService : IUserService
         }
     }
 
-   public async Task UpdateRefreshToken(string refreshToken, string userId, DateTime accessTokenDuration, int refreshTokenDuration)
+   public async Task<Response<string>> UpdateRefreshToken(string refreshToken, string userId, DateTime accessTokenDuration, int refreshTokenDuration)
     {
         User user = await _userManager.FindByIdAsync(userId);
         if (user != null)
         {
             user.RefreshToken = refreshToken;
-            user.RefreshTokenExpirationDate = accessTokenDuration.AddSeconds(refreshTokenDuration).ToString("o");
+            user.RefreshTokenExpirationDate = accessTokenDuration.ToUniversalTime().AddSeconds(refreshTokenDuration);
             await _userManager.UpdateAsync(user);
+            return Response<string>.Success(refreshToken, "Refresh token created", StatusCodes.Status200OK);
         }
+        return  Response<string>.Failure("Error", "Refresh  not token created", StatusCodes.Status400BadRequest);
     }
 }
 //IdentityResult result = await _userManager.CreateAsync(new()

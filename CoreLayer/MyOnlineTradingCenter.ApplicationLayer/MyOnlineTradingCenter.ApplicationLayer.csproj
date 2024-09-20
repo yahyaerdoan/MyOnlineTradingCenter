@@ -34,6 +34,10 @@
     <Folder Include="Concretions\Features\Users\LogInUsers\Commands\Update\" />
     <Folder Include="Concretions\Features\Users\LogInUsers\Queries\GetById\" />
     <Folder Include="Concretions\Features\Users\LogInUsers\Queries\Get\" />
+    <Folder Include="Concretions\Features\Users\RefreshTokenLogIns\Commands\Delete\" />
+    <Folder Include="Concretions\Features\Users\RefreshTokenLogIns\Commands\Update\" />
+    <Folder Include="Concretions\Features\Users\RefreshTokenLogIns\Queries\GetById\" />
+    <Folder Include="Concretions\Features\Users\RefreshTokenLogIns\Queries\Get\" />
     <Folder Include="Concretions\Features\Users\SocialLogInUsers\GoogleLogInUsers\Commands\Delete\" />
     <Folder Include="Concretions\Features\Users\SocialLogInUsers\GoogleLogInUsers\Commands\Update\" />
     <Folder Include="Concretions\Features\Users\SocialLogInUsers\GoogleLogInUsers\Queries\GetById\" />

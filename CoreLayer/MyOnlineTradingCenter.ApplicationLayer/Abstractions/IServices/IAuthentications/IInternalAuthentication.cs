@@ -1,4 +1,5 @@
 ﻿using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.LogInUsers.Commands.Create;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.RefreshTokenLogIns.Commands.Create;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Responses;
 using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Tokens;
 using System;
@@ -11,5 +12,6 @@ namespace MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices.IAuthent
 
 public interface IInternalAuthentication
 {
+    Task<Response<RefreshTokenLogInCommandResponse>> RefreshTokenLogInAsync(RefreshTokenLogInCommandRequest request);
     Task<Response<LogInUserCommandResponse>> SystemLogInAsync(LogInUserCommandRequest request);
 }
