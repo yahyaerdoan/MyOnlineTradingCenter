@@ -31,8 +31,8 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
             Response<GoogleLogInUserCommandResponse> response = await _mediator.Send(request);
             return Ok(response);
         }
-        [HttpGet("[action]")]
-        public async Task<IActionResult> RefreshTokenLogIn([FromQuery] RefreshTokenLogInCommandRequest request) 
+        [HttpPost("[action]")]
+        public async Task<IActionResult> RefreshTokenLogIn([FromBody] RefreshTokenLogInCommandRequest request) 
         {
             Response<RefreshTokenLogInCommandResponse> response = await _mediator.Send(request);
             return Ok(response);

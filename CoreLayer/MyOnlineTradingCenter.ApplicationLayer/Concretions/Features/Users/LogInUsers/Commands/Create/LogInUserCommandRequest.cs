@@ -12,5 +12,5 @@ public class LogInUserCommandRequest : IRequest<Response<LogInUserCommandRespons
 {
     public string UserNameOrEmail { get; set; }
     public string Password { get; set; }
-    public int AccessTokenLifeTime { get; set; } = 15;
+    public int AccessTokenLifeTime { get; set; } = 30;
 }
