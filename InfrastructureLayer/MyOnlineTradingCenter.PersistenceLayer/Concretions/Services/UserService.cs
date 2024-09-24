@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.CreateUsers.Commands.Create;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Responses;
+using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Tokens;
 using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Users;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.IdentityEntities;
 using System;
@@ -19,10 +21,12 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Services;
 public class UserService : IUserService
 {
     private readonly UserManager<User> _userManager;
+    private readonly IConfiguration _configuration;
 
-    public UserService(UserManager<User> userManager)
+    public UserService(UserManager<User> userManager, IConfiguration configuration)
     {
         _userManager = userManager;
+        _configuration = configuration;
     }
 
     public async Task<Response<CreateUserCommandResponseDto>> CreateUserAsync(CreateUserCommandRequestDto requestDto)
@@ -52,17 +56,17 @@ public class UserService : IUserService
         }
     }
 
-   public async Task<Response<string>> UpdateRefreshToken(string refreshToken, string userId, DateTime accessTokenDuration, int refreshTokenDuration)
+    public async Task<Response<string>> UpdateRefreshTokenAsync(RefreshTokenCommandRequestDto requestDto)
     {
-        User user = await _userManager.FindByIdAsync(userId);
-        if (user != null)
+       User user = await _userManager.FindByIdAsync(requestDto.UserId);
+        if (user is not null)
         {
-            user.RefreshToken = refreshToken;
-            user.RefreshTokenExpirationDate = accessTokenDuration.ToUniversalTime().AddSeconds(refreshTokenDuration);
+            user.RefreshToken = requestDto.RefreshToken;
+            user.RefreshTokenExpirationDate = requestDto.AccessTokenExpirationTime.ToUniversalTime().AddSeconds(requestDto.RefreshTokenLifeTime);
             await _userManager.UpdateAsync(user);
-            return Response<string>.Success(refreshToken, "Refresh token created", StatusCodes.Status200OK);
+            return Response<string>.Success(requestDto.RefreshToken, $"Refresh token created! Expires on: {user.RefreshTokenExpirationDate}", StatusCodes.Status200OK);
         }
-        return  Response<string>.Failure("Error", "Refresh  not token created", StatusCodes.Status400BadRequest);
+        return Response<string>.Failure("Error!", "Refresh token not created!", StatusCodes.Status400BadRequest);
     }
 }
 //IdentityResult result = await _userManager.CreateAsync(new()

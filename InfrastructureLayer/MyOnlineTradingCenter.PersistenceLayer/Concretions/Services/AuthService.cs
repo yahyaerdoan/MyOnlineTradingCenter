@@ -67,7 +67,15 @@ public class AuthService : IAuthService
         {
             await _userManager.AddLoginAsync(user, userInfo);
             Token token = _tokenHandler.CreateAccessToken(requestDto.AccessTokenLifeTime);
-            await _userService.UpdateRefreshToken(token.RefreshToken, user.Id, token.Expiration, 15);
+            int refreshTokenLifeTime = _configuration.GetValue<int>("TokenSettings:RefreshTokenLifeTime");
+
+            await _userService.UpdateRefreshTokenAsync(new RefreshTokenCommandRequestDto() 
+            { 
+                AccessTokenExpirationTime = token.Expiration, 
+                RefreshToken = token.RefreshToken, 
+                RefreshTokenLifeTime = refreshTokenLifeTime, 
+                UserId = user.Id 
+            });
             responseDto.Token = token;
             return Response<GoogleLogInUserCommandResponse>.Success(responseDto, "User logged in successfully with Google!", StatusCodes.Status200OK);
         }
@@ -88,11 +96,21 @@ public class AuthService : IAuthService
     public async Task<Response<RefreshTokenLogInCommandResponse>> RefreshTokenLogInAsync(RefreshTokenLogInCommandRequest request)
     {
         User? user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == request.RefreshToken);
-        if (user != null && user?.RefreshTokenExpirationDate > DateTime.UtcNow)
+        if (user != null && user?.RefreshTokenExpirationDate > DateTime.Now)
         {
             Token token = _tokenHandler.CreateAccessToken(15);
-           var updatedRefreshToken = await _userService.UpdateRefreshToken(token.RefreshToken, user.Id, token.Expiration, 15);
-            var refreshTokenResponse = new RefreshTokenLogInCommandResponse { Token = token  };
+            int refreshTokenLifeTime = _configuration.GetValue<int>("TokenSettings:RefreshTokenLifeTime");
+            DateTime refreshTokenExpirationDateTime = DateTime.Now.AddSeconds(refreshTokenLifeTime);
+
+            await _userService.UpdateRefreshTokenAsync(new RefreshTokenCommandRequestDto()
+            {
+                AccessTokenExpirationTime = token.Expiration,
+                RefreshToken = token.RefreshToken,
+                RefreshTokenLifeTime = refreshTokenLifeTime,
+                UserId = user.Id
+            });
+            token.RefreshTokenExpirationDate = refreshTokenExpirationDateTime;
+            var refreshTokenResponse = new RefreshTokenLogInCommandResponse { Token = token, };
             return Response<RefreshTokenLogInCommandResponse>.Success(refreshTokenResponse, "Refresh token created successfully!", StatusCodes.Status200OK);
         }
         return Response<RefreshTokenLogInCommandResponse>.Failure("Error!", "Refresh token creation failed!", StatusCodes.Status400BadRequest);
@@ -112,8 +130,16 @@ public class AuthService : IAuthService
         if (result.Succeeded)
         {
             Token token = _tokenHandler.CreateAccessToken(request.AccessTokenLifeTime);
-            await _userService.UpdateRefreshToken(token.RefreshToken, user.Id, token.Expiration, 15);
-            var loginResponse = new LogInUserCommandResponse { Token = token };
+            int refreshTokenLifeTime = _configuration.GetValue<int>("TokenSettings:RefreshTokenLifeTime");
+
+            await _userService.UpdateRefreshTokenAsync(new RefreshTokenCommandRequestDto()
+            {
+                AccessTokenExpirationTime = token.Expiration,
+                RefreshToken = token.RefreshToken,
+                RefreshTokenLifeTime = refreshTokenLifeTime,
+                UserId = user.Id
+            });
+            var loginResponse = new LogInUserCommandResponse { Token = token, };
             return Response<LogInUserCommandResponse>.Success(loginResponse, "User logged in successfully!", StatusCodes.Status200OK);
         }
         else
