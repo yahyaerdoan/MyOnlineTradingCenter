@@ -11,6 +11,8 @@ using MyOnlineTradingCenter.ApplicationLayer.Concretions.Extenions;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Serilog;
+using Serilog.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
