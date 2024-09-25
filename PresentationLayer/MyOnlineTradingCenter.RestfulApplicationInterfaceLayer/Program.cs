@@ -1,4 +1,5 @@
 using MyOnlineTradingCenter.PersistenceLayer.Concretions.Extensions;
+using MyOnlineTradingCenter.SignalRLayer.Concretions.Extensions;
 using FluentValidation.AspNetCore;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Validations.Products;
 using FluentValidation;
@@ -42,6 +43,7 @@ builder.Services.AddFluentValidationAutoValidation()
 builder.Services.AddPersistanceServiceRegistrations();
 builder.Services.AddInfrastructureServiceRegistrations();
 builder.Services.AddApplicationServiceRegistrations();
+builder.Services.AddSignalRServiceRegistrations();
 
 builder.Services.AddStorageServices<LocalStorage>();
 //builder.Services.AddStorageServices(StorageType.LocalStorage);
@@ -128,6 +130,8 @@ app.Use(async (context, next) =>
     LogContext.PushProperty("user_name", userName);
     await next();
 });
+
+app.AddMapHubRegistrations();
 
 app.MapControllers();
 

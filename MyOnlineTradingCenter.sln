@@ -19,7 +19,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PresentationLayer", "Presen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyOnlineTradingCenter.RestfulApplicationInterfaceLayer", "PresentationLayer\MyOnlineTradingCenter.RestfulApplicationInterfaceLayer\MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.csproj", "{5E8752E0-72ED-49A8-9261-27228C55550F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyOnlineTradingCenter.DataTransferObjectLayer", "CoreLayer\MyOnlineTradingCenter.DataTransferObjectLayer\MyOnlineTradingCenter.DataTransferObjectLayer.csproj", "{BA5F038D-CE57-4D47-9683-0F19BF7C3CC2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyOnlineTradingCenter.DataTransferObjectLayer", "CoreLayer\MyOnlineTradingCenter.DataTransferObjectLayer\MyOnlineTradingCenter.DataTransferObjectLayer.csproj", "{BA5F038D-CE57-4D47-9683-0F19BF7C3CC2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyOnlineTradingCenter.SignalRLayer", "InfrastructureLayer\MyOnlineTradingCenter.SignalRLayer\MyOnlineTradingCenter.SignalRLayer.csproj", "{74F7BD5B-B574-4447-9945-ADDAE77A8D7E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{BA5F038D-CE57-4D47-9683-0F19BF7C3CC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA5F038D-CE57-4D47-9683-0F19BF7C3CC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA5F038D-CE57-4D47-9683-0F19BF7C3CC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74F7BD5B-B574-4447-9945-ADDAE77A8D7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74F7BD5B-B574-4447-9945-ADDAE77A8D7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74F7BD5B-B574-4447-9945-ADDAE77A8D7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74F7BD5B-B574-4447-9945-ADDAE77A8D7E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +68,7 @@ Global
 		{8E466556-1AEC-464F-8485-681D66AAD617} = {F2E3DA38-7DD9-41B2-B5D5-92E9D7319BDD}
 		{5E8752E0-72ED-49A8-9261-27228C55550F} = {6C305105-755B-409D-B564-1EDB85D32F64}
 		{BA5F038D-CE57-4D47-9683-0F19BF7C3CC2} = {18059FFA-03CE-4CCD-B52A-00792C1273FD}
+		{74F7BD5B-B574-4447-9945-ADDAE77A8D7E} = {F2E3DA38-7DD9-41B2-B5D5-92E9D7319BDD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3DC16CF7-13D0-4EF0-8EDA-671AA59E739E}
