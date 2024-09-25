@@ -1,4 +1,7 @@
-﻿using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IHubs;
+﻿using Microsoft.AspNetCore.SignalR;
+using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IHubs;
+using MyOnlineTradingCenter.SignalRLayer.Concretions.Constants;
+using MyOnlineTradingCenter.SignalRLayer.Concretions.Hubs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +12,15 @@ namespace MyOnlineTradingCenter.SignalRLayer.Concretions.HubServices;
 
 public class ProductHubService : IProductHubService
 {
-    public Task ProductAddedMessageAsync(string message)
+    private readonly IHubContext<ProductHub> _hubContext;
+
+    public ProductHubService(IHubContext<ProductHub> hubContext)
     {
-        throw new NotImplementedException();
+        _hubContext = hubContext;
+    }
+
+    public async Task ProductAddedMessageAsync(string message)
+    {
+        await _hubContext.Clients.All.SendAsync(ReceivedFunctionName.ProductAddedMessage, message);
     }
 }
