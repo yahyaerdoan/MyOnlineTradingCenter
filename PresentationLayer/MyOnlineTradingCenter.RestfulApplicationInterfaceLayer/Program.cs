@@ -80,7 +80,8 @@ Logger log = new LoggerConfiguration()
         {"exception", new ExceptionColumnWriter() },
         {"log_event", new LogEventSerializedColumnWriter() },
         {"user_name", new UserNameColumnWriter() }
-    })    
+    })
+    .WriteTo.Seq(builder.Configuration["SeqLoggerUserInterface:SeqServerUrl"])
     .Enrich.FromLogContext()
     .MinimumLevel.Information()
     .CreateLogger();
