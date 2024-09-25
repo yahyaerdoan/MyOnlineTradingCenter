@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IProductRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Queries.Get;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.RequestParameters.Paginations;
@@ -14,10 +15,12 @@ namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.H
 public class GetProductsQueryHandler : IRequestHandler<GetProductsQueryRequest, GetProductsQueryResponse>
 {
     private readonly IProductReadRepository _productReadRepository;
+    private readonly ILogger<GetProductsQueryHandler> _logger;
 
-    public GetProductsQueryHandler(IProductReadRepository productReadRepository)
+    public GetProductsQueryHandler(IProductReadRepository productReadRepository, ILogger<GetProductsQueryHandler> logger)
     {
         _productReadRepository = productReadRepository;
+        _logger = logger;
     }
 
     public async Task<GetProductsQueryResponse> Handle(GetProductsQueryRequest request, CancellationToken cancellationToken)
@@ -40,6 +43,7 @@ public class GetProductsQueryHandler : IRequestHandler<GetProductsQueryRequest, 
                 CreatedDate = p.CreatedDate,
             })
             .ToListAsync(cancellationToken);
+        _logger.LogInformation("Products have been listed!");
 
         return new GetProductsQueryResponse
         {

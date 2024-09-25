@@ -2,10 +2,12 @@
 using Microsoft.IdentityModel.Tokens;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.ITokens;
 using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Tokens;
+using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.IdentityEntities;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,7 +23,7 @@ public class TokenHandler : ITokenHandler
         _configuration = configuration;
     }
 
-    public Token CreateAccessToken(int minute)
+    public Token CreateAccessToken(int minute, User user)
     {
         Token token = new();
 
@@ -36,7 +38,9 @@ public class TokenHandler : ITokenHandler
             audience: _configuration["Token:Audience"],
             expires: now.AddSeconds(minute),
             notBefore: now,
-            signingCredentials: signingCredentials
+            signingCredentials: signingCredentials,
+            claims: new List<Claim> { new(ClaimTypes.Name, user.FirtName + user.LastName) }
+            
             );
 
         JwtSecurityTokenHandler jwtSecurityTokenHandler = new();

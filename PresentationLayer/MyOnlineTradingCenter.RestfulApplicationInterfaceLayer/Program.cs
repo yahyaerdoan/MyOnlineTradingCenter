@@ -13,6 +13,11 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Serilog;
 using Serilog.Core;
+using Serilog.Sinks.PostgreSQL;
+using System.Security.Claims;
+using Serilog.Context;
+using MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.SeriLogs.ColumnWriters;
+using Microsoft.AspNetCore.HttpLogging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,8 +64,38 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidIssuer = builder.Configuration["Token:Issuer"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"])),
             LifetimeValidator = (notBefore, expires, securityToken, validationParameters) => expires != null ? expires > DateTime.UtcNow : false,
+            NameClaimType = ClaimTypes.Name
         };
     });
+
+Logger log = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("logs/log.txt")
+    .WriteTo.PostgreSQL(builder.Configuration.GetConnectionString("PostgreSql"), "Logs", needAutoCreateTable: true, columnOptions: new Dictionary<string, ColumnWriterBase>
+    {
+        {"message", new RenderedMessageColumnWriter() },
+        {"message_template", new MessageTemplateColumnWriter() },
+        {"level", new LevelColumnWriter() },
+        {"time_stamp", new TimestampColumnWriter() },
+        {"exception", new ExceptionColumnWriter() },
+        {"log_event", new LogEventSerializedColumnWriter() },
+        {"user_name", new UserNameColumnWriter() }
+    })    
+    .Enrich.FromLogContext()
+    .MinimumLevel.Information()
+    .CreateLogger();
+
+builder.Host.UseSerilog(log);
+
+builder.Services.AddHttpLogging(logging =>
+{
+    logging.LoggingFields = HttpLoggingFields.All;
+    logging.RequestHeaders.Add("sec-ch-ua");
+    logging.ResponseHeaders.Add("MyResponseHeader");
+    logging.MediaTypeOptions.AddText("application/javascript");
+    logging.RequestBodyLogLimit = 4096;
+    logging.ResponseBodyLogLimit = 4096;    
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -68,19 +103,27 @@ builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
 var app = builder.Build();
 
-app.UseCors();
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseStaticFiles();
 
+app.UseStaticFiles();
+app.UseSerilogRequestLogging();
+app.UseHttpLogging();
+app.UseCors();
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.Use(async (context, next) =>
+{
+    var userName = context.User?.Identity?.IsAuthenticated is not null || true ? context?.User?.Identity?.Name : string.Empty;
+    LogContext.PushProperty("user_name", userName);
+    await next();
+});
 
 app.MapControllers();
 

@@ -1,4 +1,5 @@
 ﻿using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Tokens;
+using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.IdentityEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace MyOnlineTradingCenter.ApplicationLayer.Abstractions.ITokens;
 
 public interface ITokenHandler
 {
-   Token CreateAccessToken(int minute);
+   Token CreateAccessToken(int minute, User user);
    string CreateRefreshToken();
 }
