@@ -18,6 +18,7 @@ using System.Security.Claims;
 using Serilog.Context;
 using MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.SeriLogs.ColumnWriters;
 using Microsoft.AspNetCore.HttpLogging;
+using MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -109,6 +110,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCongigureExceptionHandler<Program>(app.Services.GetRequiredService<ILogger<Program>>());
 
 app.UseStaticFiles();
 app.UseSerilogRequestLogging();

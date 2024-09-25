@@ -44,6 +44,7 @@ public class GetProductsQueryHandler : IRequestHandler<GetProductsQueryRequest, 
             })
             .ToListAsync(cancellationToken);
         _logger.LogInformation("Products have been listed!");
+        throw new Exception("Hata alindi!");
 
         return new GetProductsQueryResponse
         {
