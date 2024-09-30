@@ -27,7 +27,7 @@ public class GetProductsQueryHandler : IRequestHandler<GetProductsQueryRequest, 
     {
         var query = _productReadRepository.GetAll(false);
 
-        var totalCount = await query.CountAsync(cancellationToken);
+        var totalProductCount = await query.CountAsync(cancellationToken);
 
         var products = await query
             .Skip((request.Pagination.Page) * request.Pagination.Size)
@@ -49,7 +49,7 @@ public class GetProductsQueryHandler : IRequestHandler<GetProductsQueryRequest, 
         return new GetProductsQueryResponse
         {
             Products = products,
-            TotalDataCount = totalCount
+            TotalProductCount = totalProductCount
         };
     }
 }

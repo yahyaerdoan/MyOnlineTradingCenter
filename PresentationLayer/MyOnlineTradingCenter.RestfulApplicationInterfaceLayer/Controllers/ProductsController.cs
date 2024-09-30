@@ -25,7 +25,6 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(AuthenticationSchemes = "Admin")]
 public class ProductsController : ControllerBase
 {
     #region IRepository
@@ -177,6 +176,7 @@ public class ProductsController : ControllerBase
     //}
     #endregion
     [HttpPost]
+    [Authorize(AuthenticationSchemes = "Admin")]
     public async Task<IActionResult> Post(CreateProductCommandRequest request)
     {
         await _mediator.Send(request);
