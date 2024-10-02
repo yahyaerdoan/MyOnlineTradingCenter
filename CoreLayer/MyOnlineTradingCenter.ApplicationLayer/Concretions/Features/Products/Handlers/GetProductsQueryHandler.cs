@@ -25,7 +25,7 @@ public class GetProductsQueryHandler : IRequestHandler<GetProductsQueryRequest, 
 
     public async Task<GetProductsQueryResponse> Handle(GetProductsQueryRequest request, CancellationToken cancellationToken)
     {
-        var query = _productReadRepository.GetAll(false);
+        var query = _productReadRepository.GetAll(false).OrderBy(p => p.Price);
 
         var totalProductCount = await query.CountAsync(cancellationToken);
 
