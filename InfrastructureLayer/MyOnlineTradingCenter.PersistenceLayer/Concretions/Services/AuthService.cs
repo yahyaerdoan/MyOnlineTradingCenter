@@ -55,35 +55,37 @@ public class AuthService : IAuthService
         {
             Audience = new List<string> { _configuration["ExternalLogInSettings:GoogleLogIn:ClientId"] }
         };
-        var payload = await GoogleJsonWebSignature.ValidateAsync(requestDto.IdToken, settings);
 
+        var payload = await GoogleJsonWebSignature.ValidateAsync(requestDto.IdToken, settings);
         var userInfo = new UserLoginInfo(requestDto.Provider, payload.Subject, requestDto.Provider);
         User user = await _userManager.FindByLoginAsync(userInfo.LoginProvider, userInfo.ProviderKey);
+        bool userExists = await GetOrCreateExternalUserAsync(payload, user);
 
-        bool result = await GetOrCreateExternalUserAsync(payload, user);
         var responseDto = new GoogleLogInUserCommandResponse();
 
-        if (result)
+        if (userExists)
         {
-            await _userManager.AddLoginAsync(user, userInfo);
-            int accessTokenLifeTime = _configuration.GetValue<int>("TokenSettings:AccessTokenLifeTime");
-            int refreshTokenLifeTime = _configuration.GetValue<int>("TokenSettings:RefreshTokenLifeTime");
-
-
-            Token token = _tokenHandler.CreateAccessToken(accessTokenLifeTime, user);
-
-            await _userService.UpdateRefreshTokenAsync(new RefreshTokenCommandRequestDto() 
-            { 
-                AccessTokenExpirationTime = token.Expiration, 
-                RefreshToken = token.RefreshToken, 
-                RefreshTokenLifeTime = refreshTokenLifeTime, 
-                UserId = user.Id 
-            });
-            responseDto.Token = token;
-            return Response<GoogleLogInUserCommandResponse>.Success(responseDto, "User logged in successfully with Google!", StatusCodes.Status200OK);
+            user ??= await _userManager.FindByEmailAsync(payload.Email);
+            if (user != null)
+            {
+                await _userManager.AddLoginAsync(user, userInfo);
+                int accessTokenLifeTime = _configuration.GetValue<int>("TokenSettings:AccessTokenLifeTime");
+                int refreshTokenLifeTime = _configuration.GetValue<int>("TokenSettings:RefreshTokenLifeTime");
+                Token token = _tokenHandler.CreateAccessToken(accessTokenLifeTime, user);
+                await _userService.UpdateRefreshTokenAsync(new RefreshTokenCommandRequestDto()
+                {
+                    AccessTokenExpirationTime = token.Expiration,
+                    RefreshToken = token.RefreshToken,
+                    RefreshTokenLifeTime = refreshTokenLifeTime,
+                    UserId = user.Id
+                });
+                responseDto.Token = token;
+                return Response<GoogleLogInUserCommandResponse>.Success(responseDto, "User logged in successfully with Google!", StatusCodes.Status200OK);
+            }
+            return Response<GoogleLogInUserCommandResponse>.Failure("User could not be created or found!");
         }
         else
-            return Response<GoogleLogInUserCommandResponse>.Failure("Invalid credentials!");
+            return Response<GoogleLogInUserCommandResponse>.Failure("Invalid credentials!");        
     }
 
     public Task InstagramLogInAsync()
