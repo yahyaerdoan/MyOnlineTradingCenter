@@ -66,8 +66,11 @@ public class AuthService : IAuthService
         if (result)
         {
             await _userManager.AddLoginAsync(user, userInfo);
-            Token token = _tokenHandler.CreateAccessToken(requestDto.AccessTokenLifeTime, user);
+            int accessTokenLifeTime = _configuration.GetValue<int>("TokenSettings:AccessTokenLifeTime");
             int refreshTokenLifeTime = _configuration.GetValue<int>("TokenSettings:RefreshTokenLifeTime");
+
+
+            Token token = _tokenHandler.CreateAccessToken(accessTokenLifeTime, user);
 
             await _userService.UpdateRefreshTokenAsync(new RefreshTokenCommandRequestDto() 
             { 
@@ -98,8 +101,11 @@ public class AuthService : IAuthService
         User? user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == request.RefreshToken);
         if (user != null && user?.RefreshTokenExpirationDate > DateTime.Now)
         {
-            Token token = _tokenHandler.CreateAccessToken(15, user);
+            int accessTokenLifeTime = _configuration.GetValue<int>("TokenSettings:AccessTokenLifeTime");
+
             int refreshTokenLifeTime = _configuration.GetValue<int>("TokenSettings:RefreshTokenLifeTime");
+
+            Token token = _tokenHandler.CreateAccessToken(accessTokenLifeTime, user);
             DateTime refreshTokenExpirationDateTime = DateTime.Now.AddSeconds(refreshTokenLifeTime);
 
             await _userService.UpdateRefreshTokenAsync(new RefreshTokenCommandRequestDto()
@@ -129,8 +135,11 @@ public class AuthService : IAuthService
         var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, true);
         if (result.Succeeded)
         {
-            Token token = _tokenHandler.CreateAccessToken(request.AccessTokenLifeTime, user);
+            int accessTokenLifeTime = _configuration.GetValue<int>("TokenSettings:AccessTokenLifeTime");
+
             int refreshTokenLifeTime = _configuration.GetValue<int>("TokenSettings:RefreshTokenLifeTime");
+
+            Token token = _tokenHandler.CreateAccessToken(accessTokenLifeTime, user);
 
             await _userService.UpdateRefreshTokenAsync(new RefreshTokenCommandRequestDto()
             {

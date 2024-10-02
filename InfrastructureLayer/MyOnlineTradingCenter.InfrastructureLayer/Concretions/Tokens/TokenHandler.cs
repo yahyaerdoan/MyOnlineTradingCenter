@@ -39,13 +39,14 @@ public class TokenHandler : ITokenHandler
             expires: now.AddSeconds(minute),
             notBefore: now,
             signingCredentials: signingCredentials,
-            claims: new List<Claim> { new(ClaimTypes.Name, user.FirtName + user.LastName) }
-            
-            );
+            claims: new List<Claim> { new(ClaimTypes.Name, user.FirtName + user.LastName) }            
+        );
 
         JwtSecurityTokenHandler jwtSecurityTokenHandler = new();
         token.AccessToken = jwtSecurityTokenHandler.WriteToken(jwtSecurityToken);
-        token.RefreshToken = CreateRefreshToken();        
+        token.RefreshToken = CreateRefreshToken();
+        int refreshTokenLifeTime = _configuration.GetValue<int>("TokenSettings:RefreshTokenLifeTime");
+        token.RefreshTokenExpirationDate = now.AddSeconds(refreshTokenLifeTime);
         return token;
     }
 
