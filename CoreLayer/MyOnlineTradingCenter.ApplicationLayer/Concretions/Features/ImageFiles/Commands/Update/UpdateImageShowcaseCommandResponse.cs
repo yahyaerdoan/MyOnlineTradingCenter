@@ -8,4 +8,6 @@ namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.ImageFiles
 
 public class UpdateImageShowcaseCommandResponse
 {
+    public string? ProductId { get; set; }
+    public string? ImageId { get; set; }
 }

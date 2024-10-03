@@ -10,6 +10,6 @@ namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.ImageFiles
 
 public class UpdateImageShowcaseCommandRequest : IRequest<Response<UpdateImageShowcaseCommandResponse>>
 {
-    public string ProductId { get; set; }
-    public string ImageId { get; set; }
+    public string? ProductId { get; set; }
+    public string? ImageId { get; set; }
 }

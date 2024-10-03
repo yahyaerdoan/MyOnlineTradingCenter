@@ -455,7 +455,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPatch("[action]")]
-    [Authorize(AuthenticationSchemes = "Admin")]
+    //[Authorize(AuthenticationSchemes = "Admin")]
     public async Task<IActionResult> UpdateImageShowcase([FromQuery] UpdateImageShowcaseCommandRequest request)
     {
         Response<UpdateImageShowcaseCommandResponse> response = await _mediator.Send(request);

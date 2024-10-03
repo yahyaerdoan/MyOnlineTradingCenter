@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.ImageFiles.Commands.Update;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Responses;
 using System;
@@ -11,8 +12,16 @@ namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.ImageFiles
 
 public class UpdateImageShowcaseCommandHandler : IRequestHandler<UpdateImageShowcaseCommandRequest, Response<UpdateImageShowcaseCommandResponse>>
 {
-    public Task<Response<UpdateImageShowcaseCommandResponse>> Handle(UpdateImageShowcaseCommandRequest request, CancellationToken cancellationToken)
+    private readonly IImageFileService _imageFileService;
+
+    public UpdateImageShowcaseCommandHandler(IImageFileService imageFileService)
     {
-        throw new NotImplementedException();
+        _imageFileService = imageFileService;
+    }
+
+    public async Task<Response<UpdateImageShowcaseCommandResponse>> Handle(UpdateImageShowcaseCommandRequest request, CancellationToken cancellationToken)
+    {
+        Response<UpdateImageShowcaseCommandResponse> response = await _imageFileService.ChangeImageShowcaseStatusAsync(request);
+        return response;
     }
 }

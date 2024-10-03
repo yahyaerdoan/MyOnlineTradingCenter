@@ -61,6 +61,7 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Extensions
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IInternalAuthentication, AuthService>();
             services.AddScoped<IExternalAuthentication, AuthService>();
+            services.AddScoped<IImageFileService, ImageFileService>();
         }
     }
 }
