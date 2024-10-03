@@ -11,6 +11,7 @@ using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IStorageServices;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.ImageFiles.Commands.Create;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.ImageFiles.Commands.Delete;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.ImageFiles.Commands.Update;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.ImageFiles.Queries.Get;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Commands.Create;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Commands.Delete;
@@ -18,7 +19,7 @@ using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Comma
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Queries.Get;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Queries.GetById;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.RequestParameters.Paginations;
-
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Responses;
 using System.Net;
 
 namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers;
@@ -451,5 +452,13 @@ public class ProductsController : ControllerBase
         request.ImageId = imageId;
         DeleteImageFileCommandResponse response = await _mediator.Send(request);
         return Ok(new { message = "Files deleted successfully" });
+    }
+
+    [HttpPatch("[action]")]
+    [Authorize(AuthenticationSchemes = "Admin")]
+    public async Task<IActionResult> UpdateImageShowcase([FromQuery] UpdateImageShowcaseCommandRequest request)
+    {
+        Response<UpdateImageShowcaseCommandResponse> response = await _mediator.Send(request);
+        return Ok(response);
     }
 }
