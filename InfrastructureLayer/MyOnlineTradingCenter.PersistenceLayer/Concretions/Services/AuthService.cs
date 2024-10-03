@@ -86,28 +86,17 @@ public class AuthService : IAuthService
 
     public async Task<Response<RefreshTokenLogInCommandResponse>> RefreshTokenLogInAsync(RefreshTokenLogInCommandRequest request)
     {
-        User? user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == request.RefreshToken);
-        if (user != null && user?.RefreshTokenExpirationDate > DateTime.Now)
+        var user = await GetUserByRefreshTokenAsync(request.RefreshToken);
+
+        if (user == null || !IsRefreshTokenValid(user))
         {
-            int accessTokenLifeTime = _configuration.GetValue<int>("TokenSettings:AccessTokenLifeTime");
-
-            int refreshTokenLifeTime = _configuration.GetValue<int>("TokenSettings:RefreshTokenLifeTime");
-
-            Token token = _tokenHandler.CreateAccessToken(accessTokenLifeTime, user);
-            DateTime refreshTokenExpirationDateTime = DateTime.Now.AddSeconds(refreshTokenLifeTime);
-
-            await _userService.UpdateRefreshTokenAsync(new RefreshTokenCommandRequestDto()
-            {
-                AccessTokenExpirationTime = token.Expiration,
-                RefreshToken = token.RefreshToken,
-                RefreshTokenLifeTime = refreshTokenLifeTime,
-                UserId = user.Id
-            });
-            token.RefreshTokenExpirationDate = refreshTokenExpirationDateTime;
-            var refreshTokenResponse = new RefreshTokenLogInCommandResponse { Token = token, };
-            return Response<RefreshTokenLogInCommandResponse>.Success(refreshTokenResponse, "Refresh token created successfully!", StatusCodes.Status200OK);
+            return Response<RefreshTokenLogInCommandResponse>.Failure("InvalidRefreshToken!", "The provided refresh token is either expired or invalid.", StatusCodes.Status400BadRequest);
         }
-        return Response<RefreshTokenLogInCommandResponse>.Failure("Error!", "Refresh token creation failed!", StatusCodes.Status400BadRequest);
+
+        var token = await GenerateAndUpdateTokensAsync(user);
+
+        var refreshTokenResponse = new RefreshTokenLogInCommandResponse { Token = token };
+        return Response<RefreshTokenLogInCommandResponse>.Success(refreshTokenResponse, "Refresh token created successfully!", StatusCodes.Status200OK);
     }
 
     public async Task<Response<LogInUserCommandResponse>> SystemLogInAsync(LogInUserCommandRequest request)
@@ -130,6 +119,7 @@ public class AuthService : IAuthService
         return Response<LogInUserCommandResponse>.Success(loginResponse, "User logged in successfully!", StatusCodes.Status200OK);
     }
 
+    #region Helper methods
     private async Task<GoogleJsonWebSignature.Payload> ValidateGoogleTokenAsync(string idToken)
     {
         var settings = new GoogleJsonWebSignature.ValidationSettings
@@ -204,4 +194,15 @@ public class AuthService : IAuthService
     {
         return await _signInManager.CheckPasswordSignInAsync(user, password, true);
     }
+
+    private async Task<User?> GetUserByRefreshTokenAsync(string refreshToken)
+    {
+        return await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
+    }
+
+    private static bool IsRefreshTokenValid(User user)
+    {
+        return user.RefreshTokenExpirationDate > DateTime.Now;
+    }
+    #endregion
 }
