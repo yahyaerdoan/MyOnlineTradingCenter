@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Services;
 
@@ -111,35 +112,22 @@ public class AuthService : IAuthService
 
     public async Task<Response<LogInUserCommandResponse>> SystemLogInAsync(LogInUserCommandRequest request)
     {
-        User? user = await _userManager.FindByNameAsync(request.UserNameOrEmail)
-               ?? await _userManager.Users.Where(u => u.Email == request.UserNameOrEmail).FirstOrDefaultAsync();
-
+        var user = await FindUserAsync(request.UserNameOrEmail);
         if (user == null)
         {
             return Response<LogInUserCommandResponse>.Failure("Invalid credentials", "User not found!", StatusCodes.Status404NotFound);
         }
 
-        var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, true);
-        if (result.Succeeded)
+        var signInResult = await ValidateUserCredentialsAsync(user, request.Password);
+        if (!signInResult.Succeeded)
         {
-            int accessTokenLifeTime = _configuration.GetValue<int>("TokenSettings:AccessTokenLifeTime");
-
-            int refreshTokenLifeTime = _configuration.GetValue<int>("TokenSettings:RefreshTokenLifeTime");
-
-            Token token = _tokenHandler.CreateAccessToken(accessTokenLifeTime, user);
-
-            await _userService.UpdateRefreshTokenAsync(new RefreshTokenCommandRequestDto()
-            {
-                AccessTokenExpirationTime = token.Expiration,
-                RefreshToken = token.RefreshToken,
-                RefreshTokenLifeTime = refreshTokenLifeTime,
-                UserId = user.Id
-            });
-            var loginResponse = new LogInUserCommandResponse { Token = token, };
-            return Response<LogInUserCommandResponse>.Success(loginResponse, "User logged in successfully!", StatusCodes.Status200OK);
-        }
-        else
             return Response<LogInUserCommandResponse>.Failure("Invalid credentials", "Login failed!", StatusCodes.Status401Unauthorized);
+        }
+
+        var token = await GenerateAndUpdateTokensAsync(user);
+
+        var loginResponse = new LogInUserCommandResponse { Token = token };
+        return Response<LogInUserCommandResponse>.Success(loginResponse, "User logged in successfully!", StatusCodes.Status200OK);
     }
 
     private async Task<GoogleJsonWebSignature.Payload> ValidateGoogleTokenAsync(string idToken)
@@ -204,5 +192,16 @@ public class AuthService : IAuthService
         });
 
         return token;
+    }
+
+    private async Task<User?> FindUserAsync(string userNameOrEmail)
+    {
+        return await _userManager.FindByNameAsync(userNameOrEmail)
+               ?? await _userManager.Users.Where(u => u.Email == userNameOrEmail).FirstOrDefaultAsync();
+    }
+
+    private async Task<SignInResult> ValidateUserCredentialsAsync(User user, string password)
+    {
+        return await _signInManager.CheckPasswordSignInAsync(user, password, true);
     }
 }
