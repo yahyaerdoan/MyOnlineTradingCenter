@@ -51,41 +51,26 @@ public class AuthService : IAuthService
 
     public async Task<Response<GoogleLogInUserCommandResponse>> GoogleLogInAsync(GoogleLogInUserCommandRequest requestDto)
     {
-        var settings = new GoogleJsonWebSignature.ValidationSettings()
+        var payload = await ValidateGoogleTokenAsync(requestDto.IdToken);
+        if (payload == null)
         {
-            Audience = new List<string> { _configuration["ExternalLogInSettings:GoogleLogIn:ClientId"] }
-        };
+            return Response<GoogleLogInUserCommandResponse>.Failure("Invalid Google ID token.");
+        }
 
-        var payload = await GoogleJsonWebSignature.ValidateAsync(requestDto.IdToken, settings);
-        var userInfo = new UserLoginInfo(requestDto.Provider, payload.Subject, requestDto.Provider);
-        User user = await _userManager.FindByLoginAsync(userInfo.LoginProvider, userInfo.ProviderKey);
-        bool userExists = await GetOrCreateExternalUserAsync(payload, user);
+        var userLogInfo = new UserLoginInfo(requestDto.Provider, payload.Subject, requestDto.Provider);
+        var user = await FindOrCreateExternalUserAsync(payload, userLogInfo);
 
-        var responseDto = new GoogleLogInUserCommandResponse();
-
-        if (userExists)
+        if (user == null)
         {
-            user ??= await _userManager.FindByEmailAsync(payload.Email);
-            if (user != null)
-            {
-                await _userManager.AddLoginAsync(user, userInfo);
-                int accessTokenLifeTime = _configuration.GetValue<int>("TokenSettings:AccessTokenLifeTime");
-                int refreshTokenLifeTime = _configuration.GetValue<int>("TokenSettings:RefreshTokenLifeTime");
-                Token token = _tokenHandler.CreateAccessToken(accessTokenLifeTime, user);
-                await _userService.UpdateRefreshTokenAsync(new RefreshTokenCommandRequestDto()
-                {
-                    AccessTokenExpirationTime = token.Expiration,
-                    RefreshToken = token.RefreshToken,
-                    RefreshTokenLifeTime = refreshTokenLifeTime,
-                    UserId = user.Id
-                });
-                responseDto.Token = token;
-                return Response<GoogleLogInUserCommandResponse>.Success(responseDto, "User logged in successfully with Google!", StatusCodes.Status200OK);
-            }
             return Response<GoogleLogInUserCommandResponse>.Failure("User could not be created or found!");
         }
-        else
-            return Response<GoogleLogInUserCommandResponse>.Failure("Invalid credentials!");        
+
+        await AddLoginToUserAsync(user, userLogInfo);
+
+        var token = await GenerateAndUpdateTokensAsync(user);
+
+        var responseDto = new GoogleLogInUserCommandResponse { Token = token };
+        return Response<GoogleLogInUserCommandResponse>.Success(responseDto, "User logged in successfully with Google!", StatusCodes.Status200OK);
     }
 
     public Task InstagramLogInAsync()
@@ -157,25 +142,67 @@ public class AuthService : IAuthService
             return Response<LogInUserCommandResponse>.Failure("Invalid credentials", "Login failed!", StatusCodes.Status401Unauthorized);
     }
 
-    private async Task<bool> GetOrCreateExternalUserAsync(GoogleJsonWebSignature.Payload payload, User user)
+    private async Task<GoogleJsonWebSignature.Payload> ValidateGoogleTokenAsync(string idToken)
     {
+        var settings = new GoogleJsonWebSignature.ValidationSettings
+        {
+            Audience = new List<string> { _configuration["ExternalLogInSettings:GoogleLogIn:ClientId"] }
+        };
+
+        var payload = await GoogleJsonWebSignature.ValidateAsync(idToken, settings);
+
+        return payload;
+    }
+
+    private async Task<User?> FindOrCreateExternalUserAsync(GoogleJsonWebSignature.Payload payload, UserLoginInfo userInfo)
+    {
+        var user = await _userManager.FindByLoginAsync(userInfo.LoginProvider, userInfo.ProviderKey)
+                  ?? await _userManager.FindByEmailAsync(payload.Email);
+
         if (user == null)
         {
-            user = await _userManager.FindByEmailAsync(payload.Email);
-            if (user == null)
+            user = new User
             {
-                user = new()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Email = payload.Email,
-                    UserName = payload.GivenName + payload.FamilyName,
-                    FirtName = payload.GivenName,
-                    LastName = payload.FamilyName,
-                };
-                var identityResult = await _userManager.CreateAsync(user);
-                return identityResult.Succeeded;
+                Id = Guid.NewGuid().ToString(),
+                Email = payload.Email,
+                UserName = $"{payload.GivenName}{payload.FamilyName}",
+                FirtName = payload.GivenName,
+                LastName = payload.FamilyName
+            };
+
+            var result = await _userManager.CreateAsync(user);
+            if (!result.Succeeded)
+            {
+                return null;
             }
         }
-        return true;
+
+        return user;
+    }
+
+    private async Task AddLoginToUserAsync(User user, UserLoginInfo userInfo)
+    {
+        if ((await _userManager.FindByLoginAsync(userInfo.LoginProvider, userInfo.ProviderKey)) == null)
+        {
+            await _userManager.AddLoginAsync(user, userInfo);
+        }
+    }
+
+    private async Task<Token> GenerateAndUpdateTokensAsync(User user)
+    {
+        int accessTokenLifeTime = _configuration.GetValue<int>("TokenSettings:AccessTokenLifeTime");
+        int refreshTokenLifeTime = _configuration.GetValue<int>("TokenSettings:RefreshTokenLifeTime");
+
+        Token token = _tokenHandler.CreateAccessToken(accessTokenLifeTime, user);
+
+        await _userService.UpdateRefreshTokenAsync(new RefreshTokenCommandRequestDto
+        {
+            AccessTokenExpirationTime = token.Expiration,
+            RefreshToken = token.RefreshToken,
+            RefreshTokenLifeTime = refreshTokenLifeTime,
+            UserId = user.Id
+        });
+
+        return token;
     }
 }
