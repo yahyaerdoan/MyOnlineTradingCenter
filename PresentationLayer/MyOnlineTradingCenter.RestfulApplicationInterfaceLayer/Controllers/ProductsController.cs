@@ -454,9 +454,9 @@ public class ProductsController : ControllerBase
         return Ok(new { message = "Files deleted successfully" });
     }
 
-    [HttpPatch("[action]")]
+    [HttpGet("[action]")]
     //[Authorize(AuthenticationSchemes = "Admin")]
-    public async Task<IActionResult> UpdateImageShowcase([FromQuery] UpdateImageShowcaseCommandRequest request)
+    public async Task<IActionResult> UpdateImageShowcaseAsync([FromQuery] UpdateImageShowcaseCommandRequest request)
     {
         Response<UpdateImageShowcaseCommandResponse> response = await _mediator.Send(request);
         return Ok(response);
