@@ -40,6 +40,7 @@ public class GetImageFileQueryHandler : IRequestHandler<GetImageFileQueryRequest
             Id = p.Id,
             Name = p.Name,
             Status = p.Status,
+            ShowcasePicture = p.ShowcasePicture,
             Path = $"{requestScheme}://{requestHost}/{_configuration["LocalStorageOrigin"]}/{p.Name}",
             #region Other path type           
             //Path = $"{_configuration["LocalStorageOrigin"]}/{p.Path}",
