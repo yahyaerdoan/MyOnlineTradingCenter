@@ -4,6 +4,7 @@ using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IBase
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IStorageServices;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.ITokens;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.Services;
+using MyOnlineTradingCenter.InfrastructureLayer.Concretions.Services.Files;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Enums.StorageTypes;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Storages.AzureStorages;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Storages.LocalStorages;
@@ -25,6 +26,8 @@ public static class ServiceRegistration
         services.AddScoped<IFileService, FileService>();
         services.AddScoped<IStorageService, StorageService>();
         services.AddScoped<ITokenHandler, TokenHandler>();
+        //services.AddHttpContextAccessor();
+        services.AddSingleton<IFileUrlGeneratorService, FileUrlGeneratorService>();
     }
 
     public static void AddStorageServices<T>(this IServiceCollection services) where T : FileNameHelper, IBaseStorage

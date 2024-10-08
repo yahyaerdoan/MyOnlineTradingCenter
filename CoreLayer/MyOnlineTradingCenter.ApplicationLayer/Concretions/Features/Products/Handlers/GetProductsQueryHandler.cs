@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IProductRepositories;
+using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Queries.Get;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.RequestParameters.Paginations;
 using System;
@@ -20,13 +21,15 @@ public class GetProductsQueryHandler : IRequestHandler<GetProductsQueryRequest, 
     private readonly ILogger<GetProductsQueryHandler> _logger;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IConfiguration _configuration;
+    private readonly IFileUrlGeneratorService _fileUrlGeneratorService;
 
-    public GetProductsQueryHandler(IProductReadRepository productReadRepository, ILogger<GetProductsQueryHandler> logger, IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
+    public GetProductsQueryHandler(IProductReadRepository productReadRepository, ILogger<GetProductsQueryHandler> logger, IHttpContextAccessor httpContextAccessor, IConfiguration configuration, IFileUrlGeneratorService fileUrlGeneratorService)
     {
         _productReadRepository = productReadRepository;
         _logger = logger;
         _httpContextAccessor = httpContextAccessor;
         _configuration = configuration;
+        _fileUrlGeneratorService = fileUrlGeneratorService;
     }
 
     public async Task<GetProductsQueryResponse> Handle(GetProductsQueryRequest request, CancellationToken cancellationToken)
@@ -58,7 +61,8 @@ public class GetProductsQueryHandler : IRequestHandler<GetProductsQueryRequest, 
                     image.CreatedDate,
                     image.UpdatedDate,
                     image.ShowcasePicture,
-                    Path = $"{requestScheme}://{requestHost}/{_configuration["LocalStorageOrigin"]}/{image.Name}"
+                    //Path = $"{requestScheme}://{requestHost}/{_configuration["LocalStorageOrigin"]}/{image.Name}"
+                    Path = _fileUrlGeneratorService.GenerateFileUrl(image.Name)
                 }).ToList()
 
             })

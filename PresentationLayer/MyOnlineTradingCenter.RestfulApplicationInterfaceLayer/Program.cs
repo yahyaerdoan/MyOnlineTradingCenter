@@ -20,6 +20,7 @@ using Serilog.Context;
 using MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.SeriLogs.ColumnWriters;
 using Microsoft.AspNetCore.HttpLogging;
 using MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Extensions;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Contracts.Cofigurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -104,6 +105,8 @@ builder.Services.AddHttpLogging(logging =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
+
+builder.Services.AddOptions<StorageSettings>().BindConfiguration("StorageSettings");
 
 var app = builder.Build();
 
