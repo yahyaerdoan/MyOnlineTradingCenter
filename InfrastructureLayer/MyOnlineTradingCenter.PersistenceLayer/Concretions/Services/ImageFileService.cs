@@ -41,7 +41,7 @@ public class ImageFileService : IImageFileService
         var newCurrentShowcase = await query.FirstOrDefaultAsync(product => product.productImageFiles.Id == parsedImageId);
 
         if (newCurrentShowcase is null)
-            return Response<UpdateImageShowcaseCommandResponse>.Failure("Error!", "Either the current or new showcase image is missing.", StatusCodes.Status400BadRequest);
+            return Response<UpdateImageShowcaseCommandResponse>.Failure("Error!", "The new showcase image is missing.", StatusCodes.Status400BadRequest);
 
         if (currentShowcase is not null)
             currentShowcase.productImageFiles.ShowcasePicture = false;
