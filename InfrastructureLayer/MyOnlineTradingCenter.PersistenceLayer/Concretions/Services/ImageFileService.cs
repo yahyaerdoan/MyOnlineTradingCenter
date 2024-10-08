@@ -42,6 +42,7 @@ public class ImageFileService : IImageFileService
 
         if (newCurrentShowcase is null)
             return Response<UpdateImageShowcaseCommandResponse>.Failure("Error!", "Either the current or new showcase image is missing.", StatusCodes.Status400BadRequest);
+
         if (currentShowcase is not null)
             currentShowcase.productImageFiles.ShowcasePicture = false;
 
