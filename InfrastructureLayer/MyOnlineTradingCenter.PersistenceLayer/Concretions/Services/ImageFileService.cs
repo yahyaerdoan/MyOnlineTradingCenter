@@ -40,19 +40,18 @@ public class ImageFileService : IImageFileService
 
         var newCurrentShowcase = await query.FirstOrDefaultAsync(product => product.productImageFiles.Id == parsedImageId);
 
-        if (currentShowcase == null || newCurrentShowcase == null)
-        {
+        if (newCurrentShowcase is null)
             return Response<UpdateImageShowcaseCommandResponse>.Failure("Error!", "Either the current or new showcase image is missing.", StatusCodes.Status400BadRequest);
-        }
+        if (currentShowcase is not null)
+            currentShowcase.productImageFiles.ShowcasePicture = false;
 
-        currentShowcase.productImageFiles.ShowcasePicture = false;
         newCurrentShowcase.productImageFiles.ShowcasePicture = true;
 
         var updatedShowcase = newCurrentShowcase.productImageFiles.ShowcasePicture;
 
         await _imageFileWriteRepository.SaveAsync();
 
-        var response = new UpdateImageShowcaseCommandResponse {ProductId = request.ProductId, ImageId = request.ImageId };
+        var response = new UpdateImageShowcaseCommandResponse { ProductId = request.ProductId, ImageId = request.ImageId };
         return Response<UpdateImageShowcaseCommandResponse>.Success(response, "Showcase image updated successfully.", StatusCodes.Status200OK);
     }
 }
