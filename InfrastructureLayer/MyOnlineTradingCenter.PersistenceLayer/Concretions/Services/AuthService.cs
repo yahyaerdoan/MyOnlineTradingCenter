@@ -144,7 +144,7 @@ public class AuthService : IAuthService
                 Id = Guid.NewGuid().ToString(),
                 Email = payload.Email,
                 UserName = $"{payload.GivenName}{payload.FamilyName}",
-                FirtName = payload.GivenName,
+                FirstName = payload.GivenName,
                 LastName = payload.FamilyName
             };
 

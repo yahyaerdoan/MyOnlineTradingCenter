@@ -34,7 +34,7 @@ public class UserService : IUserService
         IdentityResult identityResult = await _userManager.CreateAsync(new()
         {
             Id = Guid.NewGuid().ToString(),
-            FirtName = requestDto.FirstName,
+            FirstName = requestDto.FirstName,
             LastName = requestDto.LastName,
             UserName = requestDto.UserName,
             Email = requestDto.Email,

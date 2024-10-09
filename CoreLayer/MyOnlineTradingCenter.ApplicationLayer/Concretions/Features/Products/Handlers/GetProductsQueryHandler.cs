@@ -61,8 +61,8 @@ public class GetProductsQueryHandler : IRequestHandler<GetProductsQueryRequest, 
                     image.CreatedDate,
                     image.UpdatedDate,
                     image.ShowcasePicture,
-                    //Path = $"{requestScheme}://{requestHost}/{_configuration["LocalStorageOrigin"]}/{image.Name}"
-                    Path = _fileUrlGeneratorService.GenerateFileUrl(image.Name)
+                    Path = $"{requestScheme}://{requestHost}/{_configuration["LocalStorageOrigin"]}/{image.Name}"
+                    //Path = _fileUrlGeneratorService.GenerateFileUrl(image.Name)
                 }).ToList()
 
             })

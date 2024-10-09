@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MyOnlineTradingCenter.PersistenceLayer.Migrations
 {
     [DbContext(typeof(MyOnlineTradingCenterPostgreSqlDbContext))]
-    [Migration("20240920164427_AddDateTimeForRefreshTokenExpirationDate")]
-    partial class AddDateTimeForRefreshTokenExpirationDate
+    [Migration("20241009185114_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -145,6 +145,68 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities.Basket", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Baskets");
+                });
+
+            modelBuilder.Entity("MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities.BasketItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("BasketId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<decimal>("PriceAtTimeOfAddition")
+                        .HasColumnType("numeric");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BasketId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("BasketItems");
+                });
+
             modelBuilder.Entity("MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities.Customer", b =>
                 {
                     b.Property<Guid>("Id")
@@ -190,7 +252,7 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("CustomerId")
+                    b.Property<Guid?>("CustomerId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Description")
@@ -203,11 +265,53 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Migrations
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities.OrderItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities.Product", b =>
@@ -227,8 +331,8 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<float>("Price")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
 
                     b.Property<bool>("Status")
                         .HasColumnType("boolean");
@@ -324,7 +428,7 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("FirtName")
+                    b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -383,24 +487,12 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("OrderProduct", b =>
-                {
-                    b.Property<Guid>("OrdersId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ProductsId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("OrdersId", "ProductsId");
-
-                    b.HasIndex("ProductsId");
-
-                    b.ToTable("OrderProduct");
-                });
-
             modelBuilder.Entity("MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities.ImageFile", b =>
                 {
                     b.HasBaseType("MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities.UploadedFile");
+
+                    b.Property<bool>("ShowcasePicture")
+                        .HasColumnType("boolean");
 
                     b.HasDiscriminator().HasValue("ImageFile");
                 });
@@ -478,34 +570,96 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities.Order", b =>
+            modelBuilder.Entity("MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities.Basket", b =>
                 {
-                    b.HasOne("MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities.Customer", "Customer")
-                        .WithMany("Orders")
-                        .HasForeignKey("CustomerId")
+                    b.HasOne("MyOnlineTradingCenter.DomainLayer.Concretions.Entities.IdentityEntities.User", "User")
+                        .WithMany("Baskets")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Customer");
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("OrderProduct", b =>
+            modelBuilder.Entity("MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities.BasketItem", b =>
                 {
-                    b.HasOne("MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities.Order", null)
-                        .WithMany()
-                        .HasForeignKey("OrdersId")
+                    b.HasOne("MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities.Basket", "Basket")
+                        .WithMany("BasketItems")
+                        .HasForeignKey("BasketId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsId")
+                    b.HasOne("MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities.Product", "Product")
+                        .WithMany("BasketItems")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Basket");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities.Order", b =>
+                {
+                    b.HasOne("MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities.Customer", null)
+                        .WithMany("Orders")
+                        .HasForeignKey("CustomerId");
+
+                    b.HasOne("MyOnlineTradingCenter.DomainLayer.Concretions.Entities.IdentityEntities.User", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities.OrderItem", b =>
+                {
+                    b.HasOne("MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities.Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities.Product", "Product")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities.Basket", b =>
+                {
+                    b.Navigation("BasketItems");
                 });
 
             modelBuilder.Entity("MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities.Customer", b =>
                 {
+                    b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities.Order", b =>
+                {
+                    b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities.Product", b =>
+                {
+                    b.Navigation("BasketItems");
+
+                    b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("MyOnlineTradingCenter.DomainLayer.Concretions.Entities.IdentityEntities.User", b =>
+                {
+                    b.Navigation("Baskets");
+
                     b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618

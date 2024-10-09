@@ -39,7 +39,7 @@ public class TokenHandler : ITokenHandler
             expires: now.AddSeconds(minute),
             notBefore: now,
             signingCredentials: signingCredentials,
-            claims: new List<Claim> { new(ClaimTypes.Name, user.FirtName + user.LastName) }            
+            claims: new List<Claim> { new(ClaimTypes.Name, user.FirstName + user.LastName) }            
         );
 
         JwtSecurityTokenHandler jwtSecurityTokenHandler = new();

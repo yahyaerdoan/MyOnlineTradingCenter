@@ -8,12 +8,9 @@ using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;
 
-public class Order : BaseEntity
+public class Basket : BaseEntity
 {
-    public string Description { get; set; }
-    public string Address { get; set; }
     public string UserId { get; set; }
     public User User { get; set; }
-
-    public ICollection<OrderItem> OrderItems { get; set; }
+    public ICollection<BasketItem> BasketItems { get; set; }
 }
