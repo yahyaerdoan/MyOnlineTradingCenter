@@ -1,12 +1,18 @@
-﻿using System;
+﻿using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IBasketItemRepositories;
+using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;
+using MyOnlineTradingCenter.PersistenceLayer.Concretions.Contexts;
+using MyOnlineTradingCenter.PersistenceLayer.Concretions.GenericRepositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Repositories.BasketItemRepositories
+namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Repositories.BasketItemRepositories;
+
+public class BasketItemWriteRepository : WriteRepository<BasketItem>, IBasketItemWriteRepository
 {
-    internal class BasketItemWriteRepository
+    public BasketItemWriteRepository(MyOnlineTradingCenterPostgreSqlDbContext context) : base(context)
     {
     }
 }
