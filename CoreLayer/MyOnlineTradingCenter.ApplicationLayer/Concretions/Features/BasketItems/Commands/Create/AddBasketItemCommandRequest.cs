@@ -1,12 +1,14 @@
-﻿using System;
+﻿using MediatR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.BasketItems.Commands.Create
+namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.BasketItems.Commands.Create;
+
+public class AddBasketItemCommandRequest : IRequest<AddBasketItemCommandResponse>
 {
-    internal class AddBasketItemCommandRequest
-    {
-    }
+    public string ProductId { get; set; }
+    public int Quantity { get; set; }
 }

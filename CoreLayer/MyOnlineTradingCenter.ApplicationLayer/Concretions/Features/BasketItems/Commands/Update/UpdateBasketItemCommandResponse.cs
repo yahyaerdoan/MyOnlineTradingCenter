@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.BasketItems.Commands.Update
+namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.BasketItems.Commands.Update;
+
+public class UpdateBasketItemCommandResponse
 {
-    internal class UpdateBasketItemCommandResponse
-    {
-    }
 }

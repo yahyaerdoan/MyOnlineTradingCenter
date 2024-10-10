@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.BasketItems.Commands.Delete
+namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.BasketItems.Commands.Delete;
+
+public class DeleteBasketItemCommandResponse
 {
-    internal class DeleteBasketItemCommandResponse
-    {
-    }
 }

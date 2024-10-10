@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.BasketItems.Commands.Create
+namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.BasketItems.Commands.Create;
+
+public class AddBasketItemCommandResponse
 {
-    internal class AddBasketItemCommandResponse
-    {
-    }
 }
