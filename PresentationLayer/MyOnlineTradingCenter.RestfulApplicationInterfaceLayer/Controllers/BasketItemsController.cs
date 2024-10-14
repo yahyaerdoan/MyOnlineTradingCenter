@@ -40,7 +40,7 @@ public class BasketItemsController : ControllerBase
         return Ok(response);
     }
 
-    [HttpDelete("BasketItemId")]
+    [HttpDelete("{BasketItemId}")]
     public async Task<IActionResult> DeleteBasketItemQuantity([FromRoute] DeleteBasketItemCommandRequest request)
     {
         DeleteBasketItemCommandResponse response = await _mediator.Send(request);
