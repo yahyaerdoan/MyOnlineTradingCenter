@@ -14,6 +14,7 @@ public static class ServiceRegistration
     public static void AddSignalRServiceRegistrations(this IServiceCollection services)
     {
         services.AddTransient<IProductHubService, ProductHubService>();
+        services.AddTransient<IOrderHubService, OrderHubService>();
         services.AddSignalR();
     }
 }

@@ -13,5 +13,6 @@ public static class HubRegistration
     public static void AddMapHubRegistrations(this WebApplication webApplication)
     {
         webApplication.MapHub<ProductHub>("/products-hub");
+        webApplication.MapHub<OrderHub>("/orders-hub");
     }
 }
