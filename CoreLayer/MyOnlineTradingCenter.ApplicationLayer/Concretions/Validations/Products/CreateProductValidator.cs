@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.ViewModels.Products;
+using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Products;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Validations.Products;
 
-public class CreateProductValidator : AbstractValidator<CreateProductViewModel>
+public class CreateProductValidator : AbstractValidator<CreateProductDto>
 {
     public CreateProductValidator()
     {

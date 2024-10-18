@@ -177,12 +177,18 @@ public class ProductsController : ControllerBase
     //}
     #endregion
     [HttpPost]
-    [Authorize(AuthenticationSchemes = "Admin")]
-    public async Task<IActionResult> Post(CreateProductCommandRequest request)
+    //[Authorize(AuthenticationSchemes = "Admin")]
+
+    public async Task<IActionResult> Post([FromBody] CreateProductCommandRequest request)
     {
-        await _mediator.Send(request);
-        return StatusCode((int)HttpStatusCode.Created, new { message = "Created product!" });
+        Response<CreateProductCommandResponse> response = await _mediator.Send(request);
+        return Ok(response);
     }
+    //public async Task<IActionResult> Post(CreateProductCommandRequest request)
+    //{
+    //     await _mediator.Send(request);
+    //    return StatusCode((int)HttpStatusCode.Created, new { message = "Created product!" });
+    //}
 
     #region Old version update
     //[HttpPut]

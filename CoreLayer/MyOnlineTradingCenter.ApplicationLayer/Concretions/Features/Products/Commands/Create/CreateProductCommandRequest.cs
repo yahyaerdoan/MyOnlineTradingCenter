@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Responses;
+using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Products;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +9,12 @@ using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Commands.Create;
 
-public class CreateProductCommandRequest : IRequest<Unit>
+public class CreateProductCommandRequest : IRequest<Response<CreateProductCommandResponse>>
 {
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public int Stock { get; set; }
-    public decimal Price { get; set; }
+    public CreateProductDto CreateProductDto { get; set; }
+
+    public CreateProductCommandRequest(CreateProductDto createProductDto)
+    {
+        CreateProductDto = createProductDto;
+    }
 }
