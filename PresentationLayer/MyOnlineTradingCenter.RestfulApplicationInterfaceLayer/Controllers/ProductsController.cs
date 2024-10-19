@@ -177,8 +177,7 @@ public class ProductsController : ControllerBase
     //}
     #endregion
     [HttpPost]
-    //[Authorize(AuthenticationSchemes = "Admin")]
-
+    [Authorize(AuthenticationSchemes = "Admin")]
     public async Task<IActionResult> Post([FromBody] CreateProductCommandRequest request)
     {
         Response<CreateProductCommandResponse> response = await _mediator.Send(request);

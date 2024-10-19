@@ -28,8 +28,8 @@ public class ProductService : IProductService
             Stock = productDto.Stock,
             Price = productDto.Price
         };
-        await _productWriteRepository.AddAsync(product);
-        await _productWriteRepository.SaveAsync();
-        return true;        
+        var addResult = await _productWriteRepository.AddAsync(product);
+        var saveResult = await _productWriteRepository.SaveAsync();
+        return saveResult > 0;        
     }
 }
