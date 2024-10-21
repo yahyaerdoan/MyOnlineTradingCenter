@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Commands.Delete;
+namespace MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Products;
 
-public class DeleteProductCommandResponse
+public class DeleteProductDto
 {
     public string Id { get; set; } = string.Empty;
 }

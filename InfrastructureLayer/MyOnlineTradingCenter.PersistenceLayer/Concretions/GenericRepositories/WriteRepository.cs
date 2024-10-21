@@ -44,8 +44,7 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.GenericRepositories
         public async Task<bool> RemoveByIdAsync(string id)
         {
            T entity = await Table.FirstOrDefaultAsync(data => data.Id == Guid.Parse(id));
-            return await RemoveAsync(entity);
-            
+            return await RemoveAsync(entity);            
         }
 
         public bool RemoveRange(List<T> datas)

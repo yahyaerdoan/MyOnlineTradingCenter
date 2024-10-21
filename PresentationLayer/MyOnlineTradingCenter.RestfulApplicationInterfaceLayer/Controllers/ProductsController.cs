@@ -20,6 +20,8 @@ using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Queri
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Queries.GetById;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.RequestParameters.Paginations;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Responses;
+using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Products;
+using ResultHandler.Interfaces.Contracts;
 using System.Net;
 
 namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers;
@@ -223,12 +225,14 @@ public class ProductsController : ControllerBase
     //    return Ok();
     //}
     #endregion
-    [HttpDelete("{Id}")]
-    public async Task<IActionResult> Delete([FromRoute] DeleteProductCommandRequest request)
+    [HttpDelete]
+    public async Task<IActionResult> Delete(DeleteProductCommandRequest request)
     {
-        DeleteProductCommandResponse response = await _mediator.Send(request);
-        return StatusCode((int)HttpStatusCode.OK, new { message = $"Deleted product with ID: {response.Id}" });
+        IDataResult<DeleteProductCommandResponse> response = await _mediator.Send(request);
+
+        return Ok(response);
     }
+
 
     #region old version upload
 

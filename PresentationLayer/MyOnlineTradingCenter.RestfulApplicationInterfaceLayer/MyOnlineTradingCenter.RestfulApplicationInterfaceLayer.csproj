@@ -37,4 +37,10 @@
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="ResultHandler">
+      <HintPath>..\..\..\ResponseUtilityFramework\ResultHandler\bin\Debug\net6.0\ResultHandler.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

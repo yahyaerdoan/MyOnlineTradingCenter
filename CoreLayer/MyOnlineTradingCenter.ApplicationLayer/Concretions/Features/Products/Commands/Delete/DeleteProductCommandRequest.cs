@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Products;
+using ResultHandler.Interfaces.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +9,11 @@ using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Commands.Delete;
 
-public class DeleteProductCommandRequest : IRequest<DeleteProductCommandResponse>
+public class DeleteProductCommandRequest : IRequest<IDataResult<DeleteProductCommandResponse>>
 {
-    public string Id { get; set; }
+    public DeleteProductDto DeleteProductDto { get; set; }
+    public DeleteProductCommandRequest(DeleteProductDto deleteProductDto)
+    {
+        DeleteProductDto = deleteProductDto;
+    }
 }
