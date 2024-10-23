@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Commands.Delete;
 
-public class DeleteProductCommandRequest : IRequest<IDataResult<DeleteProductCommandResponse>>
+public class DeleteProductCommandRequest : IRequest<IResult>
 {
     public DeleteProductDto DeleteProductDto { get; set; }
     public DeleteProductCommandRequest(DeleteProductDto deleteProductDto)

@@ -8,5 +8,5 @@ namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.C
 
 public class DeleteProductCommandResponse
 {
-    public string Id { get; set; } = string.Empty;
+    public string Id { get; set; } = default!;
 }
