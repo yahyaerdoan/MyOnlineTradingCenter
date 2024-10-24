@@ -20,6 +20,7 @@ using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Queri
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Queries.GetById;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.RequestParameters.Paginations;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Responses;
+using ResultHandler.Interfaces.Contracts;
 using System.Net;
 using IResult = ResultHandler.Interfaces.Contracts.IResult;
 
@@ -206,11 +207,18 @@ public class ProductsController : ControllerBase
     //    return StatusCode((int)HttpStatusCode.OK);
     //}
     #endregion
+    //[HttpPut]
+    //public async Task<IActionResult> Put([FromBody] UpdateProductCommandRequest request)
+    //{
+    //    UpdateProductCommandResponse response = await _mediator.Send(request);
+    //    return StatusCode((int)HttpStatusCode.OK, new { message = $"Updated product with ID: {response.Id}" });
+    //}
+
     [HttpPut]
-    public async Task<IActionResult> Put([FromBody] UpdateProductCommandRequest request)
+    public async Task<ActionResult<IDataResult<UpdateProductCommandResponse>>> Put([FromBody] UpdateProductCommandRequest request)
     {
-        UpdateProductCommandResponse response = await _mediator.Send(request);
-        return StatusCode((int)HttpStatusCode.OK, new { message = $"Updated product with ID: {response.Id}" });
+        IDataResult<UpdateProductCommandResponse?> response = await _mediator.Send(request);
+        return Ok(response);
     }
 
     #region old version delete
@@ -414,7 +422,7 @@ public class ProductsController : ControllerBase
     public async Task<IActionResult> GetImages([FromRoute] GetImageFileQueryRequest request)
     {
         List<GetImageFileQueryResponse> response = await _mediator.Send(request);
-       // var result = new { StatusCode = (int)HttpStatusCode.OK, Message = "Files retrieved successfully", Data = response };
+        // var result = new { StatusCode = (int)HttpStatusCode.OK, Message = "Files retrieved successfully", Data = response };
         return Ok(response);
     }
 

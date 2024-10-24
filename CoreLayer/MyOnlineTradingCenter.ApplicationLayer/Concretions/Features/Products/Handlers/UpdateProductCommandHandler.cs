@@ -1,38 +1,46 @@
 ﻿using MediatR;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IProductRepositories;
+using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Commands.Update;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.ViewModels.Products;
+using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Products;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;
+using ResultHandler.Implementations.ErrorResults;
+using ResultHandler.Implementations.SuccessResults;
+using ResultHandler.Interfaces.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Handlers;
 
-public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommandRequest, UpdateProductCommandResponse>
+public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommandRequest, IDataResult<UpdateProductCommandResponse?>>
 {
+    private readonly IProductService _productService;
     private readonly IProductReadRepository _productReadRepository;
-    private readonly IProductWriteRepository _productWriteRepository;
 
-    public UpdateProductCommandHandler(IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository)
+    public UpdateProductCommandHandler(IProductService productService, IProductReadRepository productReadRepository)
     {
+        _productService = productService;
         _productReadRepository = productReadRepository;
-        _productWriteRepository = productWriteRepository;
     }
 
-    public async Task<UpdateProductCommandResponse> Handle(UpdateProductCommandRequest request, CancellationToken cancellationToken)
+    public async Task<IDataResult<UpdateProductCommandResponse?>> Handle(UpdateProductCommandRequest request, CancellationToken cancellationToken)
     {
-        Product product = await _productReadRepository.GetByIdAsync(request.Id);
-        product.Name = request.Name;
-        product.Description = request.Description;
-        product.Stock = request.Stock;
-        product.Price = request.Price;
-        await _productWriteRepository.SaveAsync();
-        return new()
+        UpdateProductDto? updateProductDto = await _productService.UpdateProductAsync(request.UpdateProductDto);
+        var response = new UpdateProductCommandResponse { Id = request.UpdateProductDto.Id };
+
+        if (updateProductDto == null)
         {
-            Id = request.Id,
-        };
+            if (await _productReadRepository.GetByIdAsync(request.UpdateProductDto.Id) == null)
+            {
+                return new ErrorDataResult<UpdateProductCommandResponse>("Product update failed. The product does not exist.", HttpStatusCode.NotFound);
+            }
+            return new SuccessDataResult<UpdateProductCommandResponse>(response, "No changes were made as the provided data was identical to the current data.", HttpStatusCode.NotModified);
+        }
+        return new SuccessDataResult<UpdateProductCommandResponse>(response, "Product update completed successfully.", HttpStatusCode.OK);
     }
 }

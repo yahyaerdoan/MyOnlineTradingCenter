@@ -8,5 +8,5 @@ namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.C
 
 public class UpdateProductCommandResponse
 {
-    public string Id { get; set; }
+    public string? Id { get; set; }
 }
