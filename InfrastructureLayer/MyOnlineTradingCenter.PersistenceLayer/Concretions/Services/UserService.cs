@@ -1,32 +1,25 @@
-﻿using MediatR;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
-using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.CreateUsers.Commands.Create;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Responses;
 using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Tokens;
 using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Users;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.IdentityEntities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Google.Apis.Requests.BatchRequest;
+using System.Security.Claims;
 
 namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Services;
 
 public class UserService : IUserService
 {
     private readonly UserManager<User> _userManager;
-    private readonly IConfiguration _configuration;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public UserService(UserManager<User> userManager, IConfiguration configuration)
+    public UserService(UserManager<User> userManager, IHttpContextAccessor httpContextAccessor)
     {
         _userManager = userManager;
-        _configuration = configuration;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<Response<CreateUserCommandResponseDto>> CreateUserAsync(CreateUserCommandRequestDto requestDto)
@@ -56,6 +49,32 @@ public class UserService : IUserService
         }
     }
 
+
+    [Authorize(AuthenticationSchemes = "Admin")]
+    public async Task<UserDto> GetCurrentUserAsync()
+    {
+        var userName = _httpContextAccessor.HttpContext?.User?.Identity?.Name
+            ?? _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
+        if (string.IsNullOrEmpty(userName))
+        {
+            return null!;
+        }
+        User? user = await _userManager.Users
+            .Include(u => u.Baskets)
+            .FirstOrDefaultAsync(u => u.UserName == userName);
+        if (user == null) 
+        {
+            return null!;
+        }
+
+        return new UserDto
+        {
+            Id = user.Id,
+            UserName = user.UserName,
+            Email = user.Email
+        };
+    }
+
     public async Task<Response<string>> UpdateRefreshTokenAsync(RefreshTokenCommandRequestDto requestDto)
     {
        User user = await _userManager.FindByIdAsync(requestDto.UserId);
@@ -63,12 +82,13 @@ public class UserService : IUserService
         {
             user.RefreshToken = requestDto.RefreshToken;
             user.RefreshTokenExpirationDate = requestDto.AccessTokenExpirationTime.ToUniversalTime().AddSeconds(requestDto.RefreshTokenLifeTime);
-            await _userManager.UpdateAsync(user);
+            await _userManager.UpdateAsync(user);          
             return Response<string>.Success(requestDto.RefreshToken, $"Refresh token created! Expires on: {user.RefreshTokenExpirationDate}", StatusCodes.Status200OK);
-        }
-        return Response<string>.Failure("Error!", "Refresh token not created!", StatusCodes.Status400BadRequest);
+        }      
+        return Response<string>.Failure("Error!", "Refresh token not created!", StatusCodes.Status400BadRequest);       
     }
 }
+#region Old version
 //IdentityResult result = await _userManager.CreateAsync(new()
 //{
 //    Id = Guid.NewGuid().ToString(),
@@ -85,3 +105,4 @@ public class UserService : IUserService
 //            foreach (var error in result.Errors)
 //                response.Message += $"{error.Code} - {error.Description}\n";
 //        return response;
+#endregion

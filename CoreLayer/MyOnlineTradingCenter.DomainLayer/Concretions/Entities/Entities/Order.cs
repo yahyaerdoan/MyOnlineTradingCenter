@@ -17,9 +17,4 @@ public class Order : BaseEntity
     public User User { get; set; }
     public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     public decimal TotalAmount => OrderItems.Sum(item => item.TotalPrice);
-
-    public void AddOrderItem(OrderItem item)
-    {
-        OrderItems.Add(item);
-    }
 }

@@ -13,4 +13,5 @@ public interface IUserService
 {
     Task<Response<CreateUserCommandResponseDto>> CreateUserAsync(CreateUserCommandRequestDto requestDto);
     Task<Response<string>> UpdateRefreshTokenAsync(RefreshTokenCommandRequestDto requestDto);
+    Task<UserDto> GetCurrentUserAsync();
 }

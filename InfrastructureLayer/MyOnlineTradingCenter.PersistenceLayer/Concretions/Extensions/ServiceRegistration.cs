@@ -79,6 +79,8 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Extensions
             services.AddScoped<IImageFileService, ImageFileService>();
             services.AddScoped<IBasketItemService, BasketItemService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IOrderItemService, OrderItemService>();
         }
     }
 }

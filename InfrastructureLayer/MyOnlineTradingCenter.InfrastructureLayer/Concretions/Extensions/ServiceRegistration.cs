@@ -26,7 +26,7 @@ public static class ServiceRegistration
         services.AddScoped<IFileService, FileService>();
         services.AddScoped<IStorageService, StorageService>();
         services.AddScoped<ITokenHandler, TokenHandler>();
-        //services.AddHttpContextAccessor();
+        services.AddHttpContextAccessor();
         services.AddSingleton<IFileUrlGeneratorService, FileUrlGeneratorService>();
     }
 
