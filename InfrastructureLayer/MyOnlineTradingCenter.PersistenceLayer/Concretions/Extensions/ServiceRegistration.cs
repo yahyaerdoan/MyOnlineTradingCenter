@@ -81,6 +81,7 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Extensions
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IOrderItemService, OrderItemService>();
+            services.AddScoped<IBasketService, BasketService>();
         }
     }
 }
