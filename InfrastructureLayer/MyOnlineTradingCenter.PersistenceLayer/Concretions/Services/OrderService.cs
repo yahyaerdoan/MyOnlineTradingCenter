@@ -42,7 +42,7 @@ public class OrderService : IOrderService
 
             var orderItem = new OrderItem
             {
-                OrderId = order.Id,
+                OrderId = order.Id, //TODO: work to get the id, from db
                 ProductId = basketItemDto.ProductId,
                 Quantity = basketItemDto.Quantity,
                 Price = basketItemDto.PriceAtTimeOfAddition,

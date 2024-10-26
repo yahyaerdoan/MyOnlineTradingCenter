@@ -2,6 +2,7 @@
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IHubs;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Orders.Commands.Create;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Orders.Constants;
 using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Baskets;
 using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Orders;
 using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Users;
@@ -30,21 +31,21 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommandReque
     public async Task<IResult> Handle(CreateOrderCommandRequest request, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(request.Address) || string.IsNullOrWhiteSpace(request.Description))
-        return new ErrorResult("Address and description cannot be empty.", HttpStatusCode.BadRequest);
+        return new ErrorResult(OrderMessages.PropertiesCannotBeEmpty, HttpStatusCode.BadRequest);
 
         UserDto currentUser = await _userService.GetCurrentUserAsync();
         if (currentUser == null)
-        return new ErrorResult("User must be logged in to create an order.", HttpStatusCode.Unauthorized);
+        return new ErrorResult(OrderMessages.UserMustBeLoggedIn, HttpStatusCode.Unauthorized);
 
         BasketDto basketDto = await _basketService.GetBasketByUserIdAsync(currentUser.Id);
         if (basketDto == null || !basketDto.Items.Any())
-        return new ErrorResult("No items in basket to create an order.", HttpStatusCode.BadRequest);
+        return new ErrorResult(OrderMessages.NoItemsInBasket, HttpStatusCode.BadRequest);
 
         bool orderCreated = await _orderService.CreateOrderAsync(request.CreateOrderDto);
         if (!orderCreated)
-        return new ErrorResult("Creating order failed.", HttpStatusCode.InternalServerError);
+        return new ErrorResult(OrderMessages.CreatingFailed, HttpStatusCode.InternalServerError);
 
-        await _orderHubService.OrderAddedMessageAsync("New order created successfully.");
-        return new SuccessResult("Order created successfully.", HttpStatusCode.Created);    
+        await _orderHubService.OrderAddedMessageAsync(OrderMessages.NewOrderCreated);
+        return new SuccessResult(OrderMessages.OrderCreated, HttpStatusCode.Created);    
     }
 }
