@@ -2,7 +2,6 @@
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IProductRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Baskets;
-using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.OrderItems;
 using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Orders;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;
 
@@ -23,32 +22,24 @@ public class OrderService : IOrderService
         _basketService = basketService;
     }
 
-    public async Task CreateOrderAsync(CreateOrderDto createOrderDto)
+    public async Task<bool> CreateOrderAsync(CreateOrderDto createOrderDto)
     {
         var currentUser = await _userService.GetCurrentUserAsync();
-        if (currentUser == null)
-        {
-            return;
-        }
-
         BasketDto basketDto = await _basketService.GetBasketByUserIdAsync(currentUser.Id);
-        if (basketDto == null || !basketDto.Items.Any())
-        {
-            return;
-        }
-        Random random = new Random();
         var order = new Order
         {
             Id = Guid.NewGuid(),
             UserId = currentUser.Id,
-            OrderNumber = GenerateSecureOrderNumber(), //createOrderDto.OrderNumber,
-            Address = "45876 W Granville Ave", //createOrderDto.Address,
-            Description = "Order Description" + " " + random.Next(1, 10), //createOrderDto.Description
+            OrderNumber = GenerateSecureOrderNumber(),
+            Address = createOrderDto.Address,
+            Description = createOrderDto.Description,
             OrderItems = new List<OrderItem>()
-        };
+        };      
         foreach (var basketItemDto in basketDto.Items)
         {
             var product = await _productReadRepository.GetByIdAsync(basketItemDto.ProductId.ToString());
+            if (product == null) continue;
+
             var orderItem = new OrderItem
             {
                 OrderId = order.Id,
@@ -59,8 +50,9 @@ public class OrderService : IOrderService
             };
             order.OrderItems.Add(orderItem);
         }
-        await _orderWriteRepository.AddAsync(order);
-        await _orderWriteRepository.SaveAsync();
+        if (!await _orderWriteRepository.AddAsync(order)) return false;
+
+        return await _orderWriteRepository.SaveAsync() > 0;
     }
 
     private static string GenerateSecureOrderNumber()
@@ -75,7 +67,9 @@ public class OrderService : IOrderService
     private static string GenerateOrderNumber()
     {
         Random random = new();
-        return "ORD-" + random.Next(100000, 999999).ToString();
+        //return "ORD-" + random.Next(100000, 999999).ToString();
+        return random.Next(1, 10).ToString();
         //return $"ORD-{DateTime.Now.Ticks}";
+        //return $"ORD-{Guid.NewGuid().ToString()}";
     }
 }

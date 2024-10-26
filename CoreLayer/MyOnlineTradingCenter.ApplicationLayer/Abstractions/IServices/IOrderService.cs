@@ -9,5 +9,5 @@ namespace MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 
 public interface IOrderService
 {
-    Task CreateOrderAsync(CreateOrderDto createOrderDto);
+    Task<bool> CreateOrderAsync(CreateOrderDto createOrderDto);
 }

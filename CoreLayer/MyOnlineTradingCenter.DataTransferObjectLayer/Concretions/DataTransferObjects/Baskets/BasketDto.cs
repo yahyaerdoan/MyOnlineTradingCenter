@@ -9,11 +9,8 @@ namespace MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransfer
 
 public class BasketDto
 {
-    public string UserId { get; set; }
+    public string UserId { get; set; } = default!;
     public List<BasketItemDto> Items { get; set; }
 
-    public BasketDto()
-    {
-        Items = new List<BasketItemDto>();
-    }
+    public BasketDto() => Items = new List<BasketItemDto>();
 }

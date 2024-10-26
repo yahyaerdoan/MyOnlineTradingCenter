@@ -6,6 +6,7 @@ using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.BasketItems.Co
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.BasketItems.Commands.Delete;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.BasketItems.Commands.Update;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.BasketItems.Queries.Get;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Orders.Commands.Create;
 using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Orders;
 
 namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers;
@@ -47,7 +48,8 @@ public class BasketItemsController : ControllerBase
     [HttpDelete("{BasketItemId}")]
     public async Task<IActionResult> DeleteBasketItemQuantity([FromRoute] DeleteBasketItemCommandRequest request)
     {
-        await _orderService.CreateOrderAsync(new CreateOrderDto());
+
+       var yahya = await _mediator.Send(new CreateOrderCommandRequest(new CreateOrderDto() { }) );
         DeleteBasketItemCommandResponse response = await _mediator.Send(request);
         return Ok(response);
     }
