@@ -11,8 +11,8 @@ namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Orders.Com
 
 public class CreateOrderCommandRequest : IRequest<IResult>
 {
-    public string Address { get; set; } = default!;
-    public string Description { get; set; } = default!;
+   // public string Address { get; set; } = default!;
+   // public string Description { get; set; } = default!;
     public CreateOrderDto CreateOrderDto { get; set; }
 
     public CreateOrderCommandRequest(CreateOrderDto createOrderDto)

@@ -30,7 +30,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommandReque
 
     public async Task<IResult> Handle(CreateOrderCommandRequest request, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrWhiteSpace(request.Address) || string.IsNullOrWhiteSpace(request.Description))
+        if (string.IsNullOrWhiteSpace(request.CreateOrderDto.Address) || string.IsNullOrWhiteSpace(request.CreateOrderDto.Description))
         return new ErrorResult(OrderMessages.PropertiesCannotBeEmpty, HttpStatusCode.BadRequest);
 
         UserDto currentUser = await _userService.GetCurrentUserAsync();

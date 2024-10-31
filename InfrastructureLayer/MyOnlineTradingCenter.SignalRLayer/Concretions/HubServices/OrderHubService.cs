@@ -21,6 +21,6 @@ public class OrderHubService : IOrderHubService
 
     public async Task OrderAddedMessageAsync(string message)
     {
-       await _hubContext.Clients.All.SendAsync(ReceivedFunctionName.OrderaddedMessage, message);
+       await _hubContext.Clients.All.SendAsync(ReceivedFunctionName.OrderAddedMessage, message);
     }
 }

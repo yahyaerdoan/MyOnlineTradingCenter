@@ -48,8 +48,6 @@ public class BasketItemsController : ControllerBase
     [HttpDelete("{BasketItemId}")]
     public async Task<IActionResult> DeleteBasketItemQuantity([FromRoute] DeleteBasketItemCommandRequest request)
     {
-
-       var yahya = await _mediator.Send(new CreateOrderCommandRequest(new CreateOrderDto() { }) );
         DeleteBasketItemCommandResponse response = await _mediator.Send(request);
         return Ok(response);
     }
