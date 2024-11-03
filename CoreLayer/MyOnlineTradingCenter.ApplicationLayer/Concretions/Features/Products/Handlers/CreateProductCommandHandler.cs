@@ -36,7 +36,7 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommandR
         { 
             return Response<CreateProductCommandResponse>.Failure("Failed to create product", "An unexpected error occurred while saving the product to the database.", StatusCodes.Status400BadRequest);
         }
-        await _productHubService.ProductAddedMessageAsync("added!");
+        await _productHubService.ProductAddedMessageAsync("New product created.");
         return Response<CreateProductCommandResponse>.Success(new CreateProductCommandResponse(), "Product created successfully.", StatusCodes.Status201Created);
     }
 

@@ -21,7 +21,6 @@ using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Queri
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.RequestParameters.Paginations;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Responses;
 using ResultHandler.Interfaces.Contracts;
-using System.Net;
 using IResult = ResultHandler.Interfaces.Contracts.IResult;
 
 namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers;

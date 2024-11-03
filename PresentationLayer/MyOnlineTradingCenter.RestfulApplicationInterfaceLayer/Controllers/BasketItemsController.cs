@@ -1,13 +1,10 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.BasketItems.Commands.Create;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.BasketItems.Commands.Delete;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.BasketItems.Commands.Update;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.BasketItems.Queries.Get;
-using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Orders.Commands.Create;
-using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Orders;
 
 namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers;
 
@@ -17,13 +14,12 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers;
 public class BasketItemsController : ControllerBase
 {
     private readonly IMediator _mediator;
-    private readonly IOrderService _orderService;
 
-    public BasketItemsController(IMediator mediator, IOrderService orderService)
+    public BasketItemsController(IMediator mediator)
     {
         _mediator = mediator;
-        _orderService = orderService;
     }
+
     [HttpGet]
     public async Task<IActionResult> GetBasketItems([FromQuery] GetBasketItemsQueryRequest request)
     {

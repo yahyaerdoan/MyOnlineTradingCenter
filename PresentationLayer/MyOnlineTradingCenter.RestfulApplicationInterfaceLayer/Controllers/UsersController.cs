@@ -1,9 +1,6 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.CreateUsers.Commands.Create;
-using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.LogInUsers.Commands.Create;
-using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.SocialLogInUsers.GoogleLogInUsers.Commands.Create;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Responses;
 using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Users;
 

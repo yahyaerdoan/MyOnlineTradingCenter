@@ -21,8 +21,8 @@ public static class ConfigureExceptionHandlerExtensions
                     logger.LogError(exceptionHandlerFeature.Error.Message);
                    await context.Response.WriteAsync(JsonSerializer.Serialize(new
                    {
-                       StatusCode = context.Response.StatusCode,
-                       Message = exceptionHandlerFeature.Error.Message,
+                       context.Response.StatusCode,
+                       exceptionHandlerFeature.Error.Message,
                        Title = "Error!"
                    }));
                 }
