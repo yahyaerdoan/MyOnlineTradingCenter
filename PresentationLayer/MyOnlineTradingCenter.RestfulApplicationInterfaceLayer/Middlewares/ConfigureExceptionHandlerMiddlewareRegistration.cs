@@ -3,9 +3,9 @@ using System.Net;
 using System.Net.Mime;
 using System.Text.Json;
 
-namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Extensions;
+namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Middlewares;
 
-public static class ConfigureExceptionHandlerExtensions
+public static class ConfigureExceptionHandlerMiddlewareRegistration
 {
     public static void UseCongigureExceptionHandler<T>(this WebApplication webApplication, ILogger<T> logger)
     {
@@ -19,12 +19,12 @@ public static class ConfigureExceptionHandlerExtensions
                 if (exceptionHandlerFeature != null)
                 {
                     logger.LogError(exceptionHandlerFeature.Error.Message);
-                   await context.Response.WriteAsync(JsonSerializer.Serialize(new
-                   {
-                       context.Response.StatusCode,
-                       exceptionHandlerFeature.Error.Message,
-                       Title = "Error!"
-                   }));
+                    await context.Response.WriteAsync(JsonSerializer.Serialize(new
+                    {
+                        context.Response.StatusCode,
+                        exceptionHandlerFeature.Error.Message,
+                        Title = "Error!"
+                    }));
                 }
             });
         });
