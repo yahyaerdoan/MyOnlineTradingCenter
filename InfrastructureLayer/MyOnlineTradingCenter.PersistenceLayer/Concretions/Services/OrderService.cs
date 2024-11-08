@@ -57,11 +57,12 @@ public class OrderService : IOrderService
 
     private static string GenerateSecureOrderNumber()
     {
-        using var radomNumberGenarate = System.Security.Cryptography.RandomNumberGenerator.Create();
-        byte[] randomNumber = new byte[32];
-        radomNumberGenarate.GetBytes(randomNumber);
-        int value = BitConverter.ToInt32(randomNumber, 0);
-        return "ORD-" + Math.Abs(value).ToString();
+        long ticks = DateTime.Now.Ticks;
+        using var randomNumberGenerator = System.Security.Cryptography.RandomNumberGenerator.Create();
+        byte[] randomBytes = new byte[4];
+        randomNumberGenerator.GetBytes(randomBytes);
+        int randomPart = BitConverter.ToInt32(randomBytes, 0);
+        return "ORD-" + ticks + "-" + Math.Abs(randomPart).ToString();
     }
 
     private static string GenerateOrderNumber()
