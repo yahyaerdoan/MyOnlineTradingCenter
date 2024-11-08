@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IBasketItemRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IBasketRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IOrderRepositories;
+using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IProductRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.ViewModels.BasketItems;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;
@@ -25,8 +26,9 @@ public class BasketItemService : IBasketItemService
     private readonly IBasketReadRepository _basketReadRepository;
     private readonly IBasketItemWriteRepository _basketItemWriteRepository;
     private readonly IBasketItemReadRepository _basketItemReadRepository;
+    private readonly IProductReadRepository _productReadRepository;
 
-    public BasketItemService(IHttpContextAccessor httpContextAccessor, UserManager<User> userManager, IOrderReadRepository orderReadRepository, IBasketItemWriteRepository basketItemWriteRepository, IBasketWriteRepository basketWriteRepository, IBasketItemReadRepository basketItemReadRepository, IBasketReadRepository basketReadRepository)
+    public BasketItemService(IHttpContextAccessor httpContextAccessor, UserManager<User> userManager, IOrderReadRepository orderReadRepository, IBasketItemWriteRepository basketItemWriteRepository, IBasketWriteRepository basketWriteRepository, IBasketItemReadRepository basketItemReadRepository, IBasketReadRepository basketReadRepository, IProductReadRepository productReadRepository)
     {
         _httpContextAccessor = httpContextAccessor;
         _userManager = userManager;
@@ -35,6 +37,7 @@ public class BasketItemService : IBasketItemService
         _basketWriteRepository = basketWriteRepository;
         _basketItemReadRepository = basketItemReadRepository;
         _basketReadRepository = basketReadRepository;
+        _productReadRepository = productReadRepository;
     }
 
     private async Task<Basket?> GetCurrentUserAsync()
@@ -76,6 +79,7 @@ public class BasketItemService : IBasketItemService
             ?? throw new InvalidOperationException("User basket not found.");
 
         var productId = Guid.Parse(model.ProductId);
+        Product product = await _productReadRepository.GetByIdAsync(productId.ToString());
         BasketItem currentBasketItem = await _basketItemReadRepository.GetSingleAsync(bi => bi.BasketId == basket.Id && bi.ProductId == productId);
 
         if (currentBasketItem != null)
@@ -89,6 +93,7 @@ public class BasketItemService : IBasketItemService
                 BasketId = basket.Id,
                 ProductId = productId,
                 Quantity = model.Quantity,
+                PriceAtTimeOfAddition = product.Price
             };
             await _basketItemWriteRepository.AddAsync(currentBasketItem);
         }

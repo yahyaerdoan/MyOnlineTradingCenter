@@ -8,7 +8,6 @@ namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.ViewModels.BasketIt
 
 public class CreateBasketItemViewModel
 {
-    //public string BasketId { get; set; }
-    public string ProductId { get; set; }
+    public string ProductId { get; set; } = default!;
     public int Quantity { get; set; }
 }
