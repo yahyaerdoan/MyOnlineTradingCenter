@@ -10,7 +10,7 @@ namespace MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;
 
 public class Basket : BaseEntity
 {
-    public string UserId { get; set; }
-    public User User { get; set; }
-    public ICollection<BasketItem> BasketItems { get; set; }
+    public string UserId { get; set; } = default!;
+    public User User { get; set; } = default!;
+    public ICollection<BasketItem> BasketItems { get; set; } = default!;
 }

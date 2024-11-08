@@ -9,11 +9,10 @@ namespace MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;
 
 public class BasketItem : BaseEntity
 {
-    public Guid ProductId { get; set; }
-    public Guid BasketId { get; set; }
-    public int Quantity { get; set; }
-    public decimal PriceAtTimeOfAddition { get; set; }
-
-    public Basket Basket { get; set; }
-    public Product Product { get; set; }
+    public Guid ProductId { get; set; } = default!;
+    public Guid BasketId { get; set; } = default!;
+    public int Quantity { get; set; } = default!;
+    public decimal PriceAtTimeOfAddition { get; set; } = default!;
+    public Basket Basket { get; set; } = default!;
+    public Product Product { get; set; } = default!;
 }

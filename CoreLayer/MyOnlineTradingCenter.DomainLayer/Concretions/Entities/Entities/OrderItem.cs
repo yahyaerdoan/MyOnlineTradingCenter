@@ -9,11 +9,10 @@ namespace MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;
 
 public class OrderItem : BaseEntity
 {
-    public Guid OrderId { get; set; }
-    public Order Order { get; set; }
-    public Guid ProductId { get; set; }
-    public Product Product { get; set; }
-    public int Quantity { get; set; }
-    public decimal Price { get; set; }
-    public decimal TotalPrice => Quantity * Price;
+    public Guid OrderId { get; set; } = default!;
+    public Order Order { get; set; } = default!;
+    public Guid ProductId { get; set; } = default!;
+    public Product Product { get; set; } = default!; 
+    public int Quantity { get; set; } = default!;
+    public decimal Price { get; set; } = default!;
 }
