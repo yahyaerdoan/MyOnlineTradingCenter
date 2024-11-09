@@ -81,7 +81,7 @@ public class OrderService : IOrderService
         return (totalOrderCount, orders);
     }
 
-    public async  Task<OrderDetailDto> GetOrderDetailAsync(Guid orderId)
+    public async  Task<OrderDetailDto> GetByIdOrderDetailAsync(Guid orderId)
     {
         const decimal taxRate = 0.10m;
 

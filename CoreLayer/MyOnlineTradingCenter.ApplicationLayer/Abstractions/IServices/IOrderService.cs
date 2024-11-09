@@ -7,5 +7,5 @@ public interface IOrderService
 {
     Task<bool> CreateOrderAsync(CreateOrderDto createOrderDto);
     Task<(int TotalOrderCount, List<OrderDto> Orders)> GetOrdersAsync(Pagination pagination);
-    Task<OrderDetailDto> GetOrderDetailAsync(Guid orderId);
+    Task<OrderDetailDto> GetByIdOrderDetailAsync(Guid orderId);
 }
