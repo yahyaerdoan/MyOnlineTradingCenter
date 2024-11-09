@@ -77,9 +77,39 @@ public class OrderService : IOrderService
                 });
 
         int totalOrderCount = await _orderReadRepository.Table.CountAsync();
-        List<OrderDto> orders = await query.OrderByDescending(x=> x.CreatedDate).ToListAsync();
+        List<OrderDto> orders = await query.OrderByDescending(x => x.CreatedDate).ToListAsync();
         return (totalOrderCount, orders);
     }
+
+    public async  Task<OrderDetailDto> GetOrderDetailAsync(Guid orderId)
+    {
+        const decimal taxRate = 0.10m;
+
+        var query = await _orderReadRepository.Table
+            .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Product)
+            .Include(o => o.User)
+            .Where(o => o.Id == orderId)
+            .Select(o => new OrderDetailDto
+            {
+                Id = o.Id,
+                OrderNumber = o.OrderNumber,
+                UserName = $"{o.User.FirstName} {o.User.LastName}",
+                Address = o.Address,
+                Description = o.Description,
+                Name = o.OrderItems.Select(oi => oi.Product.Name).FirstOrDefault() ?? "Unknown Product",
+                PriceAtTimeAddition = o.OrderItems.Select(oi => oi.Price).FirstOrDefault(),
+                Quantity = o.OrderItems.Select(oi => oi.Quantity).FirstOrDefault(),
+                CreatedDate = o.CreatedDate,
+                Subtotal = o.OrderItems.Sum(oi => oi.Price * oi.Quantity),
+                WithTax = o.OrderItems.Sum(oi => oi.Price * oi.Quantity) * taxRate,
+                TotalAmount = o.OrderItems.Sum(oi => oi.Price * oi.Quantity) * (1 + taxRate),
+                Status = o.Status
+            }).FirstOrDefaultAsync();
+
+        return query ?? new OrderDetailDto();
+    }
+
     #region GenerateSecureOrderNumber Helper Method
     private static string GenerateSecureOrderNumber()
     {
@@ -99,5 +129,6 @@ public class OrderService : IOrderService
         //return $"ORD-{DateTime.Now.Ticks}";
         //return $"ORD-{Guid.NewGuid().ToString()}";
     }
+
     #endregion
 }
