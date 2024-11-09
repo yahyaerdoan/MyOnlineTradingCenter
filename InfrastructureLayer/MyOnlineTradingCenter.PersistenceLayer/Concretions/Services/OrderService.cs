@@ -81,9 +81,9 @@ public class OrderService : IOrderService
         return (totalOrderCount, orders);
     }
 
-    public async  Task<OrderDetailDto> GetByIdOrderDetailAsync(Guid orderId)
+    public async Task<OrderDetailDto> GetByIdOrderDetailAsync(Guid orderId)
     {
-        const decimal taxRate = 0.10m;
+        const decimal taxRate = 0.18m;
 
         var query = await _orderReadRepository.Table
             .Include(o => o.OrderItems)
@@ -97,12 +97,17 @@ public class OrderService : IOrderService
                 UserName = $"{o.User.FirstName} {o.User.LastName}",
                 Address = o.Address,
                 Description = o.Description,
-                Name = o.OrderItems.Select(oi => oi.Product.Name).FirstOrDefault() ?? "Unknown Product",
-                PriceAtTimeAddition = o.OrderItems.Select(oi => oi.Price).FirstOrDefault(),
-                Quantity = o.OrderItems.Select(oi => oi.Quantity).FirstOrDefault(),
+                OrderItems = o.OrderItems.Select(oi => new OrderItemDto
+                {
+                    OrderId = oi.OrderId,
+                    ProductName = oi.Product.Name,
+                    Price = oi.Price,
+                    Quantity = oi.Quantity
+                }).ToList(),
                 CreatedDate = o.CreatedDate,
                 Subtotal = o.OrderItems.Sum(oi => oi.Price * oi.Quantity),
-                WithTax = o.OrderItems.Sum(oi => oi.Price * oi.Quantity) * taxRate,
+                Tax = o.OrderItems.Sum(oi => oi.Price * oi.Quantity) * taxRate,
+                WithTax = o.OrderItems.Sum(oi => oi.Price * oi.Quantity) * (1 + taxRate),
                 TotalAmount = o.OrderItems.Sum(oi => oi.Price * oi.Quantity) * (1 + taxRate),
                 Status = o.Status
             }).FirstOrDefaultAsync();
