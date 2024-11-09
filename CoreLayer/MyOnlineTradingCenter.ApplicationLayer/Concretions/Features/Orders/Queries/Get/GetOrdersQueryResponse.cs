@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Orders;
 
-namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Orders.Queries.Get
+namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Orders.Queries.Get;
+
+public class GetOrdersQueryResponse
 {
-    internal class GetOrdersQueryResponse
-    {
-    }
+    public int TotalOrderCount { get; set; }
+    public List<OrderDto> Orders { get; set; } = new List<OrderDto>();
 }

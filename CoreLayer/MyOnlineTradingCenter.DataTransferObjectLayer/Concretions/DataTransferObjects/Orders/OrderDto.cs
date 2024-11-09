@@ -4,10 +4,9 @@ namespace MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransfer
 
 public class OrderDto
 {
-    public Guid Id { get; set; }
-    public string OrderNumber { get; set; }
-    public string Description { get; set; }
-    public string Address { get; set; }
+    public Guid OrderId { get; set; }
+    public string OrderNumber { get; set; } = default!;
+    public string UserName { get; set; } = default!;
+    public DateTime CreatedDate { get; set; } 
     public decimal TotalAmount { get; set; }
-    public List<OrderItemDto> OrderItems { get; set; }
 }

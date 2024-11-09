@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.RequestParameters.Paginations;
+using ResultHandler.Interfaces.Contracts;
 
-namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Orders.Queries.Get
+namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Orders.Queries.Get;
+
+public class GetOrdersQueryRequest : IRequest<IDataResult<GetOrdersQueryResponse?>>
 {
-    internal class GetOrdersQueryRequest
+    public Pagination Pagination { get; set; } = default!;
+
+    public GetOrdersQueryRequest(Pagination pagination)
     {
+        Pagination = pagination;
     }
 }
