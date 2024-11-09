@@ -61,22 +61,23 @@ public class OrderService : IOrderService
 
     public async Task<(int TotalOrderCount, List<OrderDto> Orders)> GetOrdersAsync(Pagination pagination)
     {
-        int totalOrderCount = await _orderReadRepository.Table.CountAsync();
-
-        var orders = await _orderReadRepository.Table.Skip((pagination.Page) * pagination.Size).Take(pagination.Size)
-             .Include(x => x.User)
+        var query = _orderReadRepository.Table.
+            Skip((pagination.Page) * pagination.Size).Take(pagination.Size)
+            .Include(x => x.User)
                 .ThenInclude(x => x.Orders)
                 .ThenInclude(x => x.OrderItems)
                 .ThenInclude(x => x.Product)
-             .Select(o => new OrderDto
-             {
-                 OrderId = o.Id,
-                 OrderNumber = o.OrderNumber,
-                 UserName = o.User.FirstName + ' ' + o.User.LastName,
-                 CreatedDate = DateTime.Now,
-                 TotalAmount = o.OrderItems.Sum(x => x.Product.Price * x.Quantity)
-             })
-             .ToListAsync();
+                .Select(o => new OrderDto
+                {
+                    OrderId = o.Id,
+                    OrderNumber = o.OrderNumber,
+                    UserName = o.User.FirstName + ' ' + o.User.LastName,
+                    CreatedDate = o.CreatedDate,
+                    TotalAmount = o.OrderItems.Sum(x => x.Product.Price * x.Quantity)
+                });
+
+        int totalOrderCount = await _orderReadRepository.Table.CountAsync();
+        List<OrderDto> orders = await query.OrderByDescending(x=> x.CreatedDate).ToListAsync();
         return (totalOrderCount, orders);
     }
     #region GenerateSecureOrderNumber Helper Method
