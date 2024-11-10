@@ -11,11 +11,6 @@ using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Stor
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.StorageServices;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Utilities.FileHelpers;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.InfrastructureLayer.Concretions.Extensions;
 
@@ -28,6 +23,7 @@ public static class ServiceRegistration
         services.AddScoped<ITokenHandler, TokenHandler>();
         services.AddHttpContextAccessor();
         services.AddSingleton<IFileUrlGeneratorService, FileUrlGeneratorService>();
+        services.AddScoped<IEmailService, EmailService>();
     }
 
     public static void AddStorageServices<T>(this IServiceCollection services) where T : FileNameHelper, IBaseStorage

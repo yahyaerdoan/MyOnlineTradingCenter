@@ -17,15 +17,15 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IOrderService _orderService;
+        private readonly IEmailService _emailService;
 
-        public OrdersController(IMediator mediator, IOrderService orderService)
+        public OrdersController(IMediator mediator, IEmailService emailService)
         {
             _mediator = mediator;
-            _orderService = orderService;
+            _emailService = emailService;
         }
 
-        [HttpPost]       
+        [HttpPost]
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderCommandRequest request)
         {
             IResult response = await _mediator.Send(request);
@@ -42,6 +42,26 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
         [HttpGet("[action]/{Id}")]
         public async Task<IActionResult> GetByIdOrderDetail([FromRoute] GetByIdOrderDetailQueryRequest request)
         {
+            var multipleRecipientMessage = new EmailMessage
+            {
+                ToMultiple = new[] { "yahyaerdoan@gmail.com", "yahyaerdoan@icloud.com" },
+                Subject = "Test Subject. Muiltiple Recipient",
+                Body = @"
+                        <html>
+                            <body style='font-family: Arial, sans-serif;'>
+                                <h2 style='color: #4CAF50;'>Hello,</h2>
+                                <p>This is a test email sent to multiple recipients separately.</p>
+                                <p style='font-size: 14px;'>Thank you for using our service!</p>
+                                <p>Best Regards,<br><strong>My Online Trading Center</strong></p>
+                                <hr />
+                                <footer style='color: #888888; font-size: 12px;'>
+                                    <p>This is an automated message, please do not reply.</p>
+                                </footer>
+                            </body>
+                        </html>",
+                IsBodyHtml = true
+            };
+            await _emailService.SendEmailAsync(multipleRecipientMessage);
             IDataResult<GetByIdOrderDetailQueryResponse?> response = await _mediator.Send(request);
             return Ok(response);
         }
