@@ -97,7 +97,8 @@ public class OrderService : IOrderService
                 UserName = $"{o.User.FirstName} {o.User.LastName}",
                 Address = o.Address,
                 Description = o.Description,
-                OrderItems = o.OrderItems.Select(oi => new OrderItemDto
+                OrderItems = o.OrderItems.OrderBy(oi=> oi.Price)
+                .Select(oi => new OrderItemDto
                 {
                     OrderId = oi.OrderId,
                     ProductName = oi.Product.Name,

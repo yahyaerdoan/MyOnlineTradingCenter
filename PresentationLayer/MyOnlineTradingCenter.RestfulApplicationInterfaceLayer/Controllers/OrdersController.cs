@@ -6,8 +6,6 @@ using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Orders.Command
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Orders.Queries.Get;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Orders.Queries.GetByIdDetail;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.RequestParameters.Paginations;
-using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Orders;
-using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;
 using ResultHandler.Interfaces.Contracts;
 using IResult = ResultHandler.Interfaces.Contracts.IResult;
 
@@ -41,8 +39,8 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
             IResult response = await _mediator.Send(request);
             return Ok(response);
         }
-        [HttpGet("[action]")]
-        public async Task<IActionResult> GetByIdOrderDetail([FromQuery] GetByIdOrderDetailQueryRequest request)
+        [HttpGet("[action]/{Id}")]
+        public async Task<IActionResult> GetByIdOrderDetail([FromRoute] GetByIdOrderDetailQueryRequest request)
         {
             IDataResult<GetByIdOrderDetailQueryResponse?> response = await _mediator.Send(request);
             return Ok(response);
