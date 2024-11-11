@@ -42,14 +42,21 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
         [HttpGet("[action]/{Id}")]
         public async Task<IActionResult> GetByIdOrderDetail([FromRoute] GetByIdOrderDetailQueryRequest request)
         {
+            //await SendEmail();
+            IDataResult<GetByIdOrderDetailQueryResponse?> response = await _mediator.Send(request);
+            return Ok(response);
+        }
+
+        private async Task SendEmail()
+        {
             var multipleRecipientMessage = new EmailMessage
             {
-                ToMultiple = new[] { "yahyaerdoan@gmail.com", "yahyaerdoan@icloud.com" },
+                ToMultiple = new[] { "tbatbold1999@gmail.com", "yahyaerdoan@icloud.com" },
                 Subject = "Test Subject. Muiltiple Recipient",
                 Body = @"
                         <html>
                             <body style='font-family: Arial, sans-serif;'>
-                                <h2 style='color: #4CAF50;'>Hello,</h2>
+                                <h2 style='color: #4CAF50;'>Hello Riley,</h2>
                                 <p>This is a test email sent to multiple recipients separately.</p>
                                 <p style='font-size: 14px;'>Thank you for using our service!</p>
                                 <p>Best Regards,<br><strong>My Online Trading Center</strong></p>
@@ -62,8 +69,6 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
                 IsBodyHtml = true
             };
             await _emailService.SendEmailAsync(multipleRecipientMessage);
-            IDataResult<GetByIdOrderDetailQueryResponse?> response = await _mediator.Send(request);
-            return Ok(response);
         }
     }
 }

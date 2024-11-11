@@ -3,6 +3,7 @@ using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IBaseStorages;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IStorageServices;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.ITokens;
+using MyOnlineTradingCenter.InfrastructureLayer.Concretions.EmailTemplateFactories;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.Services;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.Services.Files;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Enums.StorageTypes;
@@ -24,6 +25,7 @@ public static class ServiceRegistration
         services.AddHttpContextAccessor();
         services.AddSingleton<IFileUrlGeneratorService, FileUrlGeneratorService>();
         services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<EmailTemplateFactory>();
     }
 
     public static void AddStorageServices<T>(this IServiceCollection services) where T : FileNameHelper, IBaseStorage

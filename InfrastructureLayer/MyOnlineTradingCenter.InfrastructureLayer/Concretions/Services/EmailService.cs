@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
+using MyOnlineTradingCenter.InfrastructureLayer.Concretions.EmailTemplateFactories;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
@@ -9,11 +10,14 @@ namespace MyOnlineTradingCenter.InfrastructureLayer.Concretions.Services;
 public class EmailService : IEmailService
 {
     private readonly IConfiguration _configuration;
+    private readonly EmailTemplateFactory _templateFactory;
 
-    public EmailService(IConfiguration configuration)
+    public EmailService(IConfiguration configuration, EmailTemplateFactory templateFactory)
     {
         _configuration = configuration;
+        _templateFactory = templateFactory;
     }
+    #region SendEmailAsync
 
     public async Task SendEmailAsync(EmailMessage message)
     {
@@ -35,8 +39,10 @@ public class EmailService : IEmailService
             }
         }
     }
+    #endregion
+    #region SendIndividualEmailAsync
 
-    private static async Task SendIndividualEmailAsync(string recipient, string subject, string body, bool isBodyHtml, 
+    private static async Task SendIndividualEmailAsync(string recipient, string subject, string body, bool isBodyHtml,
         string email, string password, string host, int port, string displayName)
     {
         using var mailMessage = new MailMessage
@@ -57,5 +63,27 @@ public class EmailService : IEmailService
         };
 
         await smtpClient.SendMailAsync(mailMessage);
+    }
+    #endregion
+
+    public async Task RequestPasswordResetAsync(string to, string userId, string resetToken)
+    {
+        var template = _templateFactory.CreateTemaplate(EmailTemplateType.PasswordReset);
+        var templateDate = new Dictionary<string, string>
+        {
+            {"UserId", userId },
+            {"ResetToken", resetToken}
+        };
+        var subjet = template.GetSubject();
+        var body = template.GenerateBody(templateDate);
+
+        var message = new EmailMessage
+        {
+            ToSingle = to,
+            Subject = subjet,
+            Body = body,
+            IsBodyHtml = true,
+        };
+        await SendEmailAsync(message);
     }
 }

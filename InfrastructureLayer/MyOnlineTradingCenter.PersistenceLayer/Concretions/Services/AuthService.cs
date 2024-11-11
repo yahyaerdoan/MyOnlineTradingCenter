@@ -1,9 +1,7 @@
 ﻿using Google.Apis.Auth;
-using Google.Apis.Util;
-using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
@@ -14,11 +12,7 @@ using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.SocialLo
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Responses;
 using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Tokens;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.IdentityEntities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Services;
@@ -30,14 +24,16 @@ public class AuthService : IAuthService
     private readonly IUserService _userService;
     private readonly ITokenHandler _tokenHandler;
     private readonly IConfiguration _configuration;
+    private readonly IEmailService _emailService;
 
-    public AuthService(UserManager<User> userManager, ITokenHandler tokenHandler, IConfiguration configuration, SignInManager<User> signInManager, IUserService userService)
+    public AuthService(UserManager<User> userManager, ITokenHandler tokenHandler, IConfiguration configuration, SignInManager<User> signInManager, IUserService userService, IEmailService emailService)
     {
         _userManager = userManager;
         _tokenHandler = tokenHandler;
         _configuration = configuration;
         _signInManager = signInManager;
         _userService = userService;
+        _emailService = emailService;
     }
 
     public Task FacebookLogInAsync()
@@ -117,6 +113,22 @@ public class AuthService : IAuthService
 
         var loginResponse = new LogInUserCommandResponse { Token = token };
         return Response<LogInUserCommandResponse>.Success(loginResponse, "User logged in successfully!", StatusCodes.Status200OK);
+    }
+
+    public async Task ResetPasswordAsync(string email)
+    {
+        var user = await FindUserAsync(email);
+        if (string.IsNullOrEmpty(user?.Email)) return;
+
+        string resetToken = await GenerateEncodedResetToken(user);
+        await _emailService.RequestPasswordResetAsync(email, resetToken, user.Id);
+    }
+
+    private async Task<string> GenerateEncodedResetToken(User user)
+    {
+        string resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+        byte[] tokenBytes = Encoding.UTF8.GetBytes(resetToken);
+        return WebEncoders.Base64UrlEncode(tokenBytes);
     }
 
     #region Helper methods
@@ -204,5 +216,6 @@ public class AuthService : IAuthService
     {
         return user.RefreshTokenExpirationDate > DateTime.Now;
     }
+
     #endregion
 }

@@ -40,6 +40,10 @@
     <Folder Include="Concretions\Features\Users\RefreshTokenLogIns\Commands\Update\" />
     <Folder Include="Concretions\Features\Users\RefreshTokenLogIns\Queries\GetById\" />
     <Folder Include="Concretions\Features\Users\RefreshTokenLogIns\Queries\Get\" />
+    <Folder Include="Concretions\Features\Users\ResetPasswords\Commands\Delete\" />
+    <Folder Include="Concretions\Features\Users\ResetPasswords\Commands\Update\" />
+    <Folder Include="Concretions\Features\Users\ResetPasswords\Queries\GetById\" />
+    <Folder Include="Concretions\Features\Users\ResetPasswords\Queries\Get\" />
     <Folder Include="Concretions\Features\Users\SocialLogInUsers\GoogleLogInUsers\Commands\Delete\" />
     <Folder Include="Concretions\Features\Users\SocialLogInUsers\GoogleLogInUsers\Commands\Update\" />
     <Folder Include="Concretions\Features\Users\SocialLogInUsers\GoogleLogInUsers\Queries\GetById\" />

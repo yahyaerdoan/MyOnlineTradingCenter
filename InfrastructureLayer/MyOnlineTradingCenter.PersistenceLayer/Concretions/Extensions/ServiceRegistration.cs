@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IBasketItemRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IBasketRepositories;
@@ -24,11 +25,6 @@ using MyOnlineTradingCenter.PersistenceLayer.Concretions.Repositories.OrderRepos
 using MyOnlineTradingCenter.PersistenceLayer.Concretions.Repositories.ProductRepository;
 using MyOnlineTradingCenter.PersistenceLayer.Concretions.Repositories.UploadedFileRepository;
 using MyOnlineTradingCenter.PersistenceLayer.Concretions.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Extensions
 {
@@ -70,7 +66,8 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Extensions
             {
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireDigit = false;
-            }).AddEntityFrameworkStores<MyOnlineTradingCenterPostgreSqlDbContext>();
+            }).AddEntityFrameworkStores<MyOnlineTradingCenterPostgreSqlDbContext>()
+            .AddDefaultTokenProviders();
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
@@ -85,4 +82,3 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Extensions
         }
     }
 }
- 

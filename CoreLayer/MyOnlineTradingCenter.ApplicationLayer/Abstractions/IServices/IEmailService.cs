@@ -3,6 +3,7 @@
 public interface IEmailService 
 {
     Task SendEmailAsync(EmailMessage message);
+    Task RequestPasswordResetAsync(string to, string userId, string resetToken);
 }
 
 public class EmailMessage

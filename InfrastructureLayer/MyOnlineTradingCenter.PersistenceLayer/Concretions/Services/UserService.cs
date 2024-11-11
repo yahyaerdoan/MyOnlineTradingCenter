@@ -88,21 +88,3 @@ public class UserService : IUserService
         return Response<string>.Failure("Error!", "Refresh token not created!", StatusCodes.Status400BadRequest);       
     }
 }
-#region Old version
-//IdentityResult result = await _userManager.CreateAsync(new()
-//{
-//    Id = Guid.NewGuid().ToString(),
-//    FirtName = request.FirstName,
-//    LastName = request.LastName,
-//    UserName = request.UserName,
-//    Email = request.Email,
-//}, request.Password);
-
-//CreateUserCommandResponse response = new() { Succeeded = result.Succeeded };
-//        if (result.Succeeded)
-//            response.Message = "User created!";
-//        else
-//            foreach (var error in result.Errors)
-//                response.Message += $"{error.Code} - {error.Description}\n";
-//        return response;
-#endregion
