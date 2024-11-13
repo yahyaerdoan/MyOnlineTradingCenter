@@ -4,6 +4,7 @@ using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.LogInUse
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.RefreshTokenLogIns.Commands.Create;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.ResetPasswords.Commands.Create;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.SocialLogInUsers.GoogleLogInUsers.Commands.Create;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.VerifyResetTokens.Commands.Create;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Responses;
 
 namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
@@ -41,6 +42,12 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
         public async Task<IActionResult> ResetPasswordAsync([FromBody] ResetPasswordCommandRequest request)
         {
             ResetPasswordCommandResponse response = await _mediator.Send(request);
+            return Ok(response);
+        }
+        [HttpPost("VerifyResetToken")]
+        public async Task<IActionResult> VerifyResetTokenAsync([FromBody] VerifyResetTokenCommandRequest request)
+        {
+            VerifyResetTokenCommandResponse response = await _mediator.Send(request);
             return Ok(response);
         }
     }

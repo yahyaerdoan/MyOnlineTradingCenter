@@ -120,14 +120,33 @@ public class AuthService : IAuthService
         var user = await FindUserAsync(email);
         if (string.IsNullOrEmpty(user?.Email)) return;
 
-        string resetToken = await GenerateEncodedResetToken(user);
+        var resetToken = await GenerateEncodedResetTokenAsync(user);
         await _emailService.RequestPasswordResetAsync(email, resetToken, user.Id);
     }
 
-    private async Task<string> GenerateEncodedResetToken(User user)
+    public async Task<bool> VerifyResetTokenAsync(string resetToken, string userId)
     {
-        string resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
-        byte[] tokenBytes = Encoding.UTF8.GetBytes(resetToken);
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null) return false;
+
+        var decodedToken = DecodeResetToken(resetToken);
+        return await _userManager.VerifyUserTokenAsync(user, _userManager.Options.Tokens.PasswordResetTokenProvider,PasswordResetTokenPurpose, decodedToken);
+    }
+
+    private const string PasswordResetTokenPurpose = "ResetToken";
+    private async Task<string> GenerateEncodedResetTokenAsync(User user)
+    {
+        var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+        return EncodeResetToken(resetToken);
+    }
+    private static string DecodeResetToken(string encodedToken)
+    {
+        byte[] tokenBytes = WebEncoders.Base64UrlDecode(encodedToken);
+        return Encoding.UTF8.GetString(tokenBytes);
+    }
+    private static string EncodeResetToken(string token)
+    {
+        byte[] tokenBytes = Encoding.UTF8.GetBytes(token);
         return WebEncoders.Base64UrlEncode(tokenBytes);
     }
 
