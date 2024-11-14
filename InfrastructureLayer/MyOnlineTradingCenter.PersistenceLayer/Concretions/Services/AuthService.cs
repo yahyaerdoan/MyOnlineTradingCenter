@@ -133,7 +133,7 @@ public class AuthService : IAuthService
         return await _userManager.VerifyUserTokenAsync(user, _userManager.Options.Tokens.PasswordResetTokenProvider,PasswordResetTokenPurpose, decodedToken);
     }
 
-    private const string PasswordResetTokenPurpose = "ResetToken";
+    private const string PasswordResetTokenPurpose = "ResetPassword";
     private async Task<string> GenerateEncodedResetTokenAsync(User user)
     {
         var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
