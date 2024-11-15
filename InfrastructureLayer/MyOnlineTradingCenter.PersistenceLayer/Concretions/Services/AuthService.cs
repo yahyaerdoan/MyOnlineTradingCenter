@@ -130,7 +130,38 @@ public class AuthService : IAuthService
         if (user == null) return false;
 
         var decodedToken = DecodeResetToken(resetToken);
-        return await _userManager.VerifyUserTokenAsync(user, _userManager.Options.Tokens.PasswordResetTokenProvider,PasswordResetTokenPurpose, decodedToken);
+        return await _userManager.VerifyUserTokenAsync(user, _userManager.Options.Tokens.PasswordResetTokenProvider, PasswordResetTokenPurpose, decodedToken);
+    }
+    public async Task<bool> UpdatePasswordAsync(string userId, string email, string resetToken, string newPassword)
+    {
+        var user = await FindUserByEmailAndIdAsync(userId, email);
+        if (user == null) return false;
+
+        var decodedToken = DecodeResetToken(resetToken);
+        var result = await _userManager.ResetPasswordAsync(user, decodedToken, newPassword);
+
+        if (result.Succeeded)
+        {
+            await _userManager.UpdateSecurityStampAsync(user);
+            return true;
+        }
+
+        return false;
+    }
+    private async Task<User?> FindUserByEmailAndIdAsync(string? userId, string? email)
+    {
+        if (!string.IsNullOrEmpty(email))
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user != null) return user;
+        }
+
+        if (!string.IsNullOrEmpty(userId))
+        {
+            return await _userManager.FindByIdAsync(userId);
+        }
+
+        return null;
     }
 
     private const string PasswordResetTokenPurpose = "ResetPassword";
