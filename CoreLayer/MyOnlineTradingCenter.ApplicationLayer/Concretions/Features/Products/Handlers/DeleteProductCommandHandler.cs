@@ -5,12 +5,7 @@ using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObje
 using ResultHandler.Implementations.ErrorResults;
 using ResultHandler.Implementations.SuccessResults;
 using ResultHandler.Interfaces.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Handlers;
 

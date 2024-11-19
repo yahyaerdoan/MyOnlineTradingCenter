@@ -23,6 +23,7 @@ public class UpdatePasswordDtoValidator : AbstractValidator<UpdatePasswordComman
             .MinimumLength(8).WithMessage("Password must be at least 8 characters long.");
 
         RuleFor(dto => dto.UpdatePasswordDto.ConfirmPassword)
-            .Equal("true").WithMessage("ConfirmPassword must be true to proceed.");
+            .NotEmpty().WithMessage("ConfirmPassword is required.")
+            .MinimumLength(8).WithMessage("ConfirmPassword must be match to proceed.");
     }
 }

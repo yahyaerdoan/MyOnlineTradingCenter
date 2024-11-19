@@ -150,10 +150,17 @@ public class AuthService : IAuthService
     }
     private async Task<User?> FindUserByEmailAndIdAsync(string? userId, string? email)
     {
+        
         if (!string.IsNullOrEmpty(email))
-        {
-            var user = await _userManager.FindByEmailAsync(email);
-            if (user != null) return user;
+        {            
+            var users = await _userManager.Users.Where(u => u.Email == email).ToListAsync();
+                        
+            if (!string.IsNullOrEmpty(userId))
+            {
+                return users.SingleOrDefault(u => u.Id == userId);
+            }
+
+            return users.FirstOrDefault();
         }
 
         if (!string.IsNullOrEmpty(userId))

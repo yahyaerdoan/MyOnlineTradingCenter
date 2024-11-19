@@ -2,18 +2,11 @@
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IProductRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Commands.Update;
-using MyOnlineTradingCenter.ApplicationLayer.Concretions.ViewModels.Products;
 using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Products;
-using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;
 using ResultHandler.Implementations.ErrorResults;
 using ResultHandler.Implementations.SuccessResults;
 using ResultHandler.Interfaces.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Handlers;
 
