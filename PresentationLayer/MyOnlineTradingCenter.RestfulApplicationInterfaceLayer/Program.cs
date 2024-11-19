@@ -3,6 +3,7 @@ using FluentValidation.AspNetCore;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Contracts.Cofigurations;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Extenions;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Validations.Products;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Validations.Users;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.Extensions;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.Filters.Validations;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Storages.LocalStorages;

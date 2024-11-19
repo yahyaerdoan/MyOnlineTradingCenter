@@ -1,48 +1,38 @@
 ﻿using FluentValidation;
-using MyOnlineTradingCenter.ApplicationLayer.Concretions.ViewModels.Products;
-using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Products;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Commands.Create;
 
 namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Validations.Products;
 
-public class CreateProductValidator : AbstractValidator<CreateProductDto>
+public class CreateProductValidator : AbstractValidator<CreateProductCommandRequest>
 {
     public CreateProductValidator()
     {
-        RuleFor(p => p.Name)
-            .NotEmpty()
-            .NotNull()
-            .WithMessage("The product name can not be empty or null")
-            .MaximumLength(150)
-            .MinimumLength(2)
-            .WithMessage("The product name can not be less then two character.");
-
-        RuleFor(p => p.Description)
-            .NotEmpty()
-            .NotNull()
-            .WithMessage("The product description can not be empty or null")
-            .MaximumLength(200)
-            .MinimumLength(5)
-            .WithMessage("The product description can not be less then five character.");
-
-        RuleFor(p => p.Stock)
+        RuleFor(p => p.CreateProductDto.Name)
            .NotEmpty()
-           .NotNull()
-           .WithMessage("The product stock can not be empty or null")
-           .Must(s => s >= 0)
-           .WithMessage("The product stock can not be less then zero or negative.");
+           .WithMessage("The product name cannot be empty or null.")
+           .MaximumLength(150)
+           .WithMessage("The product name cannot exceed 150 characters.")
+           .MinimumLength(2)
+           .WithMessage("The product name must be at least 2 characters long.");
 
-        RuleFor(p => p.Price)
+        RuleFor(p => p.CreateProductDto.Description)
+            .NotEmpty()
+            .WithMessage("The product description cannot be empty or null.")
+            .MaximumLength(200)
+            .WithMessage("The product description cannot exceed 200 characters.")
+            .MinimumLength(5)
+            .WithMessage("The product description must be at least 5 characters long.");
+
+        RuleFor(p => p.CreateProductDto.Stock)
+            .NotNull()
+            .WithMessage("The product stock cannot be null.")
             .GreaterThanOrEqualTo(0)
-                .WithMessage("The product price cannot be less than zero or negative.");
-        //.NotEmpty()
-        //.NotNull()
-        //.WithMessage("The product price can not be empty or null")
-        //.Must(s => s >= 0)
-        //.WithMessage("The product price can not be less then zero or negative.");
+            .WithMessage("The product stock cannot be less than zero.");
+
+        RuleFor(p => p.CreateProductDto.Price)
+            .NotNull()
+            .WithMessage("The product price cannot be null.")
+            .GreaterThanOrEqualTo(0)
+            .WithMessage("The product price cannot be less than zero.");
     }
 }
