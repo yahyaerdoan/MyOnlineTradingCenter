@@ -7,7 +7,6 @@ using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.SocialLo
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.UpdatePasswords.Commands.Update;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.VerifyResetTokens.Commands.Create;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Responses;
-using ResultHandler.Interfaces.Contracts;
 using IResult = ResultHandler.Interfaces.Contracts.IResult;
 
 namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
