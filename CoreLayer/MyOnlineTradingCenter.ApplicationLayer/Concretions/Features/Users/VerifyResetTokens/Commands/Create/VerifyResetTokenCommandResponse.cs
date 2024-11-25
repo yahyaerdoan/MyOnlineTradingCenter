@@ -2,5 +2,5 @@
 
 public class VerifyResetTokenCommandResponse
 {
-    public bool State { get; set; }
+    public bool VerifyResetTokenState { get; set; }
 }

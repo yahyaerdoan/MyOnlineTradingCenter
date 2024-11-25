@@ -7,6 +7,7 @@ using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.SocialLo
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.UpdatePasswords.Commands.Update;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.VerifyResetTokens.Commands.Create;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Responses;
+using ResultHandler.Interfaces.Contracts;
 using IResult = ResultHandler.Interfaces.Contracts.IResult;
 
 namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
@@ -49,7 +50,7 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
         [HttpPost("VerifyResetToken")]
         public async Task<IActionResult> VerifyResetTokenAsync([FromBody] VerifyResetTokenCommandRequest request)
         {
-            VerifyResetTokenCommandResponse response = await _mediator.Send(request);
+            IDataResult<VerifyResetTokenCommandResponse?> response = await _mediator.Send(request);
             return Ok(response);
         }
         [HttpPost("UpdatePassword")]
