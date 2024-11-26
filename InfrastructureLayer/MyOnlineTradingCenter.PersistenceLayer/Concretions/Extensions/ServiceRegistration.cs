@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IBasketItemRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IBasketRepositories;
+using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.ICompletedOrderRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.ICustomerRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IImageFileRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IInvoiceFileRepositories;
@@ -17,6 +18,7 @@ using MyOnlineTradingCenter.PersistenceLayer.Concretions.Contexts;
 using MyOnlineTradingCenter.PersistenceLayer.Concretions.Contexts.Configurations;
 using MyOnlineTradingCenter.PersistenceLayer.Concretions.Repositories.BasketItemRepositories;
 using MyOnlineTradingCenter.PersistenceLayer.Concretions.Repositories.BasketRepositories;
+using MyOnlineTradingCenter.PersistenceLayer.Concretions.Repositories.CompletedOrderRepositories;
 using MyOnlineTradingCenter.PersistenceLayer.Concretions.Repositories.CustomerRepository;
 using MyOnlineTradingCenter.PersistenceLayer.Concretions.Repositories.ImageFileRepository;
 using MyOnlineTradingCenter.PersistenceLayer.Concretions.Repositories.InvoiceFileRepository;
@@ -62,6 +64,9 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Extensions
             services.AddScoped<IOrderItemReadRepository, OrderItemReadRepository>();
             services.AddScoped<IOrderItemWriteRepository, OrderItemWriteRepository>();
 
+            services.AddScoped<ICompletedOrderReadRepository, CompletedOrderReadRepository>();
+            services.AddScoped<ICompletedOrderWriteRepository, CompletedOrderWriteRepository>();
+
             services.AddIdentity<User, Role>(options =>
             {
                 options.Password.RequireNonAlphanumeric = false;
@@ -79,6 +84,7 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Extensions
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IOrderItemService, OrderItemService>();
             services.AddScoped<IBasketService, BasketService>();
+            services.AddScoped<ICompletedOrderService, CompletedOrderService>();
         }
     }
 }
