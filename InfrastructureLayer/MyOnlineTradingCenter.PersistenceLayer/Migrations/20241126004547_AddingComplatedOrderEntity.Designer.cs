@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyOnlineTradingCenter.PersistenceLayer.Concretions.Contexts;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MyOnlineTradingCenter.PersistenceLayer.Migrations
 {
     [DbContext(typeof(MyOnlineTradingCenterPostgreSqlDbContext))]
-    partial class MyOnlineTradingCenterPostgreSqlDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241126004547_AddingComplatedOrderEntity")]
+    partial class AddingComplatedOrderEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

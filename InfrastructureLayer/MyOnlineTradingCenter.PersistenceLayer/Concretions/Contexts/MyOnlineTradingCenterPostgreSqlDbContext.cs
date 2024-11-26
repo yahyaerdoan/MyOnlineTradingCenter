@@ -4,11 +4,6 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.CommonEntities;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.IdentityEntities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Contexts
 {
@@ -18,15 +13,16 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Contexts
         {
         }
 
-        public DbSet<Product> Products  { get; set; }
-        public DbSet<Customer> Customers  { get; set; }
-        public DbSet<UploadedFile> UploadedFiles  { get; set; }
-        public DbSet<ImageFile> ImageFiles  { get; set; }
-        public DbSet<InvoiceFile> InvoiceFiles  { get; set; }
-        public DbSet<Basket> Baskets  { get; set; }
-        public DbSet<BasketItem> BasketItems  { get; set; }        
-        public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<Product> Products { get; set; } = default!;
+        public DbSet<Customer> Customers { get; set; } = default!;
+        public DbSet<UploadedFile> UploadedFiles { get; set; } = default!;
+        public DbSet<ImageFile> ImageFiles { get; set; } = default!;
+        public DbSet<InvoiceFile> InvoiceFiles { get; set; } = default!;
+        public DbSet<Basket> Baskets { get; set; } = default!;
+        public DbSet<BasketItem> BasketItems { get; set; } = default!;        
+        public DbSet<Order> Orders { get; set; } = default!;
+        public DbSet<OrderItem> OrderItems { get; set; } = default!;
+        public DbSet<CompletedOrder> CompletedOrders { get; set; } = default!;
 
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
