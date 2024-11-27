@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.CompletedOrders.Commands.Create;
-using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Orders.Commands.Create;
 
 namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
 {
@@ -16,7 +15,7 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
             _mediator = mediator;
         }
         [HttpPost]
-        public async Task<IActionResult> CompleteOrderAsync([FromRoute] CompleteOrderCommandRequest request)
+        public async Task<IActionResult> CompleteOrderAsync([FromBody] CompleteOrderCommandRequest request)
         {
             var response = await _mediator.Send(request);
             return Ok(response);

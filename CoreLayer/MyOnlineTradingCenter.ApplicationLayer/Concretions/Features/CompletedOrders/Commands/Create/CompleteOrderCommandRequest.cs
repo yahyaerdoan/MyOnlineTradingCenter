@@ -1,14 +1,15 @@
 ﻿using MediatR;
+using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.CompletedOrders;
 using ResultHandler.Interfaces.Contracts;
 
 namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.CompletedOrders.Commands.Create;
 
 public class CompleteOrderCommandRequest : IRequest<IResult>
 {
-    public string OrderId { get; set; } = default!;
+    public CompleteOrderDto CompleteOrderDto { get; set; }
 
-    public CompleteOrderCommandRequest(string orderId)
+    public CompleteOrderCommandRequest(CompleteOrderDto completeOrderDto)
     {
-        OrderId = orderId;
+        CompleteOrderDto = completeOrderDto;
     }
 }

@@ -19,15 +19,11 @@ public class CompleteOrderCommandHandler : IRequestHandler<CompleteOrderCommandR
 
     public async Task<IResult> Handle(CompleteOrderCommandRequest request, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrWhiteSpace(request.OrderId))
-            return new ErrorResult("Order ID is required.", HttpStatusCode.BadRequest);
-
-        bool completedOrder = await _completedOrderService.CompleteOrderAsync(request.OrderId);
+        bool completedOrder = await _completedOrderService.CompleteOrderAsync(request.CompleteOrderDto.OrderId);
 
         if (!completedOrder)
             return new ErrorResult("Failed to complete the order. Please check the order ID.", HttpStatusCode.BadRequest);
 
         return new SuccessResult("Order marked as completed successfully.", HttpStatusCode.Created);
     }
-
 }

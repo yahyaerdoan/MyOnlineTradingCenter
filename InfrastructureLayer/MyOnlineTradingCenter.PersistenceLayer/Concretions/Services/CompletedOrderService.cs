@@ -1,6 +1,7 @@
 ﻿using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.ICompletedOrderRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IOrderRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
+using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.CompletedOrders;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;
 
 namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Services;
@@ -18,14 +19,11 @@ public class CompletedOrderService : ICompletedOrderService
 
     public async Task<bool> CompleteOrderAsync(string orderId)
     {
-        if (string.IsNullOrWhiteSpace(orderId)) return false;
-
-        if (!Guid.TryParse(orderId, out Guid parsedOrderId)) return false;
-
         var order = await _orderReadRepository.GetByIdAsync(orderId);
         if (order == null) return false;
 
-        var completedOrder = new CompletedOrder { OrderId = parsedOrderId };
+        var completedOrderDto = new CompleteOrderDto { OrderId = orderId };
+        var completedOrder = new CompletedOrder() { OrderId = Guid.Parse(completedOrderDto.OrderId), Status = true };
 
         await _completedOrderWriteRepository.AddAsync(completedOrder);
         await _completedOrderWriteRepository.SaveAsync();
