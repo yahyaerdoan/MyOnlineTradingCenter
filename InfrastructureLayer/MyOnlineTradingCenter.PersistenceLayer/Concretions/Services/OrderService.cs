@@ -62,7 +62,7 @@ public class OrderService : IOrderService
     public async Task<(int TotalOrderCount, List<OrderDto> Orders)> GetOrdersAsync(Pagination pagination)
     {
         var query = _orderReadRepository.Table.
-            Skip((pagination.Page) * pagination.Size).Take(pagination.Size)
+            Skip((pagination.Page) * pagination.Size).Take(pagination.Size).Where(x=> x.Status == false)
             .Include(x => x.User)
                 .ThenInclude(x => x.Orders)
                 .ThenInclude(x => x.OrderItems)
