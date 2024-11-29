@@ -6,11 +6,11 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CompletedOrderController : ControllerBase
+    public class CompletedOrdersController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public CompletedOrderController(IMediator mediator)
+        public CompletedOrdersController(IMediator mediator)
         {
             _mediator = mediator;
         }
