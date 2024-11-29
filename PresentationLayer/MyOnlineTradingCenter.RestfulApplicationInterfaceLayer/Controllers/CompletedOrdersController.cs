@@ -15,7 +15,7 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
             _mediator = mediator;
         }
         [HttpPost]
-        public async Task<IActionResult> CompleteOrderAsync([FromBody] CompleteOrderCommandRequest request)
+        public async Task<IActionResult> CompleteOrderAsync(CompleteOrderCommandRequest request)
         {
             var response = await _mediator.Send(request);
             return Ok(response);
