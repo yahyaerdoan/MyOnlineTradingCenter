@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Orders.Commands.Create;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Orders.Commands.Update;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Orders.Queries.Get;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Orders.Queries.GetByIdDetail;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.RequestParameters.Paginations;
@@ -44,6 +45,12 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
         {
             //await SendEmail();
             IDataResult<GetByIdOrderDetailQueryResponse?> response = await _mediator.Send(request);
+            return Ok(response);
+        }
+        [HttpPut]
+        public async Task<IActionResult> UpdateOrderStatusToTrueAsync([FromBody] UpdateOrderStatusToTrueCommandRequest request)
+        {
+            var response = await _mediator.Send(request);
             return Ok(response);
         }
 
