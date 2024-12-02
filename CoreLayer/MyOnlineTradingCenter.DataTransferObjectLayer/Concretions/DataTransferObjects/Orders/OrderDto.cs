@@ -7,4 +7,5 @@ public class OrderDto
     public string UserName { get; set; } = default!;
     public DateTime CreatedDate { get; set; } 
     public decimal TotalAmount { get; set; }
+    public bool Status { get; set; }
 }
