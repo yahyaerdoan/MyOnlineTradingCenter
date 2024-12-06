@@ -17,6 +17,7 @@ public class EmailTemplateFactory
         return templateType switch
         {
             EmailTemplateType.PasswordReset => new PasswordResetTemplate(_configuration),
+            EmailTemplateType.ComplatedOrder => new CompletedOrderTemplate(),
 
             _ => throw new ArgumentException("Invalid template type")
         };
@@ -24,5 +25,6 @@ public class EmailTemplateFactory
 }
 public enum EmailTemplateType
 {
-    PasswordReset
+    PasswordReset,
+    ComplatedOrder
 }

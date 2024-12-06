@@ -26,8 +26,8 @@ public class CompletedOrderService : ICompletedOrderService
         var completedOrder = new CompletedOrder() { OrderId = Guid.Parse(completedOrderDto.OrderId), Status = true };
 
         await _completedOrderWriteRepository.AddAsync(completedOrder);
-        await _completedOrderWriteRepository.SaveAsync();
+        var savedResult = await _completedOrderWriteRepository.SaveAsync();
 
-        return true;
+        return savedResult > 0;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.EmailTemplateFactories;
+using MyOnlineTradingCenter.InfrastructureLayer.Concretions.EmailTemplates;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
@@ -74,13 +75,36 @@ public class EmailService : IEmailService
             {"UserId", userId },
             {"ResetToken", resetToken}
         };
-        var subjet = template.GetSubject();
+        var subject = template.GetSubject();
         var body = template.GenerateBody(templateDate);
 
         var message = new EmailMessage
         {
             ToSingle = to,
-            Subject = subjet,
+            Subject = subject,
+            Body = body,
+            IsBodyHtml = true,
+        };
+        await SendEmailAsync(message);
+    }
+
+    public async Task SendCompletedOrderAsync(string to, string orderNumber, DateTime orderDate, string userFullName)
+    {
+        var template = new CompletedOrderTemplate();
+        var templateData = new Dictionary<string, string>
+        {
+            { "OrderNumber", orderNumber },
+            { "OrderDate", orderDate.ToString("MMMM dd, yyyy") },
+            { "UserFullName", userFullName }
+        };
+        var subject = template.GetSubject();
+        var body = template.GenerateBody(templateData);
+
+
+        var message = new EmailMessage
+        {
+            ToSingle = to,
+            Subject = subject,
             Body = body,
             IsBodyHtml = true,
         };

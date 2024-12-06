@@ -4,6 +4,7 @@ public interface IEmailService
 {
     Task SendEmailAsync(EmailMessage message);
     Task RequestPasswordResetAsync(string to, string userId, string resetToken);
+    Task SendCompletedOrderAsync(string to, string orderNumber, DateTime orderDate, string userFullName);
 }
 
 public class EmailMessage
