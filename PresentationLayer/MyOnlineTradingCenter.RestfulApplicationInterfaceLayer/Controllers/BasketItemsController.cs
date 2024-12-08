@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MyOnlineTradingCenter.ApplicationLayer.Concretions.Attributes;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.BasketItems.Commands.Create;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.BasketItems.Commands.Delete;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.BasketItems.Commands.Update;
@@ -21,6 +22,7 @@ public class BasketItemsController : ControllerBase
     }
 
     [HttpGet]
+    [AuthorizationDefinition(menu: "Baskets", definition: "Get Basket Items", actionType: ActionType.Read)]
     public async Task<IActionResult> GetBasketItems([FromQuery] GetBasketItemsQueryRequest request)
     {
         List<GetBasketItemsQueryResponse> response = await _mediator.Send(request);
@@ -28,6 +30,7 @@ public class BasketItemsController : ControllerBase
     }
 
     [HttpPost]
+    [AuthorizationDefinition(menu: "Baskets", definition: "Add Item Into Basket", actionType: ActionType.Create)]
     public async Task<IActionResult> AddBasketItem(AddBasketItemCommandRequest request)
     {
        AddBasketItemCommandResponse response = await _mediator.Send(request);
@@ -35,6 +38,7 @@ public class BasketItemsController : ControllerBase
     }
 
     [HttpPut]
+    [AuthorizationDefinition(menu: "Baskets", definition: "Update Basket Item Quantity", actionType: ActionType.Update)]
     public async Task<IActionResult> UpdateBasketItemQuantity(UpdateBasketItemCommandRequest request)
     {
         UpdateBasketItemCommandResponse response = await _mediator.Send(request);
@@ -42,6 +46,7 @@ public class BasketItemsController : ControllerBase
     }
 
     [HttpDelete("{BasketItemId}")]
+    [AuthorizationDefinition(menu: "Baskets", definition: "Delete Basket Item Quantity", actionType: ActionType.Delete)]
     public async Task<IActionResult> DeleteBasketItemQuantity([FromRoute] DeleteBasketItemCommandRequest request)
     {
         DeleteBasketItemCommandResponse response = await _mediator.Send(request);
