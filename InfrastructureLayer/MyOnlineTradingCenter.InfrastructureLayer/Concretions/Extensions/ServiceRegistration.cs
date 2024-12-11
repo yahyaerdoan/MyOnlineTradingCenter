@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IAttributes;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IBaseStorages;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IStorageServices;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.ITokens;
+using MyOnlineTradingCenter.InfrastructureLayer.Concretions.Attributes;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.EmailTemplateFactories;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.Services;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.Services.Files;
@@ -26,6 +28,7 @@ public static class ServiceRegistration
         services.AddSingleton<IFileUrlGeneratorService, FileUrlGeneratorService>();
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<EmailTemplateFactory>();
+        services.AddScoped<IAttributeInfoProvider, AttributeInfoProvider>();
     }
 
     public static void AddStorageServices<T>(this IServiceCollection services) where T : FileNameHelper, IBaseStorage
