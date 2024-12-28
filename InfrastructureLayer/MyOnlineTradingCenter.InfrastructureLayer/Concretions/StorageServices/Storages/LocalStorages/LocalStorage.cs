@@ -2,12 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IStorages.ILocalStorages;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Utilities.FileHelpers;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Storages.LocalStorages
 {

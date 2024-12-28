@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IBaseStorages;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IStorageServices;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.StorageServices;
 
