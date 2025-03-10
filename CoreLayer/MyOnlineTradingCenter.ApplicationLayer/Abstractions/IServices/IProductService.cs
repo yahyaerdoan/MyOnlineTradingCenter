@@ -1,10 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Products;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Products;
 
 namespace MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 
