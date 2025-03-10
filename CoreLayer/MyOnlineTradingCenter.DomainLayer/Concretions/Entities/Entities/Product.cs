@@ -1,10 +1,4 @@
 ﻿using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.CommonEntities;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;
 
