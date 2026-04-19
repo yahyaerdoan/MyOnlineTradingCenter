@@ -21,5 +21,5 @@ public class UsersController : ControllerBase
     {
         Response<CreateUserCommandResponseDto> response = await _mediator.Send(request);
         return Ok(response);
-    }   
+    }
 }

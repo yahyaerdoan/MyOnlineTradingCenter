@@ -15,7 +15,7 @@ public class AddBasketItemCommandHandler : IRequestHandler<AddBasketItemCommandR
 
     async Task<AddBasketItemCommandResponse> IRequestHandler<AddBasketItemCommandRequest, AddBasketItemCommandResponse>.Handle(AddBasketItemCommandRequest request, CancellationToken cancellationToken)
     {
-        await _basketItemService.AddBasketItemAsync(new() { ProductId = request.ProductId, Quantity = request.Quantity});
+        await _basketItemService.AddBasketItemAsync(new() { ProductId = request.ProductId, Quantity = request.Quantity });
         return new AddBasketItemCommandResponse();
     }
 }

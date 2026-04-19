@@ -19,7 +19,7 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Contexts
         public DbSet<ImageFile> ImageFiles { get; set; } = default!;
         public DbSet<InvoiceFile> InvoiceFiles { get; set; } = default!;
         public DbSet<Basket> Baskets { get; set; } = default!;
-        public DbSet<BasketItem> BasketItems { get; set; } = default!;        
+        public DbSet<BasketItem> BasketItems { get; set; } = default!;
         public DbSet<Order> Orders { get; set; } = default!;
         public DbSet<OrderItem> OrderItems { get; set; } = default!;
         public DbSet<CompletedOrder> CompletedOrders { get; set; } = default!;
@@ -39,7 +39,7 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Contexts
                 {
                     EntityState.Added => datum.Entity.CreatedDate = currentTime,
                     EntityState.Modified => datum.Entity.UpdatedDate = currentTime,
-                    _=> DateTime.UtcNow
+                    _ => DateTime.UtcNow
                 };
             }
 

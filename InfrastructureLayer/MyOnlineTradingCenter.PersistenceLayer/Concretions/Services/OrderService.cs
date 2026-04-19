@@ -73,7 +73,7 @@ public class OrderService : IOrderService
                     OrderNumber = o.OrderNumber,
                     UserName = o.User.FirstName + ' ' + o.User.LastName,
                     CreatedDate = o.CreatedDate,
-                    Status = o.Status,                    
+                    Status = o.Status,
                     TotalAmount = o.OrderItems.Sum(x => x.Product.Price * x.Quantity)
                 });
 

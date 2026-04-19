@@ -1,10 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.CommonEntities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.ApplicationLayer.Abstractions.IGenericRepositories
 {

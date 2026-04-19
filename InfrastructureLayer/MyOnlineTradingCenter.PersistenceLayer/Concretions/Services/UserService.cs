@@ -62,7 +62,7 @@ public class UserService : IUserService
         User? user = await _userManager.Users
             .Include(u => u.Baskets)
             .FirstOrDefaultAsync(u => u.UserName == userName);
-        if (user == null) 
+        if (user == null)
         {
             return null!;
         }
@@ -77,14 +77,14 @@ public class UserService : IUserService
 
     public async Task<Response<string>> UpdateRefreshTokenAsync(RefreshTokenCommandRequestDto requestDto)
     {
-       User user = await _userManager.FindByIdAsync(requestDto.UserId);
+        User user = await _userManager.FindByIdAsync(requestDto.UserId);
         if (user is not null)
         {
             user.RefreshToken = requestDto.RefreshToken;
             user.RefreshTokenExpirationDate = requestDto.AccessTokenExpirationTime.ToUniversalTime().AddSeconds(requestDto.RefreshTokenLifeTime);
-            await _userManager.UpdateAsync(user);          
+            await _userManager.UpdateAsync(user);
             return Response<string>.Success(requestDto.RefreshToken, $"Refresh token created! Expires on: {user.RefreshTokenExpirationDate}", StatusCodes.Status200OK);
-        }      
-        return Response<string>.Failure("Error!", "Refresh token not created!", StatusCodes.Status400BadRequest);       
+        }
+        return Response<string>.Failure("Error!", "Refresh token not created!", StatusCodes.Status400BadRequest);
     }
 }

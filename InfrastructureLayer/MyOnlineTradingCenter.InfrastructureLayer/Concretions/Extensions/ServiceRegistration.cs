@@ -36,7 +36,7 @@ public static class ServiceRegistration
         services.AddScoped<IBaseStorage, T>();
     }
 
-    public static void AddStorageServices(this IServiceCollection services,  StorageType storageType)
+    public static void AddStorageServices(this IServiceCollection services, StorageType storageType)
     {
         switch (storageType)
         {

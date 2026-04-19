@@ -1,14 +1,7 @@
-﻿using MediatR;
-using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IProductRepositories;
+﻿using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IProductRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Products;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;
-using MyOnlineTradingCenter.PersistenceLayer.Concretions.Repositories.ProductRepository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Services;
 

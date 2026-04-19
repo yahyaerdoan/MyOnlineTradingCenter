@@ -3,11 +3,6 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IGenericRepositories;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.CommonEntities;
 using MyOnlineTradingCenter.PersistenceLayer.Concretions.Contexts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.GenericRepositories
 {
@@ -27,7 +22,7 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.GenericRepositories
             EntityEntry<T> entityEntry = await Table.AddAsync(entity);
             return entityEntry.State == EntityState.Added;
         }
-          
+
 
         public async Task<bool> AddRangeAsync(List<T> datas)
         {
@@ -37,14 +32,14 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.GenericRepositories
 
         public async Task<bool> RemoveAsync(T entity)
         {
-            EntityEntry<T> entityEntry = await Task.Run(()=> Table.Remove(entity));
+            EntityEntry<T> entityEntry = await Task.Run(() => Table.Remove(entity));
             return entityEntry.State == EntityState.Deleted;
         }
 
         public async Task<bool> RemoveByIdAsync(string id)
         {
-           T entity = await Table.FirstOrDefaultAsync(data => data.Id == Guid.Parse(id));
-            return await RemoveAsync(entity);            
+            T entity = await Table.FirstOrDefaultAsync(data => data.Id == Guid.Parse(id));
+            return await RemoveAsync(entity);
         }
 
         public bool RemoveRange(List<T> datas)
@@ -58,14 +53,14 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.GenericRepositories
 
         public async Task<bool> UpdateAsync(T entity)
         {
-            EntityEntry entityEntry = await Task.Run( ()=> Table.Update(entity));
+            EntityEntry entityEntry = await Task.Run(() => Table.Update(entity));
             return entityEntry.State == EntityState.Modified;
         }
 
         public bool UpdateRange(List<T> datas)
         {
-            Table.UpdateRange(datas); 
-            return true;            
+            Table.UpdateRange(datas);
+            return true;
         }
     }
 }

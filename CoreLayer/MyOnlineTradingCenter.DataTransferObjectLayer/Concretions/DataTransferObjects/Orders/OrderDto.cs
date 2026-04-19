@@ -5,7 +5,7 @@ public class OrderDto
     public Guid OrderId { get; set; }
     public string OrderNumber { get; set; } = default!;
     public string UserName { get; set; } = default!;
-    public DateTime CreatedDate { get; set; } 
+    public DateTime CreatedDate { get; set; }
     public decimal TotalAmount { get; set; }
     public bool Status { get; set; }
 }

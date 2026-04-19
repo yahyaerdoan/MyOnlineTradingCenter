@@ -13,10 +13,10 @@ namespace MyOnlineTradingCenter.RestfulApplicationInterfaceLayer.Controllers
         {
             _attributeInfoProvider = attributeInfoProvider;
         }
-        [HttpGet]      
-        public  IActionResult GetAuthorizedEndpoints()
+        [HttpGet]
+        public IActionResult GetAuthorizedEndpoints()
         {
-           var response =  _attributeInfoProvider.GetAuthorizedDefinitionEndpointsAsync(typeof(Program));
+            var response = _attributeInfoProvider.GetAuthorizedDefinitionEndpointsAsync(typeof(Program));
             return Ok(response);
         }
     }

@@ -24,7 +24,7 @@ public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommandR
         if (deleteProductDto is null)
         {
             return new ErrorResult("Product deletion failed.", HttpStatusCode.NotFound);
-        }        
+        }
         return new SuccessResult("Product deletion completed successfully.", HttpStatusCode.OK);
     }
 }

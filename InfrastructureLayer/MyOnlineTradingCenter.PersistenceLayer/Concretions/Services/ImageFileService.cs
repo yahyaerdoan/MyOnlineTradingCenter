@@ -4,13 +4,6 @@ using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IImageFi
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.ImageFiles.Commands.Update;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Responses;
-using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Services;
 

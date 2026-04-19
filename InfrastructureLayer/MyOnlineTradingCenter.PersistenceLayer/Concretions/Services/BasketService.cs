@@ -4,11 +4,6 @@ using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.BasketItems;
 using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Baskets;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.Services;
 

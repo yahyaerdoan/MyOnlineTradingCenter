@@ -10,5 +10,5 @@ public class GetByIdOrderDetailQueryRequest : IRequest<IDataResult<GetByIdOrderD
     public GetByIdOrderDetailQueryRequest(Guid id)
     {
         Id = id;
-    }   
+    }
 }

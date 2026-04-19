@@ -30,21 +30,21 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommandReque
     public async Task<IResult> Handle(CreateOrderCommandRequest request, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(request.CreateOrderDto.Address) || string.IsNullOrWhiteSpace(request.CreateOrderDto.Description))
-        return new ErrorResult(OrderMessages.PropertiesCannotBeEmpty, HttpStatusCode.BadRequest);
+            return new ErrorResult(OrderMessages.PropertiesCannotBeEmpty, HttpStatusCode.BadRequest);
 
         UserDto currentUser = await _userService.GetCurrentUserAsync();
         if (currentUser == null)
-        return new ErrorResult(OrderMessages.UserMustBeLoggedIn, HttpStatusCode.Unauthorized);
+            return new ErrorResult(OrderMessages.UserMustBeLoggedIn, HttpStatusCode.Unauthorized);
 
         BasketDto basketDto = await _basketService.GetBasketByUserIdAsync(currentUser.Id);
         if (basketDto == null || !basketDto.Items.Any())
-        return new ErrorResult(OrderMessages.NoItemsInBasket, HttpStatusCode.BadRequest);
+            return new ErrorResult(OrderMessages.NoItemsInBasket, HttpStatusCode.BadRequest);
 
         bool orderCreated = await _orderService.CreateOrderAsync(request.CreateOrderDto);
         if (!orderCreated)
-        return new ErrorResult(OrderMessages.CreatingFailed, HttpStatusCode.InternalServerError);
+            return new ErrorResult(OrderMessages.CreatingFailed, HttpStatusCode.InternalServerError);
 
         await _orderHubService.OrderAddedMessageAsync(OrderMessages.NewOrderCreated);
-        return new SuccessResult(OrderMessages.OrderCreated, HttpStatusCode.Created);    
+        return new SuccessResult(OrderMessages.OrderCreated, HttpStatusCode.Created);
     }
 }

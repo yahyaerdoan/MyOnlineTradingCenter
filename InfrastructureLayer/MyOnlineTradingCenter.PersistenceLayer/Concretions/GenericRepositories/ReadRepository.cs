@@ -2,12 +2,7 @@
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IGenericRepositories;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.CommonEntities;
 using MyOnlineTradingCenter.PersistenceLayer.Concretions.Contexts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.GenericRepositories
 {
@@ -28,7 +23,7 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.GenericRepositories
             if (!traking)
                 query = query.AsNoTracking();
             return query;
-        }  
+        }
 
         public async Task<T> GetByIdAsync(string id, bool traking = true)
         //=> await Table.FirstOrDefaultAsync(data => data.Id == Guid.Parse(id));
@@ -41,9 +36,9 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.GenericRepositories
         }
 
         public async Task<T> GetSingleAsync(Expression<Func<T, bool>> expression, bool traking = true)
-        { 
+        {
             var query = Table.AsQueryable();
-            if(!traking)
+            if (!traking)
                 query = Table.AsNoTracking();
             return await query.FirstOrDefaultAsync(expression);
         }
@@ -51,7 +46,7 @@ namespace MyOnlineTradingCenter.PersistenceLayer.Concretions.GenericRepositories
         public IQueryable<T> GetWhere(Expression<Func<T, bool>> expression, bool traking = true)
         {
             var query = Table.Where(expression);
-            if(!traking) 
+            if (!traking)
                 query = query.AsNoTracking();
             return query;
         }

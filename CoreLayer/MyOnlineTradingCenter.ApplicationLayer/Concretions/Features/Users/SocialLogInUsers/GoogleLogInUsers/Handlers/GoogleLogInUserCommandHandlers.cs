@@ -1,18 +1,10 @@
-﻿using Google.Apis.Auth;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.ITokens;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.SocialLogInUsers.GoogleLogInUsers.Commands.Create;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Responses;
-using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Tokens;
-using MyOnlineTradingCenter.DataTransferObjectLayer.Concretions.DataTransferObjects.Users.GoogleLogInUsers;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.IdentityEntities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Users.SocialLogInUsers.GoogleLogInUsers.Handlers;
 
@@ -30,7 +22,7 @@ public class GoogleLogInUserCommandHandlers : IRequestHandler<GoogleLogInUserCom
     }
 
     public async Task<Response<GoogleLogInUserCommandResponse>> Handle(GoogleLogInUserCommandRequest request, CancellationToken cancellationToken)
-    {        
+    {
         Response<GoogleLogInUserCommandResponse> response = await _authService.GoogleLogInAsync(request);
         //string accessToken = response?.Data?.Token?.AccessToken ?? string.Empty;
         //Token token = new() { AccessToken = accessToken };

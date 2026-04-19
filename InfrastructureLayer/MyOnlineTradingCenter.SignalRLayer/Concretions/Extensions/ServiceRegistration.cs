@@ -1,11 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IHubs;
 using MyOnlineTradingCenter.SignalRLayer.Concretions.HubServices;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.SignalRLayer.Concretions.Extensions;
 

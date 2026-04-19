@@ -5,12 +5,6 @@ using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IImageFi
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IProductRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IUploadedFileRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.ImageFiles.Commands.Delete;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.ImageFiles.Handlers;
 
@@ -35,11 +29,11 @@ public class DeleteImageFileCommandHandler : IRequestHandler<DeleteImageFileComm
     {
         var productIdGuid = Guid.Parse(request.Id); var imageIdGuid = Guid.Parse(request.ImageId);
         var product = await _productReadRepository.Table.Include(p => p.ImageFiles)
-            .FirstOrDefaultAsync(p => p.Id == productIdGuid);     
+            .FirstOrDefaultAsync(p => p.Id == productIdGuid);
 
-        var imageFile = product?.ImageFiles.FirstOrDefault(p => p.Id == imageIdGuid);     
+        var imageFile = product?.ImageFiles.FirstOrDefault(p => p.Id == imageIdGuid);
 
-        var uploadedFile = await _imageFileReadRepository.Table.FirstOrDefaultAsync(p => p.Id == imageIdGuid);      
+        var uploadedFile = await _imageFileReadRepository.Table.FirstOrDefaultAsync(p => p.Id == imageIdGuid);
 
         await _uploadedFileWriteRepository.RemoveAsync(uploadedFile);
         await _uploadedFileWriteRepository.SaveAsync();

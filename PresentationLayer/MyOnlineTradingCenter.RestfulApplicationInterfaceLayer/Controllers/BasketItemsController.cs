@@ -33,7 +33,7 @@ public class BasketItemsController : ControllerBase
     [AuthorizationDefinition(menu: "Baskets", definition: "Add Item Into Basket", actionType: ActionType.Create)]
     public async Task<IActionResult> AddBasketItem(AddBasketItemCommandRequest request)
     {
-       AddBasketItemCommandResponse response = await _mediator.Send(request);
+        AddBasketItemCommandResponse response = await _mediator.Send(request);
         return Ok(response);
     }
 

@@ -1,7 +1,7 @@
 ﻿namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Attributes;
 
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-public class AuthorizationDefinition :  Attribute
+public class AuthorizationDefinition : Attribute
 {
     public AuthorizationDefinition(string menu, string definition, ActionType actionType)
     {

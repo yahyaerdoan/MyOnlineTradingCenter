@@ -21,8 +21,8 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommandR
     public async Task<Response<CreateProductCommandResponse>> Handle(CreateProductCommandRequest request, CancellationToken cancellationToken)
     {
         var isSuccessful = await _productService.CreateProductAsync(request.CreateProductDto);
-        if (!isSuccessful) 
-        { 
+        if (!isSuccessful)
+        {
             return Response<CreateProductCommandResponse>.Failure("Failed to create product", "An unexpected error occurred while saving the product to the database.", StatusCodes.Status400BadRequest);
         }
         await _productHubService.ProductAddedMessageAsync("New product created.");

@@ -6,12 +6,6 @@ using Microsoft.Extensions.Logging;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IProductRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IServices;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Queries.Get;
-using MyOnlineTradingCenter.ApplicationLayer.Concretions.RequestParameters.Paginations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Handlers;
 

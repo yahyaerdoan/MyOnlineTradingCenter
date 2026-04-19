@@ -10,7 +10,7 @@ public class OrderDetailDto
     public List<OrderItemDto> OrderItems { get; set; } = new List<OrderItemDto>();
     public DateTime CreatedDate { get; set; }
     public decimal Subtotal { get; set; }
-    public decimal Tax { get; set; }    
+    public decimal Tax { get; set; }
     public decimal WithTax { get; set; }
     public decimal TotalAmount { get; set; }
     public bool Status { get; set; }

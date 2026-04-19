@@ -2,11 +2,6 @@
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IRepositories.IProductRepositories;
 using MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Queries.GetById;
 using MyOnlineTradingCenter.DomainLayer.Concretions.Entities.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.Features.Products.Handlers;
 
@@ -22,13 +17,13 @@ public class GetByIdProductQueryHandler : IRequestHandler<GetByIdProductQueryReq
     public async Task<GetByIdProductQueryResponse> Handle(GetByIdProductQueryRequest request, CancellationToken cancellationToken)
     {
         Product product = await _productReadRepository.GetByIdAsync(request.Id, false);
-        return new() 
+        return new()
         {
-            Name = product.Name, 
+            Name = product.Name,
             Description = product.Description,
             Price = product.Price,
-            Stock = product.Stock,           
-            
+            Stock = product.Stock,
+
         };
     }
 }

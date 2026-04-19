@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.ViewModels.Products
+﻿namespace MyOnlineTradingCenter.ApplicationLayer.Concretions.ViewModels.Products
 {
     public class CreateProductViewModel
     {
