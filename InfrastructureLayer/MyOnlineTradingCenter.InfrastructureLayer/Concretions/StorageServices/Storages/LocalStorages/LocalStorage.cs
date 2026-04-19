@@ -5,14 +5,9 @@ using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Util
 
 namespace MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Storages.LocalStorages
 {
-    public class LocalStorage : FileNameHelper, ILocalStorage
+    public class LocalStorage(IWebHostEnvironment webHostEnvironment) : FileNameHelper, ILocalStorage
     {
-        private readonly IWebHostEnvironment _webHostEnvironment;
-
-        public LocalStorage(IWebHostEnvironment webHostEnvironment)
-        {
-            _webHostEnvironment = webHostEnvironment;
-        }
+        private readonly IWebHostEnvironment _webHostEnvironment = webHostEnvironment;
 
         public async Task DeleteAsync(string targetFolderPathOrContainerName, string fileName)
         {
@@ -25,11 +20,11 @@ namespace MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.
         public Task<List<string>> GetFiles(string targetFolderPathOrContainerName)
         {
             DirectoryInfo directoryInfo = new(targetFolderPathOrContainerName);
-            List<string> fileNames = directoryInfo.GetFiles().Select(x => x.Name).ToList();
+            List<string> fileNames = [.. directoryInfo.GetFiles().Select(x => x.Name)];
             return Task.FromResult(fileNames);
         }
 
-        public bool HasFile(string targetFolderPathOrContainerName, string fileName)
+        public new bool HasFile(string targetFolderPathOrContainerName, string fileName)
         {
             var filePath = $"{targetFolderPathOrContainerName}\\{fileName}";
             return File.Exists(filePath);
@@ -63,7 +58,7 @@ namespace MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.
         }
 
         #region Private Helper Methods, Only Using Here
-        private async Task<bool> CopyFileAsync(string destinationFilePath, IFormFile sourceFile)
+        private static async Task<bool> CopyFileAsync(string destinationFilePath, IFormFile sourceFile)
         {
             await using var fileStream = new FileStream(destinationFilePath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, useAsync: false);
             await sourceFile.CopyToAsync(fileStream);

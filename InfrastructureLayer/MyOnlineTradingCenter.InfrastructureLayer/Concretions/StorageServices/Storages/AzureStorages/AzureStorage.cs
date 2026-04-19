@@ -3,24 +3,14 @@ using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IStorages.IAzureStorages;
-using MyOnlineTradingCenter.ApplicationLayer.Abstractions.IStorageServices.IStorageServices;
 using MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Utilities.FileHelpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyOnlineTradingCenter.InfrastructureLayer.Concretions.StorageServices.Storages.AzureStorages;
 
-public class AzureStorage : FileNameHelper, IAzureStorage
+public class AzureStorage(IConfiguration configuration) : FileNameHelper, IAzureStorage
 {
-    private readonly BlobServiceClient _blobServiceClient;
+    private readonly BlobServiceClient _blobServiceClient = new(configuration["Storages:AzureCloudStorage"]);
     private BlobContainerClient? _blobContainerClient;
-    public AzureStorage(IConfiguration configuration)
-    {
-        _blobServiceClient = new(configuration["Storages:AzureCloudStorage"]);
-    }
 
     public async Task DeleteAsync(string targetFolderPathOrContainerName, string fileName)
     {
@@ -36,7 +26,7 @@ public class AzureStorage : FileNameHelper, IAzureStorage
         return await Task.FromResult(blobs);
     }
 
-    public bool HasFile(string targetFolderPathOrContainerName, string fileName)
+    public new bool HasFile(string targetFolderPathOrContainerName, string fileName)
     {
         _blobContainerClient = _blobServiceClient.GetBlobContainerClient(targetFolderPathOrContainerName);
         return _blobContainerClient.GetBlobs().Any(blob => blob.Name == fileName);
